@@ -1,0 +1,26 @@
+diff --git a/cjs/components/file-route-resolver.js b/cjs/components/file-route-resolver.js
+index 3d0b516fb7c84ec05286c49d27eeec8f720d17aa..7e6055a57bb933b0c97b63e96d3cd69f97dde7d6 100644
+--- a/cjs/components/file-route-resolver.js
++++ b/cjs/components/file-route-resolver.js
+@@ -371,7 +371,7 @@ var FileRouteResolver = /*#__PURE__*/function () {
+   return FileRouteResolver;
+ }();
+ exports.FileRouteResolver = FileRouteResolver;
+-_defineProperty(FileRouteResolver, "fileExtensions", ['js', 'mjs', 'cjs', 'ts'].join('|'));
++_defineProperty(FileRouteResolver, "fileExtensions", ['js', 'mjs', 'cjs', 'ts', 'tsx'].join('|'));
+ _defineProperty(FileRouteResolver, "fileExtensionPattern", new RegExp("\\.(".concat(FileRouteResolver.fileExtensions, ")$")));
+ _defineProperty(FileRouteResolver, "middlewareFilePattern", new RegExp("middleware\\.(".concat(FileRouteResolver.fileExtensions, ")$")));
+ // Matches: index.js and index.[get].js
+diff --git a/esm/components/file-route-resolver.mjs b/esm/components/file-route-resolver.mjs
+index 1dfbf2246f6e32307443f5cb90b67aecda570cf3..5e80a1163fdf5b300d252a4684906c303627aa16 100644
+--- a/esm/components/file-route-resolver.mjs
++++ b/esm/components/file-route-resolver.mjs
+@@ -8,7 +8,7 @@ import { MiddlewareHandler } from "./route-handler/middleware-handler.mjs";
+ import { isCommonJs } from "../utils/env.utils.mjs";
+ import { validateFileFormat } from "../validations/validations.mjs";
+ export class FileRouteResolver {
+-  static fileExtensions = ['js', 'mjs', 'cjs', 'ts'].join('|');
++  static fileExtensions = ['js', 'mjs', 'cjs', 'ts', 'tsx'].join('|');
+   static fileExtensionPattern = new RegExp(`\\.(${FileRouteResolver.fileExtensions})$`);
+   static middlewareFilePattern = new RegExp(`middleware\\.(${FileRouteResolver.fileExtensions})$`);
+   // Matches: index.js and index.[get].js

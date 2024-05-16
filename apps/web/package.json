@@ -3,22 +3,26 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint . --max-warnings 0"
+    "dev": "tsx watch app/tasks/start.ts",
+    "start": "tsx app/tasks/start.ts",
+    "check": "tsc --noEmit && eslint . --max-warnings 0 && xss-scan",
+    "test": "node --test"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
-    "next": "^14.1.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@kitajs/html": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-file-router": "^0.6.0",
+    "plainweb": "workspace:*",
+    "tsx": "^4.10.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.1.1",
+    "@kitajs/ts-html-plugin": "^4.0.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/eslint": "^8.56.5",
+    "@types/express": "^4.17.21",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",

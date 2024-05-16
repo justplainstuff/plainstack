@@ -1,5 +1,5 @@
 {
-  "name": "plainweb",
+  "name": "plainweb-project",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -11,10 +11,16 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "prettier": "^3.2.5",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "node-file-router@0.6.0": "patches/node-file-router@0.6.0.patch"
+    }
   }
 }
