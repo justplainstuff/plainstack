@@ -1,13 +1,11 @@
-import { route, render } from "plainweb";
+import { html, RouteHandler } from "plainweb";
 import { Layout } from "~/app/components/layout";
 
-export default route({
-  GET: ({ res }) => {
-    render(
-      res,
-      <Layout>
-        <h1>Hello, world!</h1>
-      </Layout>
-    );
-  },
-});
+export const GET: RouteHandler = async ({ res }) => {
+  return html(
+    res,
+    <Layout>
+      <h1>Hello, world!</h1>
+    </Layout>
+  );
+};

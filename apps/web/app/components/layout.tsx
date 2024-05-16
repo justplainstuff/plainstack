@@ -19,7 +19,7 @@ export function Layout(
           <title>{props.title || "Hello World!"}</title>
           <link rel="stylesheet" href="/style.css" />
           <script src="/script.js" />
-          {Html.escapeHtml(props.head)}
+          {props.head ? Html.escapeHtml(props.head) : ""}
         </head>
         <body>{props.children}</body>
       </html>
