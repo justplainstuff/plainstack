@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "tsx watch app/tasks/start.ts",
-    "start": "tsx app/tasks/start.ts",
+    "dev": "tsx watch app/cli/start.ts",
+    "start": "tsx app/cli/start.ts",
     "check": "tsc --noEmit && eslint . --max-warnings 0 && xss-scan",
     "test": "node --test"
   },
@@ -12,7 +12,6 @@
     "@kitajs/html": "^4.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "node-file-router": "^0.6.0",
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",
     "zod": "^3.23.8"
