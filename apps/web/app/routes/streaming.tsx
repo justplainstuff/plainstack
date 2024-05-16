@@ -35,7 +35,6 @@ function renderLayout(rid: number | string) {
 }
 
 export default function index(_: IncomingMessage, res: ServerResponse) {
-  console.log(<div>{String.name}</div>);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   const htmlStream = renderToStream(renderLayout);
   htmlStream.pipe(res);
