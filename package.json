@@ -1,20 +1,22 @@
 {
-  "name": "my-turborepo",
+  "name": "plainweb-project",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "cs": "changeset",
+    "pub": "turbo run build lint test && changeset version && changeset publish"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@changesets/cli": "^2.27.3",
     "prettier": "^3.2.5",
-    "turbo": "^1.12.4"
+    "turbo": "latest",
+    "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }

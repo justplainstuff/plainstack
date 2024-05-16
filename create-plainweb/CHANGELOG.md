@@ -1,0 +1,37 @@
+# create-plainweb
+
+## 0.0.6
+
+### Patch Changes
+
+- fixing esm
+
+## 0.0.5
+
+### Patch Changes
+
+- fixing
+
+## 0.0.4
+
+### Patch Changes
+
+- fixing
+
+## 0.0.3
+
+### Patch Changes
+
+- fix modules issue
+
+## 0.0.2
+
+### Patch Changes
+
+- fix shebang
+
+## 0.0.1
+
+### Patch Changes
+
+- initial release
