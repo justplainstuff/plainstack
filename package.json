@@ -17,10 +17,5 @@
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "node-file-router@0.6.0": "patches/node-file-router@0.6.0.patch"
-    }
   }
 }

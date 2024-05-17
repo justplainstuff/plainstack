@@ -1,11 +1,11 @@
 import { html, RouteHandler } from "plainweb";
-import { Layout } from "~/app/components/layout";
+import RootLayout from "~/app/root";
 
 export const GET: RouteHandler = async ({ res }) => {
   return html(
     res,
-    <Layout>
-      <h1>Hello, world!</h1>
-    </Layout>
+    <RootLayout>
+      <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    </RootLayout>
   );
 };
