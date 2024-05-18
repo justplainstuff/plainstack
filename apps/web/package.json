@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm dev:app\" \"pnpm dev:tw\"",
     "dev:app": "tsx watch app/cli/start.ts",
-    "dev:tw": "tailwindcss -i ./app/input.css -o ./public/output.css --watch",
+    "dev:tw": "tailwindcss -i ./app/styles.css -o ./public/output.css --watch",
     "start": "tsx app/cli/start.ts",
     "check": "tsc --noEmit && eslint . --max-warnings 0 && xss-scan",
     "generate": "drizzle-kit generate",
@@ -19,13 +19,12 @@
     "drizzle-orm": "^0.30.10",
     "express": "^4.19.2",
     "plainweb": "workspace:*",
+    "shiki": "^1.5.2",
     "tsx": "^4.10.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@kitajs/ts-html-plugin": "^4.0.1",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@types/better-sqlite3": "^7.6.10",
     "@types/eslint": "^8.56.5",
     "@types/express": "^4.17.21",

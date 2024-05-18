@@ -15,69 +15,102 @@ interface FileRouteHandler {
   POST?: RouteHandler;
 }
 
-export async function fileRouter(opts: { dir: string }): Promise<Router> {
-  const dir = path.resolve(process.cwd(), opts.dir);
-  const router = express.Router();
+type FileRoute = { filePath: string; routePath: string };
 
-  async function getRoutes(dir: string): Promise<[string, string][]> {
-    const routes: [string, string][] = [];
+async function readRoutesFromFs(dir: string): Promise<FileRoute[]> {
+  const routes: FileRoute[] = [];
 
-    const files = await fs.readdir(dir);
+  const files = await fs.readdir(dir);
 
-    for (const file of files) {
-      const fullPath = path.join(dir, file);
-      const stat = await fs.stat(fullPath);
+  for (const file of files) {
+    const fullFilePath = path.join(dir, file);
+    const stat = await fs.stat(fullFilePath);
 
-      if (stat.isDirectory()) {
-        const subRoutes = await getRoutes(fullPath);
-        routes.push(...subRoutes);
-      } else if (stat.isFile() && file.endsWith(".tsx")) {
-        const relativePath = path.relative(dir, fullPath);
-        const routePath =
-          "/" +
-          relativePath
-            .replace(/\\/g, "/")
-            .replace(/\[([^[\]]+)\]/g, ":$1")
-            .replace(/\.tsx$/, "");
+    if (stat.isDirectory()) {
+      const subRoutes = await readRoutesFromFs(fullFilePath);
+      routes.push(...subRoutes);
+    } else if (stat.isFile() && file.endsWith(".tsx")) {
+      const relativePath = path.relative(dir, fullFilePath);
 
-        routes.push([fullPath, routePath]);
-      }
+      routes.push({ filePath: fullFilePath, routePath: relativePath });
     }
-
-    return routes;
   }
 
-  const routes = await getRoutes(dir);
+  return routes;
+}
 
-  routes.forEach(([filePath, routePath]) => {
-    const module = require(filePath) as FileRouteHandler;
+export function expressifyFileRoutes(routes: FileRoute[]): FileRoute[] {
+  return routes.map(({ filePath, routePath }) => {
+    const expressRoutePath =
+      "/" +
+      routePath
+        .replace(/\.tsx$/, "")
+        .split("/")
+        .map((part) => {
+          if (part.startsWith("[...") && part.endsWith("]")) {
+            return `:${part.slice(4, -1)}(*)`;
+          }
+          if (part.startsWith("[") && part.endsWith("]")) {
+            return `:${part.slice(1, -1)}`;
+          }
+          return part;
+        })
+        .join("/")
+        .replace(/\/index$/, "");
 
-    if (module.GET) {
-      router.get(routePath, async (req, res, next) => {
-        try {
-          const plainResponse = await module.GET!({ req, res });
-          await sendPlainResponse(res, plainResponse);
-        } catch (e) {
-          next(e);
+    return { filePath, routePath: expressRoutePath };
+  });
+}
+
+async function _fileRouter(routes: FileRoute[]): Promise<Router> {
+  const router = express.Router();
+
+  routes.forEach(async ({ filePath, routePath }) => {
+    try {
+      const module = (await import(filePath)) as FileRouteHandler;
+      if (module.GET) {
+        if (typeof module.GET !== "function") {
+          throw new Error(`GET export in route ${filePath} is not a function`);
         }
-      });
-    }
+        router.get(routePath, async (req, res, next) => {
+          try {
+            const plainResponse = await module.GET!({ req, res });
+            await sendPlainResponse(res, plainResponse);
+          } catch (e) {
+            next(e);
+          }
+        });
+      }
 
-    if (module.POST) {
-      router.post(routePath, async (req, res, next) => {
-        try {
-          const plainResponse = await module.POST!({ req, res });
-          await sendPlainResponse(res, plainResponse);
-        } catch (e) {
-          next(e);
+      if (module.POST) {
+        if (typeof module.POST !== "function") {
+          throw new Error(`POST export in route ${filePath} is not a function`);
         }
-      });
-    }
+        router.post(routePath, async (req, res, next) => {
+          try {
+            const plainResponse = await module.POST!({ req, res });
+            await sendPlainResponse(res, plainResponse);
+          } catch (e) {
+            next(e);
+          }
+        });
+      }
 
-    if (!module.GET && !module.POST) {
-      console.error(`No exported GET or POST functions found in ${filePath}`);
+      if (!module.GET && !module.POST) {
+        console.error(`No exported GET or POST functions found in ${filePath}`);
+      }
+    } catch (e) {
+      console.error(e);
+      throw new Error(
+        `Double check the route at ${filePath}. Make sure to export a GET or POST function.`
+      );
     }
   });
-
   return router;
+}
+
+export async function fileRouter(opts: { dir: string }): Promise<Router> {
+  const dir = path.resolve(process.cwd(), opts.dir);
+  const routes = expressifyFileRoutes(await readRoutesFromFs(dir));
+  return _fileRouter(routes);
 }

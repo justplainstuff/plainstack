@@ -1,7 +1,7 @@
-import { Suspense, renderToStream } from "@kitajs/html/suspense";
+import { Suspense } from "@kitajs/html/suspense";
 import { Html, PropsWithChildren } from "@kitajs/html";
 
-import type { IncomingMessage, ServerResponse } from "node:http";
+import { RouteHandler, stream } from "plainweb";
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await new Promise((res, rej) => {
@@ -34,8 +34,6 @@ function renderLayout(rid: number | string) {
   );
 }
 
-export default function index(_: IncomingMessage, res: ServerResponse) {
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  const htmlStream = renderToStream(renderLayout);
-  htmlStream.pipe(res);
-}
+export const GET: RouteHandler = async ({ req, res }) => {
+  return stream(res, renderLayout);
+};
