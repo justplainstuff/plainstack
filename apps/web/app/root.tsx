@@ -26,12 +26,13 @@ export default function RootLayout(
             }
           />
           <link rel="stylesheet" href="/output.css" />
+          <script src="https://unpkg.com/htmx.org@1.9.12"></script>
           {props.head ? Html.escapeHtml(props.head) : null}
         </head>
         <body>
           <div class="navbar bg-base-100">
             <div class="flex-1">
-              <a class="btn btn-ghost text-xl">plain web dev</a>
+              <a class="btn btn-ghost text-xl">plainweb.dev</a>
             </div>
             <div class="flex-none">
               <ul class="menu menu-horizontal px-1">

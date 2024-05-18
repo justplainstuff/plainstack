@@ -35,9 +35,6 @@ importers:
       express:
         specifier: ^4.19.2
         version: 4.19.2
-      express-list-routes:
-        specifier: ^1.2.1
-        version: 1.2.1
       plainweb:
         specifier: workspace:*
         version: link:../../packages/plainweb
@@ -78,6 +75,9 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
+      express-routes-catalogue:
+        specifier: ^1.1.0
+        version: 1.1.0
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
@@ -1043,6 +1043,10 @@ packages:
     resolution: {integrity: sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==}
     dev: false
 
+  /ascii-table@0.0.9:
+    resolution: {integrity: sha512-xpkr6sCDIYTPqzvjG8M3ncw1YOTaloWZOyrUmicoEifBEKzQzt+ooUpRpQ/AbOoJfO/p2ZKiyp79qHThzJDulQ==}
+    dev: true
+
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
@@ -1818,9 +1822,11 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /express-list-routes@1.2.1:
-    resolution: {integrity: sha512-vGO542ykRMd2g16HvVMpcLvozBmHLPvy02yi/PT/mcx/kcDwoyIvABGjpuxNBOSAfYbtl+fYck921c1Skc/gkg==}
-    dev: false
+  /express-routes-catalogue@1.1.0:
+    resolution: {integrity: sha512-9PBP/zOPB2ycYFqkizKs3E45UuiXaVgD9n8DFZkd/J/IgOPw3I/g0nQC2hNtHRe+TWGKK10pIGGYZF+3k+UcPA==}
+    dependencies:
+      ascii-table: 0.0.9
+    dev: true
 
   /express@4.19.2:
     resolution: {integrity: sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==}

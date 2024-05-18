@@ -17,21 +17,27 @@ interface FileRouteHandler {
 
 type FileRoute = { filePath: string; routePath: string };
 
-async function readRoutesFromFs(dir: string): Promise<FileRoute[]> {
+async function readRoutesFromFs(opts: {
+  baseDir: string;
+  currentDir?: string;
+}): Promise<FileRoute[]> {
+  const { baseDir, currentDir } = opts;
   const routes: FileRoute[] = [];
 
-  const files = await fs.readdir(dir);
+  const files = await fs.readdir(currentDir || baseDir);
 
   for (const file of files) {
-    const fullFilePath = path.join(dir, file);
+    const fullFilePath = path.join(currentDir || baseDir, file);
     const stat = await fs.stat(fullFilePath);
 
     if (stat.isDirectory()) {
-      const subRoutes = await readRoutesFromFs(fullFilePath);
+      const subRoutes = await readRoutesFromFs({
+        baseDir,
+        currentDir: fullFilePath,
+      });
       routes.push(...subRoutes);
     } else if (stat.isFile() && file.endsWith(".tsx")) {
-      const relativePath = path.relative(dir, fullFilePath);
-
+      const relativePath = path.relative(baseDir, fullFilePath);
       routes.push({ filePath: fullFilePath, routePath: relativePath });
     }
   }
@@ -112,7 +118,7 @@ async function _fileRouter(routes: FileRoute[]): Promise<Router> {
 
 export async function fileRouter(opts: { dir: string }): Promise<Router> {
   const dir = path.resolve(process.cwd(), opts.dir);
-  const rawFileRoutes = await readRoutesFromFs(dir);
+  const rawFileRoutes = await readRoutesFromFs({ baseDir: dir });
   const expressRoutes = expressifyFileRoutes(rawFileRoutes);
   return _fileRouter(expressRoutes);
 }
