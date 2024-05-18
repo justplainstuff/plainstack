@@ -28,7 +28,21 @@ export default function RootLayout(
           <link rel="stylesheet" href="/output.css" />
           {props.head ? Html.escapeHtml(props.head) : null}
         </head>
-        <body>{props.children}</body>
+        <body>
+          <div class="navbar bg-base-100">
+            <div class="flex-1">
+              <a class="btn btn-ghost text-xl">plain web dev</a>
+            </div>
+            <div class="flex-none">
+              <ul class="menu menu-horizontal px-1">
+                <li>
+                  <a>Docs</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {props.children}
+        </body>
       </html>
     </>
   );

@@ -8,6 +8,7 @@
     "dev:tw": "tailwindcss -i ./app/styles.css -o ./public/output.css --watch",
     "start": "tsx app/cli/start.ts",
     "check": "tsc --noEmit && eslint . --max-warnings 0 && xss-scan",
+    "routes": "tsx app/cli/list-routes.ts",
     "generate": "drizzle-kit generate",
     "migrate": "tsx app/cli/migrate.ts",
     "test": "node --test"
@@ -18,6 +19,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",
     "express": "^4.19.2",
+    "express-list-routes": "^1.2.1",
     "plainweb": "workspace:*",
     "shiki": "^1.5.2",
     "tsx": "^4.10.3",

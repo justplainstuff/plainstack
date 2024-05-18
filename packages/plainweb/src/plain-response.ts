@@ -15,9 +15,10 @@ export async function sendPlainResponse(
   plainResponse: PlainResponse
 ) {
   if (res.headersSent) {
-    console.warn("headers already sent, cannot send response");
+    console.warn("Headers already sent, cannot send response");
     return;
   }
+
   if (plainResponse.headers) {
     for (const [key, value] of Object.entries(plainResponse.headers)) {
       res.setHeader(key, value);
@@ -49,10 +50,6 @@ export function html(
     body: html,
   };
 }
-
-// res.setHeader("Content-Type", "text/html; charset=utf-8");
-//   const htmlStream = renderToStream(renderLayout);
-//   htmlStream.pipe(res);
 
 export function stream(
   res: express.Response,

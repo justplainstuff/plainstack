@@ -35,6 +35,9 @@ importers:
       express:
         specifier: ^4.19.2
         version: 4.19.2
+      express-list-routes:
+        specifier: ^1.2.1
+        version: 1.2.1
       plainweb:
         specifier: workspace:*
         version: link:../../packages/plainweb
@@ -1813,6 +1816,10 @@ packages:
   /expand-template@2.0.3:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
+    dev: false
+
+  /express-list-routes@1.2.1:
+    resolution: {integrity: sha512-vGO542ykRMd2g16HvVMpcLvozBmHLPvy02yi/PT/mcx/kcDwoyIvABGjpuxNBOSAfYbtl+fYck921c1Skc/gkg==}
     dev: false
 
   /express@4.19.2:

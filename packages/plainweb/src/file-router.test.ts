@@ -3,6 +3,12 @@ import assert from "node:assert/strict";
 import { expressifyFileRoutes } from "./file-router";
 
 describe("expressifyFileRoutes", () => {
+  test("index route", () => {
+    const fileRoutes = [{ filePath: "index.tsx", routePath: "index.tsx" }];
+    const expectedRoutes = [{ filePath: "index.tsx", routePath: "/" }];
+    const convertedRoutes = expressifyFileRoutes(fileRoutes);
+    assert.deepEqual(convertedRoutes, expectedRoutes);
+  });
   test("converts file routes to Express.js routes", () => {
     const fileRoutes = [
       { filePath: "pages/index.tsx", routePath: "pages/index.tsx" },
