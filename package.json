@@ -5,7 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "fly": "fly deploy --config apps/web/fly.toml --dockerfile apps/web/Dockerfile"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
