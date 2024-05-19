@@ -1,5 +1,8 @@
 import { html, RouteHandler } from "plainweb";
 import RootLayout from "~/app/root";
+import z from "zod";
+import { db } from "../database/database";
+import { contacts } from "../database/schema";
 
 const code = `import { type RouteHandler, html } from "plainweb";
 import RootLayout from "~/app/root";
@@ -32,26 +35,34 @@ async function HeroSection() {
           <div class="mx-auto max-w-2xl">
             <div class="max-w-lg">
               <h1 class="text-4xl font-bold tracking-tight text-neutral sm:text-6xl">
-                Worse is better
+                Plain web development
               </h1>
               <p class="mt-6 text-lg leading-8 text-neutral-700">
-                Plainweb is a grug{" "}
+                Plainweb is a set of tools and docs inspired by the grug brained
+                developer{" "}
                 <a href="https://grugbrain.dev/" class="btn-link">
                   <img src="/images/grug.png" class="inline-block w-6 h-6" />
-                </a>{" "}
-                approach to web development.
-                <br>Stop overengineering and start shipping. </br>
+                </a>
+                . Stop overengineering, start shipping.
               </p>
-              <div class="mt-10 flex items-center gap-x-6">
-                <a href="/docs" class="btn btn-primary">
-                  Getting Started
-                </a>
-                <a
-                  href="https://github.com/joseferben/plainweb"
-                  class="btn btn-ghost"
-                >
-                  View on GitHub <span aria-hidden="true">→</span>
-                </a>
+              <div class="mt-10 gap-x-6">
+                <p class="text-lg leading-8 mb-2 text-neutral-700">
+                  Coming soon, get notified about the launch. No spam, promise.
+                </p>
+                <form class="join" hx-post="/" hx-swap="outerHTML">
+                  <input
+                    name="email"
+                    type="email"
+                    class="input input-bordered join-item"
+                    placeholder="Email"
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary join-item rounded-r-full"
+                  >
+                    Sign up
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -142,12 +153,27 @@ function FooterSection() {
   );
 }
 
+export const POST: RouteHandler = async ({ res, req }) => {
+  const parsed = z.object({ email: z.string() }).safeParse(req.body);
+  if (!parsed.success) {
+    return html(
+      res,
+      <div class="text-lg text-error leading-8">
+        Please provide a valid email address
+      </div>
+    );
+  }
+  await db
+    .insert(contacts)
+    .values({ email: parsed.data.email, created: Date.now() });
+  return html(res, <div class="text-lg leading-8">I'll keep you posted!</div>);
+};
+
 export const GET: RouteHandler = async ({ res }) => {
   return html(
     res,
     <RootLayout>
       <HeroSection />
-      <LogoCloudSection />
       <FooterSection />
     </RootLayout>
   );

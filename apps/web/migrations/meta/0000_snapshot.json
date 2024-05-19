@@ -1,15 +1,29 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "8847ed52-ea17-4377-a79b-adf752aff30a",
+  "id": "f135491e-a5de-43e7-a4e0-6e6fa7c9e638",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "users": {
-      "name": "users",
+    "contacts": {
+      "name": "contacts",
       "columns": {
-        "id": {
-          "name": "id",
+        "email": {
+          "name": "email",
           "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created": {
+          "name": "created",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "double_opted": {
+          "name": "double_opted",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

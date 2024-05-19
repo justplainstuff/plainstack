@@ -5,4 +5,4 @@ import { env } from "~/app/env";
 
 export const connection: Database = new BetterSqlite3Database(env.DB_URL);
 connection.pragma("journal_mode = WAL");
-export const db = drizzle<typeof schema>(connection);
+export const db = drizzle<typeof schema>(connection, { schema });
