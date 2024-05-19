@@ -1,8 +1,8 @@
 import { html, RouteHandler } from "plainweb";
 import RootLayout from "~/app/root";
 import z from "zod";
-import { db } from "../database/database";
-import { contacts } from "../database/schema";
+import { db } from "~/app/database/database";
+import { contacts } from "~/app/database/schema";
 
 const code = `import { type RouteHandler, html } from "plainweb";
 import RootLayout from "~/app/root";
@@ -38,8 +38,8 @@ async function HeroSection() {
                 Plain web development
               </h1>
               <p class="mt-6 text-lg leading-8 text-neutral-700">
-                Plainweb is a set of tools and docs inspired by the grug brained
-                developer{" "}
+                Plainweb is a simpler way to build apps, inspired by the grug
+                brained developer{" "}
                 <a href="https://grugbrain.dev/" class="btn-link">
                   <img src="/images/grug.png" class="inline-block w-6 h-6" />
                 </a>
@@ -47,7 +47,7 @@ async function HeroSection() {
               </p>
               <div class="mt-10 gap-x-6">
                 <p class="text-lg leading-8 mb-2 text-neutral-700">
-                  Coming soon, get notified about the launch. No spam, promise.
+                  Coming soon, get notified about the launch.
                 </p>
                 <form class="join" hx-post="/" hx-swap="outerHTML">
                   <input
@@ -56,10 +56,7 @@ async function HeroSection() {
                     class="input input-bordered join-item"
                     placeholder="Email"
                   />
-                  <button
-                    type="submit"
-                    class="btn btn-primary join-item rounded-r-full"
-                  >
+                  <button type="submit" class="btn btn-primary join-item">
                     Sign up
                   </button>
                 </form>
@@ -166,7 +163,12 @@ export const POST: RouteHandler = async ({ res, req }) => {
   await db
     .insert(contacts)
     .values({ email: parsed.data.email, created: Date.now() });
-  return html(res, <div class="text-lg leading-8">I'll keep you posted!</div>);
+  return html(
+    res,
+    <div class="text-lg leading-8">
+      Thanks for subscribing, I'll keep you posted!
+    </div>
+  );
 };
 
 export const GET: RouteHandler = async ({ res }) => {

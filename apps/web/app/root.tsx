@@ -10,7 +10,7 @@ export default function RootLayout(
   return (
     <>
       {"<!doctype html>"}
-      <html lang="en" data-theme="cupcake">
+      <html lang="en" data-theme="light">
         <head>
           <meta charset="UTF-8" />
           <meta
@@ -22,7 +22,7 @@ export default function RootLayout(
             name="description"
             content={
               props.description ||
-              "a simple way to build web apps for the grug brained developer"
+              "a simpler way to build web apps for the grug brained developer"
             }
           />
           <link rel="stylesheet" href="/output.css" />

@@ -25,19 +25,19 @@ swap_size_mb = 512
   internal_port = 3000
   force_https = true
   auto_stop_machines = false
-  auto_start_machines = true
+  auto_start_machines = false
   min_machines_running = 1
   processes = ['app']
 
 [[http_service.checks]]
-  grace_period = "10s"
-  interval = "30s"
+  grace_period = "1s"
+  interval = "5s"
   method = "GET"
-  timeout = "5s"
+  timeout = "2s"
   path = "/health"
 
 [[vm]]
   size = 'shared-cpu-1x'
-  memory = '256mb'
+  memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
