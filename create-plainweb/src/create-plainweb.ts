@@ -57,7 +57,7 @@ async function getContext(argv: string[]): Promise<Context> {
       "--no-motion": Boolean,
       "--overwrite": Boolean,
     },
-    { argv, permissive: true }
+    { argv, permissive: true },
   );
 
   let {
@@ -96,8 +96,8 @@ async function getContext(argv: string[]): Promise<Context> {
     } else {
       log(
         `\n${color.warning(
-          `${selectedPlainwebVersion} is an invalid version specifier. Using Plainweb v${thisPlainwebVersion}.`
-        )}`
+          `${selectedPlainwebVersion} is an invalid version specifier. Using Plainweb v${thisPlainwebVersion}.`,
+        )}`,
       );
       selectedPlainwebVersion = undefined;
     }
@@ -106,7 +106,7 @@ async function getContext(argv: string[]): Promise<Context> {
   let context: Context = {
     tempDir: path.join(
       await fs.promises.realpath(os.tmpdir()),
-      `create-plainweb--${Math.random().toString(36).substr(2, 8)}`
+      `create-plainweb--${Math.random().toString(36).substr(2, 8)}`,
     ),
     cwd,
     overwrite,
@@ -120,7 +120,7 @@ async function getContext(argv: string[]): Promise<Context> {
       pkgManager ??
         // npm, pnpm, Yarn, and Bun set the user agent environment variable that can be used
         // to determine which package manager ran the command.
-        (process.env.npm_config_user_agent ?? "npm").split("/")[0]
+        (process.env.npm_config_user_agent ?? "npm").split("/")[0],
     ),
     projectName,
     plainwebVersion: selectedPlainwebVersion || thisPlainwebVersion,
@@ -134,8 +134,8 @@ async function getContext(argv: string[]): Promise<Context> {
 async function introStep(ctx: Context) {
   log(
     `\n${color.bgWhite(` ${color.black("plainweb")} `)}  ${color.green(
-      color.bold(`v${ctx.plainwebVersion}`)
-    )} ${color.bold("🪨 Let's build a plain app...")}`
+      color.bold(`v${ctx.plainwebVersion}`),
+    )} ${color.bold("🪨 Let's build a plain app...")}`,
   );
 
   if (!ctx.interactive) {
@@ -206,7 +206,7 @@ async function copyTemplateToTempDirStep(ctx: Context) {
               ? err.message
               : "Something went wrong. Run `create-plainweb --debug` to see more info.\n\n" +
                   "Open an issue to report the problem at " +
-                  "https://github.com/joseferben/plainweb/issues/new"
+                  "https://github.com/joseferben/plainweb/issues/new",
           );
           throw err;
         },
@@ -248,7 +248,7 @@ async function copyTempDirToAppDirStep(ctx: Context) {
     if (ctx.overwrite) {
       info(
         "Overwrite:",
-        `overwriting files due to \`--overwrite\`:${getFileList("           ")}`
+        `overwriting files due to \`--overwrite\`:${getFileList("           ")}`,
       );
     } else if (!ctx.interactive) {
       error(
@@ -256,10 +256,10 @@ async function copyTempDirToAppDirStep(ctx: Context) {
         `Destination directory contains files that would be overwritten\n` +
           `         and no \`--overwrite\` flag was included in a non-interactive\n` +
           `         environment. The following files would be overwritten:` +
-          getFileList("           ")
+          getFileList("           "),
       );
       throw new Error(
-        "File collisions detected in a non-interactive environment"
+        "File collisions detected in a non-interactive environment",
       );
     } else {
       if (ctx.debug) {
@@ -419,8 +419,8 @@ async function doneStep(ctx: Context) {
   }
   log(
     `${prefix}Check out ${color.bold(
-      "README.md"
-    )} for development and deploy instructions.`
+      "README.md",
+    )} for development and deploy instructions.`,
   );
   await sleep(100);
   // log(
@@ -471,7 +471,7 @@ async function updatePackageJSON(ctx: Context) {
     error(
       "Oh no!",
       "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file does not exist in ${color.bold(relativePath)}.`
+        `file, but that file does not exist in ${color.bold(relativePath)}.`,
     );
     throw new Error(`package.json does not exist in ${ctx.cwd}`);
   }
@@ -487,7 +487,7 @@ async function updatePackageJSON(ctx: Context) {
     error(
       "Oh no!",
       "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file is invalid.`
+        `file, but that file is invalid.`,
     );
     throw err;
   }
@@ -500,7 +500,7 @@ async function updatePackageJSON(ctx: Context) {
       error(
         "Oh no!",
         "The provided template must be a Plainweb project with a `package.json` " +
-          `file, but its ${pkgKey} value is invalid.`
+          `file, but its ${pkgKey} value is invalid.`,
       );
       throw new Error(`package.json ${pkgKey} are invalid`);
     }
@@ -521,7 +521,7 @@ async function updatePackageJSON(ctx: Context) {
   fs.promises.writeFile(
     packageJSONPath,
     JSON.stringify(sortPackageJSON(packageJSON), null, 2),
-    "utf-8"
+    "utf-8",
   );
 }
 

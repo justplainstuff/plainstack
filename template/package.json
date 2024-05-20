@@ -1,5 +1,5 @@
 {
-  "name": "plainweb.dev",
+  "name": "app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,8 @@
     "start": "tsx app/cli/migrate.ts && tsx app/cli/start.ts",
     "lint": "eslint . --max-warnings 0 && xss-scan",
     "fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "build": "tsc --noEmit && tailwindcss -i ./app/styles.css -o ./public/output.css",
-    "routes": "tsx app/cli/print-routes.ts",
-    "deploy": "fly deploy ../.. --config plainweb.dev/fly.toml --dockerfile plainweb.dev/Dockerfile",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx app/cli/migrate.ts",
     "db:studio": "drizzle-kit studio",
@@ -26,10 +25,8 @@
     "drizzle-orm": "^0.30.10",
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
-    "express-slow-down": "^2.0.3",
     "morgan": "^1.10.0",
     "plainweb": "workspace:*",
-    "shiki": "^1.5.2",
     "tsx": "^4.10.3",
     "zod": "^3.23.8"
   },

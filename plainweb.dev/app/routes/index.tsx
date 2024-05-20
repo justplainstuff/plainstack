@@ -1,4 +1,4 @@
-import { html, RouteHandler } from "../../../plainweb/src";
+import { html, RouteHandler } from "plainweb";
 import RootLayout from "~/app/root";
 import z from "zod";
 import { db } from "~/app/database/database";
@@ -72,6 +72,7 @@ async function HeroSection() {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 function LogoCloudSection() {
   return (
     <div class="py-24 sm:py-32">

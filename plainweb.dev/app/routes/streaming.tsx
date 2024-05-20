@@ -1,10 +1,10 @@
 import { Suspense } from "@kitajs/html/suspense";
 import { Html, PropsWithChildren } from "@kitajs/html";
 
-import { RouteHandler, stream } from "../../../plainweb/src";
+import { RouteHandler, stream } from "plainweb";
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
-  await new Promise((res, rej) => {
+  await new Promise((res) => {
     setTimeout(() => {
       res({});
     }, ms * 2);
@@ -34,6 +34,6 @@ function renderLayout(rid: number | string) {
   );
 }
 
-export const GET: RouteHandler = async ({ req, res }) => {
+export const GET: RouteHandler = async ({ res }) => {
   return stream(res, renderLayout);
 };

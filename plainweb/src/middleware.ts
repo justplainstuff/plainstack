@@ -3,7 +3,7 @@ import express from "express";
 function preferHeader(
   request: express.Request,
   from: string,
-  to: string
+  to: string,
 ): void {
   const preferredValue = request.get(from.toLowerCase());
   if (preferredValue == null) return;
@@ -15,7 +15,7 @@ function preferHeader(
 export const flyHeaders: express.RequestHandler = function flyHeaders(
   req,
   res,
-  next
+  next,
 ) {
   if (process.env.FLY_APP_NAME == null) return next();
 

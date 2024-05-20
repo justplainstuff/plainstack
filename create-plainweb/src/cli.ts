@@ -9,5 +9,5 @@ let argv = process.argv.slice(2).filter((arg) => arg !== "--");
 
 createPlainweb(argv).then(
   () => process.exit(0),
-  () => process.exit(1)
+  () => process.exit(1),
 );

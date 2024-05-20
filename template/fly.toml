@@ -1,0 +1,43 @@
+# fly.toml app configuration file generated for plainweb on 2024-05-18T22:15:40+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'plainweb'
+primary_region = 'iad'
+swap_size_mb = 512
+
+[env]
+  DB_URL = '/data/db.sqlite3'
+  NODE_ENV = 'production'
+  PORT = '3000'
+
+[deploy]
+  strategy = "rolling"
+
+[build]
+
+[mounts]
+  source = 'data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+  processes = ['app']
+
+[[http_service.checks]]
+  grace_period = "1s"
+  interval = "5s"
+  method = "GET"
+  timeout = "2s"
+  path = "/health"
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1

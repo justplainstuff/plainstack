@@ -1,11 +1,11 @@
-import { RouteHandler, html } from "../../../../plainweb/src";
+import { RouteHandler, html } from "plainweb";
 import RootLayout from "~/app/root";
 
-export const POST: RouteHandler = async ({ req, res }) => {
+export const POST: RouteHandler = async ({ res }) => {
   return html(res, <div>Clicked!</div>);
 };
 
-export const GET: RouteHandler = async ({ req, res }) => {
+export const GET: RouteHandler = async ({ res }) => {
   return html(
     res,
     <RootLayout>

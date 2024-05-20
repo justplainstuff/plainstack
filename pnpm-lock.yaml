@@ -195,6 +195,100 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  template:
+    dependencies:
+      '@kitajs/html':
+        specifier: ^4.1.0
+        version: 4.1.0
+      better-sqlite3:
+        specifier: ^10.0.0
+        version: 10.0.0
+      compression:
+        specifier: ^1.7.4
+        version: 1.7.4
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      drizzle-orm:
+        specifier: ^0.30.10
+        version: 0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+      errorhandler:
+        specifier: ^1.5.1
+        version: 1.5.1
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
+      morgan:
+        specifier: ^1.10.0
+        version: 1.10.0
+      plainweb:
+        specifier: workspace:*
+        version: link:../plainweb
+      tsx:
+        specifier: ^4.10.3
+        version: 4.10.3
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@flydotio/dockerfile':
+        specifier: ^0.5.7
+        version: 0.5.7
+      '@kitajs/ts-html-plugin':
+        specifier: ^4.0.1
+        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.3.3)
+      '@types/better-sqlite3':
+        specifier: ^7.6.10
+        version: 7.6.10
+      '@types/compression':
+        specifier: ^1.7.5
+        version: 1.7.5
+      '@types/errorhandler':
+        specifier: ^1.5.3
+        version: 1.5.3
+      '@types/eslint':
+        specifier: ^8.56.5
+        version: 8.56.10
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.9
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.12.12
+      '@typescript-eslint/parser':
+        specifier: ^7.9.0
+        version: 7.9.0(eslint@8.57.0)(typescript@5.3.3)
+      concurrently:
+        specifier: ^8.2.2
+        version: 8.2.2
+      daisyui:
+        specifier: ^4.11.1
+        version: 4.11.1(postcss@8.4.38)
+      drizzle-kit:
+        specifier: ^0.21.2
+        version: 0.21.2
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@8.57.0)
+      eslint-config-turbo:
+        specifier: ^1.13.3
+        version: 1.13.3(eslint@8.57.0)
+      eslint-plugin-only-warn:
+        specifier: ^1.1.0
+        version: 1.1.0
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.3
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
 packages:
 
   /@alloc/quick-lru@5.2.0:

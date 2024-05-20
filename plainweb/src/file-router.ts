@@ -109,7 +109,7 @@ async function _fileRouter(routes: FileRoute[]): Promise<Router> {
     } catch (e) {
       console.error(e);
       throw new Error(
-        `Double check the route at ${filePath}. Make sure to export a GET or POST function.`
+        `Double check the route at ${filePath}. Make sure to export a GET or POST function.`,
       );
     }
   });

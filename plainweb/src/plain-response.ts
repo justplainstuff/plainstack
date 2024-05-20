@@ -12,7 +12,7 @@ export interface PlainResponse {
 
 export async function sendPlainResponse(
   res: express.Response,
-  plainResponse: PlainResponse
+  plainResponse: PlainResponse,
 ) {
   if (res.headersSent) {
     console.warn("Headers already sent, cannot send response");
@@ -41,7 +41,7 @@ export async function sendPlainResponse(
 
 export function html(
   res: express.Response,
-  html: Promise<string> | string
+  html: Promise<string> | string,
 ): PlainResponse {
   return {
     headers: {
@@ -53,7 +53,7 @@ export function html(
 
 export function stream(
   res: express.Response,
-  htmlStream: (rid: number | string) => JSX.Element
+  htmlStream: (rid: number | string) => JSX.Element,
 ): PlainResponse {
   return {
     headers: {
@@ -66,7 +66,7 @@ export function stream(
 export function redirect(
   res: express.Response,
   path: string,
-  opts: { message?: FlashMessage }
+  opts: { message?: FlashMessage },
 ): PlainResponse {
   // TODO store flash message
   return {

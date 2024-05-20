@@ -5,6 +5,7 @@ export default defineConfig({
   format: ["cjs"],
   entry: ["src/cli.ts"],
   outDir: "dist",
+  dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
