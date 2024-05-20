@@ -1,4 +1,4 @@
-import { html, RouteHandler } from "plainweb";
+import { html, RouteHandler } from "../../../plainweb/src";
 import RootLayout from "~/app/root";
 import z from "zod";
 import { db } from "~/app/database/database";

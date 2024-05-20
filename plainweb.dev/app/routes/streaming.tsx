@@ -1,7 +1,7 @@
 import { Suspense } from "@kitajs/html/suspense";
 import { Html, PropsWithChildren } from "@kitajs/html";
 
-import { RouteHandler, stream } from "plainweb";
+import { RouteHandler, stream } from "../../../plainweb/src";
 
 async function SleepForMs({ ms, children }: PropsWithChildren<{ ms: number }>) {
   await new Promise((res, rej) => {

@@ -2,9 +2,14 @@
   "name": "plainweb",
   "version": "0.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "node --import tsx --test src/*.test.ts"
+    "test": "node --import tsx --test src/*.test.ts",
+    "build": "tsup"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +20,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "tsx": "^4.10.3"
+    "tsx": "^4.10.3",
+    "tsup": "^8.0.2"
   }
 }

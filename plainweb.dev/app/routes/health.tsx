@@ -1,4 +1,4 @@
-import { RouteHandler, json } from "plainweb";
+import { RouteHandler, json } from "../../../plainweb/src";
 import { db } from "~/app/database/database";
 
 export const GET: RouteHandler = async ({ req, res }) => {

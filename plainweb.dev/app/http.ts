@@ -1,5 +1,5 @@
 import express, { type Express } from "express";
-import { fileRouter, flyHeaders } from "plainweb";
+import { fileRouter, flyHeaders } from "../../plainweb/src";
 import slowDown from "express-slow-down";
 import compression from "compression";
 import errorHandler from "errorhandler";

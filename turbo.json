@@ -3,8 +3,8 @@
   "globalDependencies": ["**/.env"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "dependsOn": ["^build", "lint"],
+      "outputs": [".dist/**", "public/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
