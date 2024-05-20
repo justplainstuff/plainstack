@@ -1,13 +1,12 @@
-import { RouteHandler, html } from "plainweb";
+import { Handler } from "plainweb";
 import RootLayout from "~/app/root";
 
-export const POST: RouteHandler = async ({ res }) => {
-  return html(res, <div>Clicked!</div>);
+export const POST: Handler = async () => {
+  return <div>Clicked!</div>;
 };
 
-export const GET: RouteHandler = async ({ res }) => {
-  return html(
-    res,
+export const GET: Handler = async () => {
+  return (
     <RootLayout>
       <button hx-post="/examples/button" hx-swap="outerHTML">
         Click Me

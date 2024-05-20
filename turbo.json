@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".dist/**", "public/**"]
+      "outputs": ["dist/**", "public/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]

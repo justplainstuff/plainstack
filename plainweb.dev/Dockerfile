@@ -17,15 +17,16 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 sqlite3
 
 # Install node modules
 COPY --link . .
 RUN npm install -g pnpm@8.9.1
-RUN pnpm install
+RUN pnpm install    
 
 # Final stage for app image
 FROM base
+RUN npm install -g pnpm@8.9.1
 
 # Copy built application
 COPY --from=build /app /app
@@ -36,4 +37,4 @@ VOLUME /data
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "--prefix", "plainweb.dev", "start" ]
+CMD [ "pnpm", "--prefix", "plainweb.dev", "start" ]

@@ -12,7 +12,7 @@ describe("expressifyFileRoutes", () => {
   test("converts file routes to Express.js routes", () => {
     const fileRoutes = [
       { filePath: "pages/index.tsx", routePath: "pages/index.tsx" },
-      { filePath: "pages/about.tsx", routePath: "pages/about.tsx" },
+      { filePath: "pages/about-us.tsx", routePath: "pages/about-us.tsx" },
       { filePath: "pages/users/[id].tsx", routePath: "pages/users/[id].tsx" },
       {
         filePath: "pages/posts/[...slug].tsx",
@@ -22,7 +22,7 @@ describe("expressifyFileRoutes", () => {
 
     const expectedRoutes = [
       { filePath: "pages/index.tsx", routePath: "/pages" },
-      { filePath: "pages/about.tsx", routePath: "/pages/about" },
+      { filePath: "pages/about-us.tsx", routePath: "/pages/about-us" },
       { filePath: "pages/users/[id].tsx", routePath: "/pages/users/:id" },
       {
         filePath: "pages/posts/[...slug].tsx",

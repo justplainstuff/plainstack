@@ -2,17 +2,23 @@ import "@kitajs/html";
 import express from "express";
 import { FlashMessage } from "./flash-message";
 import { renderToStream } from "@kitajs/html/suspense";
+import { JSONSerializable } from ".";
 
 export interface PlainResponse {
+  _tag: "PlainResponse";
   headers?: Record<string, string>;
   status?: number;
   body?: string | Promise<string>;
   htmlStream?: (rid: number | string) => JSX.Element;
 }
 
+export function isPlainResponse(r: unknown): r is PlainResponse {
+  return (r as PlainResponse)._tag === "PlainResponse";
+}
+
 export async function sendPlainResponse(
   res: express.Response,
-  plainResponse: PlainResponse,
+  plainResponse: PlainResponse
 ) {
   if (res.headersSent) {
     console.warn("Headers already sent, cannot send response");
@@ -36,40 +42,51 @@ export async function sendPlainResponse(
   } else if (plainResponse.htmlStream) {
     const htmlStream = renderToStream(plainResponse.htmlStream);
     htmlStream.pipe(res);
+    htmlStream.on("end", () => {
+      res.end();
+    });
+    htmlStream.on("error", (err) => {
+      console.error("Error streaming response", err);
+    });
+  } else {
+    throw new Error("No body or htmlStream provided");
   }
 }
 
 export function html(
-  res: express.Response,
   html: Promise<string> | string,
+  opts?: { status?: number }
 ): PlainResponse {
   return {
+    _tag: "PlainResponse",
     headers: {
       "Content-Type": "text/html; charset=utf-8",
     },
     body: html,
+    status: opts?.status,
   };
 }
 
 export function stream(
-  res: express.Response,
-  htmlStream: (rid: number | string) => JSX.Element,
+  htmlStream: (rid: number | string) => JSX.Element
 ): PlainResponse {
   return {
+    _tag: "PlainResponse",
     headers: {
       "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-transform",
     },
     htmlStream,
   };
 }
 
 export function redirect(
-  res: express.Response,
   path: string,
-  opts: { message?: FlashMessage },
+  opts?: { message?: FlashMessage }
 ): PlainResponse {
   // TODO store flash message
   return {
+    _tag: "PlainResponse",
     status: 302,
     headers: {
       Location: path,
@@ -77,11 +94,16 @@ export function redirect(
   };
 }
 
-export function json(res: express.Response, json: unknown): PlainResponse {
+export function json(
+  json: JSONSerializable,
+  opts?: { status?: number }
+): PlainResponse {
   return {
+    _tag: "PlainResponse",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(json),
+    status: opts?.status,
   };
 }

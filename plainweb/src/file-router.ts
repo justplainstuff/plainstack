@@ -1,24 +1,18 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import express, { raw, type Router } from "express";
-import { PlainResponse, sendPlainResponse } from "./plain-response";
-
-export interface HandlerArgs {
-  req: express.Request;
-  res: express.Response;
-}
-
-export type RouteHandler = (args: HandlerArgs) => Promise<PlainResponse>;
+import express, { type Router } from "express";
+import { Handler, handleResponse } from "./handler";
 
 interface FileRouteHandler {
-  GET?: RouteHandler;
-  POST?: RouteHandler;
+  GET?: Handler;
+  POST?: Handler;
 }
 
-type FileRoute = { filePath: string; routePath: string };
+export type FileRoute = { filePath: string; routePath: string };
 
 async function readRoutesFromFs(opts: {
   baseDir: string;
+  debug?: boolean;
   currentDir?: string;
 }): Promise<FileRoute[]> {
   const { baseDir, currentDir } = opts;
@@ -31,6 +25,7 @@ async function readRoutesFromFs(opts: {
     const stat = await fs.stat(fullFilePath);
 
     if (stat.isDirectory()) {
+      opts.debug && console.log(`Found directory: ${fullFilePath}`);
       const subRoutes = await readRoutesFromFs({
         baseDir,
         currentDir: fullFilePath,
@@ -38,6 +33,7 @@ async function readRoutesFromFs(opts: {
       routes.push(...subRoutes);
     } else if (stat.isFile() && file.endsWith(".tsx")) {
       const relativePath = path.relative(baseDir, fullFilePath);
+      opts.debug && console.log(`Found route: ${relativePath}`);
       routes.push({ filePath: fullFilePath, routePath: relativePath });
     }
   }
@@ -81,8 +77,8 @@ async function _fileRouter(routes: FileRoute[]): Promise<Router> {
         }
         router.get(routePath, async (req, res, next) => {
           try {
-            const plainResponse = await module.default.GET!({ req, res });
-            await sendPlainResponse(res, plainResponse);
+            const userResponse = await module.default.GET!({ req, res });
+            await handleResponse(res, userResponse);
           } catch (e) {
             next(e);
           }
@@ -95,8 +91,8 @@ async function _fileRouter(routes: FileRoute[]): Promise<Router> {
         }
         router.post(routePath, async (req, res, next) => {
           try {
-            const plainResponse = await module.default.POST!({ req, res });
-            await sendPlainResponse(res, plainResponse);
+            const userResponse = await module.default.POST!({ req, res });
+            await handleResponse(res, userResponse);
           } catch (e) {
             next(e);
           }
@@ -116,9 +112,15 @@ async function _fileRouter(routes: FileRoute[]): Promise<Router> {
   return router;
 }
 
-export async function fileRouter(opts: { dir: string }): Promise<Router> {
+export async function fileRouter(opts: {
+  dir: string;
+  debug?: boolean;
+}): Promise<Router> {
   const dir = path.resolve(process.cwd(), opts.dir);
-  const rawFileRoutes = await readRoutesFromFs({ baseDir: dir });
+  const rawFileRoutes = await readRoutesFromFs({
+    baseDir: dir,
+    debug: opts.debug,
+  });
   const expressRoutes = expressifyFileRoutes(rawFileRoutes);
   return _fileRouter(expressRoutes);
 }

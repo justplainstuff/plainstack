@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm dev:app\" \"pnpm dev:tw\"",
@@ -15,7 +15,7 @@
     "db:migrate": "tsx app/cli/migrate.ts",
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",
-    "test": "node --test"
+    "test": "NODE_ENV=test node --import tsx --test app/**/*.test.ts"
   },
   "dependencies": {
     "@kitajs/html": "^4.1.0",
@@ -29,7 +29,8 @@
     "morgan": "^1.10.0",
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.7",
