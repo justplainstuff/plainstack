@@ -36,4 +36,4 @@ VOLUME /data
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "run", "--prefix", "apps/web", "start" ]
+CMD [ "npm", "run", "--prefix", "plainweb.dev", "start" ]
