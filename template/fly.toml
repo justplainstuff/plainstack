@@ -1,9 +1,6 @@
-# fly.toml app configuration file generated for plainweb on 2024-05-18T22:15:40+02:00
-#
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
 
-app = 'plainweb'
+app = 'my-app'
 primary_region = 'iad'
 swap_size_mb = 512
 

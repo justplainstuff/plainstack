@@ -1,9 +1,8 @@
-import { text, integer, sqliteTable, int } from "drizzle-orm/sqlite-core";
+import { text, sqliteTable, int } from "drizzle-orm/sqlite-core";
 
-export const contacts = sqliteTable("contacts", {
+export const users = sqliteTable("users", {
   email: text("email").primaryKey(),
   created: int("created").notNull(),
-  doubleOpted: integer("double_opted"),
 });
 
-export type Contact = typeof contacts.$inferSelect;
+export type User = typeof users.$inferSelect;

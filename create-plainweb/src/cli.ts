@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import process from "node:process";
 
 import { createPlainweb } from "./create-plainweb";
@@ -9,5 +10,5 @@ let argv = process.argv.slice(2).filter((arg) => arg !== "--");
 
 createPlainweb(argv).then(
   () => process.exit(0),
-  () => process.exit(1),
+  () => process.exit(1)
 );

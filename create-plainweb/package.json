@@ -1,6 +1,6 @@
 {
   "name": "create-plainweb",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "Create a new plainweb project",
   "files": [
     "dist/"

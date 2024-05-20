@@ -5,7 +5,7 @@ export default function RootLayout(
     head?: string | Promise<string>;
     description?: string;
     title?: string;
-  }>,
+  }>
 ) {
   return (
     <>
@@ -17,26 +17,17 @@ export default function RootLayout(
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
-          <title>{props.title || "plain web development"}</title>
+          <title>{props.title ?? "Title"}</title>
           <meta
             name="description"
-            content={
-              props.description ||
-              "a simpler way to build web apps for the grug brained developer"
-            }
+            content={props.description || "Description"}
           />
           <link rel="stylesheet" href="/output.css" />
-          <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+          <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
+          <script defer src="//unpkg.com/alpinejs"></script>
           {props.head ? Html.escapeHtml(props.head) : null}
         </head>
-        <body>
-          <div class="navbar bg-base-100">
-            <div class="flex-1">
-              <a class="btn btn-ghost text-xl">plainweb.dev</a>
-            </div>
-          </div>
-          {props.children}
-        </body>
+        <body>{props.children}</body>
       </html>
     </>
   );

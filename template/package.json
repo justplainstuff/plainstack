@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "version": "1.0.0",
+  "name": "my-app",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm dev:app\" \"pnpm dev:tw\"",
@@ -25,6 +25,7 @@
     "drizzle-orm": "^0.30.10",
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
+    "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",

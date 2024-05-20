@@ -1,9 +1,10 @@
 import express, { type Express } from "express";
+import { env } from "~/app/env";
 import { fileRouter } from "plainweb";
 import compression from "compression";
 import errorHandler from "errorhandler";
-import { env } from "~/app/env";
 import morgan from "morgan";
+import helmet from "helmet";
 
 export async function http(): Promise<Express> {
   const app = express();
@@ -11,6 +12,7 @@ export async function http(): Promise<Express> {
   else app.use(morgan("combined"));
   if (env.NODE_ENV === "development") app.use(errorHandler());
   app.use(compression());
+  app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
