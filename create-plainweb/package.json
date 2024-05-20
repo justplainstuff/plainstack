@@ -1,6 +1,6 @@
 {
   "name": "create-plainweb",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "Create a new plainweb project",
   "files": [
     "dist/"
@@ -10,7 +10,7 @@
   },
   "typings": "dist/cli.d.ts",
   "scripts": {
-    "build": "tsup"
+    "build": "tsc --noEmit && tsup"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +35,11 @@
     "tar-fs": "^2.1.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/gunzip-maybe": "^1.4.2",
+    "@types/recursive-readdir": "^2.2.4",
+    "@types/semver": "^7.5.8",
+    "@types/tar-fs": "^2.0.4",
     "tsup": "^8.0.2"
   }
 }

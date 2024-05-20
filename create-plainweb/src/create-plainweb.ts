@@ -5,12 +5,12 @@ import path from "node:path";
 import fse from "fs-extra";
 import stripAnsi from "strip-ansi";
 import { rimraf } from "rimraf";
-import { execa } from "execa";
+import execa from "execa";
 import arg from "arg";
-import * as semver from "semver";
+import semver from "semver";
 import sortPackageJSON from "sort-package-json";
 
-import { version as thisPlainwebVersion } from "../package.json";
+import { version as thisPlainwebVersion } from "../../plainweb/package.json";
 import {
   IGNORED_TEMPLATE_DIRECTORIES,
   color,
@@ -80,7 +80,7 @@ async function getContext(argv: string[]): Promise<Context> {
     "--overwrite": overwrite,
   } = flags;
 
-  let cwd = flags["_"][0] as string;
+  let cwd = flags["_"][0];
   let interactive = isInteractive();
   let projectName = cwd;
 
@@ -135,7 +135,7 @@ async function introStep(ctx: Context) {
   log(
     `\n${color.bgWhite(` ${color.black("plainweb")} `)}  ${color.green(
       color.bold(`v${ctx.plainwebVersion}`)
-    )} ${color.bold(" 🪨 Let's build a plainweb app...")}`
+    )} ${color.bold("🪨  Let's build a plainweb app...")}`
   );
 
   if (!ctx.interactive) {

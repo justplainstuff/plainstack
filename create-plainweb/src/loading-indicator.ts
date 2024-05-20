@@ -28,7 +28,7 @@ export async function renderLoadingIndicator({
     const spinner = ora({
       text: start,
       spinner: "dots",
-      stream: stdin,
+      stream: stdout,
     }).start();
     await act;
     spinner.stop();

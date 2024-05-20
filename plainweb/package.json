@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "node --import tsx --test src/*.test.ts",
-    "build": "tsup"
+    "build": "tsc --noEmit && tsup"
   },
   "keywords": [],
   "author": "",
