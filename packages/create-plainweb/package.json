@@ -1,12 +1,40 @@
 {
   "name": "create-plainweb",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Create a new plainweb project",
+  "files": [
+    "dist/"
+  ],
+  "bin": {
+    "create-plainweb": "dist/cli.js"
+  },
+  "typings": "dist/cli.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.4",
+    "@remix-run/web-fetch": "^4.4.2",
+    "arg": "^5.0.2",
+    "chalk": "4.1.2",
+    "execa": "^9.1.0",
+    "fs-extra": "^11.2.0",
+    "gunzip-maybe": "^1.4.2",
+    "node-fetch": "^3.3.2",
+    "ora": "^8.0.1",
+    "proxy-agent": "^6.4.0",
+    "recursive-readdir": "^2.2.3",
+    "rimraf": "^5.0.7",
+    "semver": "^7.6.2",
+    "sisteransi": "^1.0.5",
+    "sort-package-json": "^2.10.0",
+    "strip-ansi": "^7.1.0",
+    "tar-fs": "^3.0.6"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2"
+  }
 }
