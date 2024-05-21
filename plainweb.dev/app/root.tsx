@@ -5,7 +5,7 @@ export default function RootLayout(
     head?: string | Promise<string>;
     description?: string;
     title?: string;
-  }>,
+  }>
 ) {
   return (
     <>
@@ -26,17 +26,18 @@ export default function RootLayout(
             }
           />
           <link rel="stylesheet" href="/output.css" />
-          <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+          <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
+          ></script>
+          <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"
+          ></script>
+          <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
           {props.head ? Html.escapeHtml(props.head) : null}
         </head>
-        <body>
-          <div class="navbar bg-base-100">
-            <div class="flex-1">
-              <a class="btn btn-ghost text-xl">plainweb.dev</a>
-            </div>
-          </div>
-          {props.children}
-        </body>
+        <body>{props.children}</body>
       </html>
     </>
   );
