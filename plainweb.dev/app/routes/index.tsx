@@ -1,4 +1,4 @@
-import { html, RouteHandler } from "plainweb";
+import { RouteHandler } from "plainweb";
 import RootLayout from "~/app/root";
 import z from "zod";
 import { db } from "~/app/database/database";
@@ -8,11 +8,10 @@ import { HeroSection } from "~/app/components/hero-section";
 import { SignupSection } from "~/app/components/signup-section";
 import { StackSection } from "~/app/components/stack-section";
 
-export const POST: RouteHandler = async ({ res, req }) => {
+export const POST: RouteHandler = async ({ req }) => {
   const parsed = z.object({ email: z.string() }).safeParse(req.body);
   if (!parsed.success) {
-    return html(
-      res,
+    return (
       <div class="text-lg text-error leading-8">
         Please provide a valid email address
       </div>
@@ -21,17 +20,15 @@ export const POST: RouteHandler = async ({ res, req }) => {
   await db
     .insert(contacts)
     .values({ email: parsed.data.email, created: Date.now() });
-  return html(
-    res,
+  return (
     <div class="text-lg leading-8">
       Thanks for subscribing, I'll keep you posted!
     </div>
   );
 };
 
-export const GET: RouteHandler = async ({ res }) => {
-  return html(
-    res,
+export const GET: RouteHandler = async () => {
+  return (
     <RootLayout>
       <HeroSection />
       <StackSection />

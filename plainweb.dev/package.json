@@ -19,7 +19,7 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@kitajs/html": "^4.1.0",
+    "@kitajs/html": "4.1.0",
     "better-sqlite3": "^10.0.0",
     "compression": "^1.7.4",
     "dotenv": "^16.4.5",

@@ -23,6 +23,6 @@ export async function http(): Promise<Express> {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
-  app.use(await fileRouter({ dir: "app/routes" }));
+  app.use(await fileRouter({ dir: "app/routes", debug: true }));
   return app;
 }

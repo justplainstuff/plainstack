@@ -20,6 +20,27 @@ const features: { title: string; content: () => JSX.Element }[] = [
     },
   },
   {
+    title: "HTMX",
+    content: async () => {
+      const code = `// app/routes/click.tsx
+        
+export const POST: RouteHandler = async ({ req, res }) => {
+  return html(res, <div>Clicked!</div>);
+};
+
+export const GET: RouteHandler = async ({ req, res }) => {
+  return html(
+    res,
+    <button hx-post="/click" hx-swap="outerHTML">
+      Click Me
+    </button>
+  );
+};       `;
+      const safeCode = await renderCode(code);
+      return <div>{safeCode}</div>;
+    },
+  },
+  {
     title: "JSX Components",
     content: async () => {
       const code = `// app/components/video.tsx
@@ -32,6 +53,7 @@ export interface VideoProps {
   };
 }
 
+// just like using React!
 export function Video({ video }: VideoProps) {
   return (
     <div>
@@ -54,45 +76,16 @@ export function Video({ video }: VideoProps) {
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
-  {
-    title: "Built for HTMX",
-    content: async () => {
-      const code = `// app/routes/click.tsx
-        
-export const POST: RouteHandler = async ({ req, res }) => {
-  return html(res, <div>Clicked!</div>);
-};
 
-export const GET: RouteHandler = async ({ req, res }) => {
-  return html(
-    res,
-    <RootLayout>
-      <button hx-post="/click" hx-swap="outerHTML">
-        Click Me
-      </button>
-    </RootLayout>
-  );
-};       `;
-      const safeCode = await renderCode(code);
-      return <div>{safeCode}</div>;
-    },
-  },
   {
-    title: "SQLite",
+    title: "Database",
     content: async () => {
       const safeCode = await renderCode(placeHolder);
       return <div>{safeCode}</div>;
     },
   },
   {
-    title: "Explicit & Intuitive API",
-    content: async () => {
-      const safeCode = await renderCode(placeHolder);
-      return <div>{safeCode}</div>;
-    },
-  },
-  {
-    title: "Simple Deployment",
+    title: "Deployment",
     content: async () => {
       const safeCode = await renderCode(placeHolder);
       return <div>{safeCode}</div>;
@@ -106,14 +99,14 @@ export const GET: RouteHandler = async ({ req, res }) => {
     },
   },
   {
-    title: "Cron Schedules",
+    title: "Cron",
     content: async () => {
       const safeCode = await renderCode(placeHolder);
       return <div>{safeCode}</div>;
     },
   },
   {
-    title: "Middleware Stack",
+    title: "Middleware",
     content: async () => {
       const code = `// app/http.ts
       
@@ -136,7 +129,7 @@ export async function http() {
     },
   },
   {
-    title: "Type-safe Env Vars",
+    title: "Env Vars",
     content: async () => {
       const code = `// app/env.ts 
       
