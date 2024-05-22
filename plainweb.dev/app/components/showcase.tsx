@@ -1,15 +1,17 @@
 import Html from "@kitajs/html";
 import { renderCode } from "~/app/utils/render-code";
 
-const placeHolder = `// app/routes/index.tsx
+const placeHolder = `// app/routes/health.tsx
 
-export const POST: RouteHandler = async ({ req, res }) => {
-  return json(res, { message: "Pong!" });
+export const GET: Handler = async () => {
+  try {
+    await db.query.users.findFirst();
+    return { status: "ok" };
+  } catch (e) {
+    return json({ status: "degraded" }, { status: 500 });
+  }
 };
-
-export const GET: RouteHandler = async ({ req, res }) => {
-  return html(res, <div>Hello World!<div>);
-};`;
+`;
 
 const features: { title: string; content: () => JSX.Element }[] = [
   {
@@ -24,13 +26,12 @@ const features: { title: string; content: () => JSX.Element }[] = [
     content: async () => {
       const code = `// app/routes/click.tsx
         
-export const POST: RouteHandler = async ({ req, res }) => {
-  return html(res, <div>Clicked!</div>);
+export const POST: Handler = async () => {
+  return (<div>Clicked!</div>);
 };
 
-export const GET: RouteHandler = async ({ req, res }) => {
-  return html(
-    res,
+export const GET: Handler = async () => {
+  return (
     <button hx-post="/click" hx-swap="outerHTML">
       Click Me
     </button>
@@ -53,7 +54,7 @@ export interface VideoProps {
   };
 }
 
-// just like using React!
+// Just like using React!
 export function Video({ video }: VideoProps) {
   return (
     <div>
@@ -72,7 +73,25 @@ export function Video({ video }: VideoProps) {
   {
     title: "Streaming",
     content: async () => {
-      const safeCode = await renderCode(placeHolder);
+      const code = `// app/routes/index.tsx
+
+async function HelloUser() {
+  const user = await db.query.users.findFirst();
+  return <div>Hello {user.name}</div>;
+}
+
+export const GET: Handler = async () => {
+  return stream((rid) => (
+    <Suspense
+      rid={rid}
+      fallback={<div>Loading...</div>}
+      catch={() => <div>Something went wrong</div>}
+    >
+      <HelloUser />
+    </Suspense>
+  ));
+};`;
+      const safeCode = await renderCode(code);
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
@@ -80,14 +99,25 @@ export function Video({ video }: VideoProps) {
   {
     title: "Database",
     content: async () => {
-      const safeCode = await renderCode(placeHolder);
-      return <div>{safeCode}</div>;
-    },
-  },
-  {
-    title: "Deployment",
-    content: async () => {
-      const safeCode = await renderCode(placeHolder);
+      const code = `// app/database/schema.ts
+
+export const contacts = sqliteTable("contacts", {
+  email: text("email").primaryKey(),
+  created: int("created").notNull(),
+  doubleOpted: integer("double_opted"),
+});
+
+export type Contact = typeof contacts.$inferSelect;
+
+// app/routes/contacts.tsx
+
+const contacts = await db.query.contacts.findMany({
+  where: (contacts, { lte }) =>
+    lte(contacts.created, Date.now() - 1000 * 60 * 60 * 24 * 7),
+});
+
+`;
+      const safeCode = await renderCode(code);
       return <div>{safeCode}</div>;
     },
   },
@@ -163,7 +193,8 @@ export async function Showcase() {
         {features.map((feature) => (
           <button
             x-on:click={`open = '${feature.title}'`}
-            class="btn btn-ghost"
+            class={`btn btn-ghost w-full justify-start ${feature.title === features[0]!.title ? "btn-active" : ""}`}
+            x-bind:class={`{'btn-active': open === '${feature.title}'}`}
           >
             {Html.escapeHtml(feature.title)}
           </button>

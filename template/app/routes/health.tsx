@@ -1,7 +1,11 @@
-import { Handler } from "plainweb";
+import { Handler, json } from "plainweb";
 import { db } from "~/app/database/database";
 
 export const GET: Handler = async () => {
-  await db.query.users.findFirst();
-  return { status: "ok" };
+  try {
+    await db.query.users.findFirst();
+    return { status: "ok" };
+  } catch (e) {
+    return json({ status: "degraded" }, { status: 500 });
+  }
 };

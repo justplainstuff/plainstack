@@ -2,6 +2,7 @@ import "@kitajs/html";
 import express from "express";
 import { FlashMessage } from "./flash-message";
 import { renderToStream } from "@kitajs/html/suspense";
+import { JSONSerializable } from ".";
 
 export interface PlainResponse {
   _tag: "PlainResponse";
@@ -52,13 +53,17 @@ export async function sendPlainResponse(
   }
 }
 
-export function html(html: Promise<string> | string): PlainResponse {
+export function html(
+  html: Promise<string> | string,
+  opts?: { status?: number }
+): PlainResponse {
   return {
     _tag: "PlainResponse",
     headers: {
       "Content-Type": "text/html; charset=utf-8",
     },
     body: html,
+    status: opts?.status,
   };
 }
 
@@ -77,7 +82,7 @@ export function stream(
 
 export function redirect(
   path: string,
-  opts: { message?: FlashMessage }
+  opts?: { message?: FlashMessage }
 ): PlainResponse {
   // TODO store flash message
   return {
@@ -89,13 +94,16 @@ export function redirect(
   };
 }
 
-// TODO add JSONSerislizable as type
-export function json(json: unknown): PlainResponse {
+export function json(
+  json: JSONSerializable,
+  opts?: { status?: number }
+): PlainResponse {
   return {
     _tag: "PlainResponse",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(json),
+    status: opts?.status,
   };
 }
