@@ -5,7 +5,7 @@ export type PlainWebConfig = {
 export { fileRouter } from "./file-router";
 export {
   type HandlerArgs,
-  type RouteHandler,
+  type Handler,
   type JSONSerializable,
   type ExpressResponse,
 } from "./handler";

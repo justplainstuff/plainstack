@@ -1,11 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import express, { type Router } from "express";
-import { RouteHandler, handleResponse } from "./handler";
+import { Handler, handleResponse } from "./handler";
 
 interface FileRouteHandler {
-  GET?: RouteHandler;
-  POST?: RouteHandler;
+  GET?: Handler;
+  POST?: Handler;
 }
 
 type FileRoute = { filePath: string; routePath: string };

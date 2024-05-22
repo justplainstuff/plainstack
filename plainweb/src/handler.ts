@@ -19,7 +19,7 @@ export type JSONSerializable =
   | JSONSerializable[]
   | { [key: string]: JSONSerializable };
 
-export type RouteHandler = (
+export type Handler = (
   args: HandlerArgs
 ) => Promise<PlainResponse | JSX.Element | JSONSerializable>;
 

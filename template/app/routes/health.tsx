@@ -1,7 +1,7 @@
-import { RouteHandler, json } from "plainweb";
+import { Handler } from "plainweb";
 import { db } from "~/app/database/database";
 
-export const GET: RouteHandler = async ({ res }) => {
+export const GET: Handler = async () => {
   await db.query.users.findFirst();
-  return json(res, { status: "ok" });
+  return { status: "ok" };
 };

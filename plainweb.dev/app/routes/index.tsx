@@ -1,4 +1,4 @@
-import { RouteHandler } from "plainweb";
+import { Handler } from "plainweb";
 import RootLayout from "~/app/root";
 import z from "zod";
 import { db } from "~/app/database/database";
@@ -8,7 +8,7 @@ import { HeroSection } from "~/app/components/hero-section";
 import { SignupSection } from "~/app/components/signup-section";
 import { StackSection } from "~/app/components/stack-section";
 
-export const POST: RouteHandler = async ({ req }) => {
+export const POST: Handler = async ({ req }) => {
   const parsed = z.object({ email: z.string() }).safeParse(req.body);
   if (!parsed.success) {
     return (
@@ -27,7 +27,7 @@ export const POST: RouteHandler = async ({ req }) => {
   );
 };
 
-export const GET: RouteHandler = async () => {
+export const GET: Handler = async () => {
   return (
     <RootLayout>
       <HeroSection />
