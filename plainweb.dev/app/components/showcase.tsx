@@ -1,26 +1,7 @@
 import Html from "@kitajs/html";
 import { renderCode } from "~/app/utils/render-code";
 
-const placeHolder = `// app/routes/health.tsx
-
-export const GET: Handler = async () => {
-  try {
-    await db.query.users.findFirst();
-    return { status: "ok" };
-  } catch (e) {
-    return json({ status: "degraded" }, { status: 500 });
-  }
-};
-`;
-
 const features: { title: string; content: () => JSX.Element }[] = [
-  {
-    title: "File Based Routing",
-    content: async () => {
-      const safeCode = await renderCode(placeHolder);
-      return <div>{safeCode}</div>;
-    },
-  },
   {
     title: "HTMX",
     content: async () => {
@@ -42,32 +23,22 @@ export const GET: Handler = async () => {
     },
   },
   {
-    title: "JSX Components",
+    title: "Routing",
     content: async () => {
-      const code = `// app/components/video.tsx
+      const code = `// app/routes/health.tsx
 
-export interface VideoProps {
-  video: {
-    title: string;
-    url: string;
-    thumbnail: string;
-  };
-}
+export const GET: Handler = async () => {
+  try {
+    await db.query.users.findFirst();
+    return { status: "ok" };
+  } catch (e) {
+    return json({ status: "degraded" }, { status: 500 });
+  }
+};
 
-// Just like using React!
-export function Video({ video }: VideoProps) {
-  return (
-    <div>
-      <Thumbnail video={video} />
-      <a href={video.url}>
-        <h3 safe>{video.title}</h3>
-      </a>
-    </div>
-  );
-}
 `;
       const safeCode = await renderCode(code);
-      return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
+      return <div>{safeCode}</div>;
     },
   },
   {
@@ -82,6 +53,7 @@ async function HelloUser() {
 
 export const GET: Handler = async () => {
   return stream((rid) => (
+    // Without React!
     <Suspense
       rid={rid}
       fallback={<div>Loading...</div>}
@@ -90,12 +62,46 @@ export const GET: Handler = async () => {
       <HelloUser />
     </Suspense>
   ));
-};`;
+};
+
+`;
       const safeCode = await renderCode(code);
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
+  {
+    title: "Components",
+    content: async () => {
+      const code = `// app/components/video.tsx
 
+export interface VideoProps {
+  title: string;
+  url: string;
+  thumbnail: string;
+}
+
+export function Video({ title, url, string }: VideoProps) {
+  return (
+    <div>
+      <a href={url}>
+        <h3>{title}</h3>
+      </a>
+    </div>
+  );
+}
+
+`;
+      const safeCode = await renderCode(code);
+      return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
+    },
+  },
+  {
+    title: "Forms",
+    content: async () => {
+      const safeCode = await renderCode("");
+      return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
+    },
+  },
   {
     title: "Database",
     content: async () => {
@@ -108,6 +114,9 @@ export const contacts = sqliteTable("contacts", {
 });
 
 export type Contact = typeof contacts.$inferSelect;
+
+// pnpm db:generate -> create .sql files
+// pnpm db:migrate  -> apply .sql files
 
 // app/routes/contacts.tsx
 
@@ -124,14 +133,7 @@ const contacts = await db.query.contacts.findMany({
   {
     title: "Testing",
     content: async () => {
-      const safeCode = await renderCode(placeHolder);
-      return <div>{safeCode}</div>;
-    },
-  },
-  {
-    title: "Cron",
-    content: async () => {
-      const safeCode = await renderCode(placeHolder);
+      const safeCode = await renderCode("");
       return <div>{safeCode}</div>;
     },
   },
@@ -159,7 +161,7 @@ export async function http() {
     },
   },
   {
-    title: "Env Vars",
+    title: "Env",
     content: async () => {
       const code = `// app/env.ts 
       
@@ -176,7 +178,9 @@ export const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
-export const env: Env = envSchema.parse(process.env);`;
+export const env: Env = envSchema.parse(process.env);
+
+`;
       const safeCode = await renderCode(code);
       return <div>{safeCode}</div>;
     },

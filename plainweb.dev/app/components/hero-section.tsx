@@ -23,7 +23,10 @@ export async function HeroSection() {
         </p>
       </div>
       <div class="mt-10 text-center">
-        <button class="btn btn-primary">npx create-plainweb</button>
+        <div class="select-all cursor-text rounded-lg bg-slate-200 px-2 py-1 inline-block">
+          <pre class="text-xl">npx create-plainweb</pre>
+        </div>{" "}
+        (heavy wip)
       </div>
       <div class="mx-auto mt-20">
         <Showcase />
