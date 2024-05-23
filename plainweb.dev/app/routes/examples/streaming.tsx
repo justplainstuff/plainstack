@@ -1,10 +1,13 @@
 import { Suspense } from "@kitajs/html/suspense";
 import { Handler, stream } from "plainweb";
-import { db } from "~/app/database/database";
 
 async function HelloDelayed() {
-  const user = db.query.users.findFirst();
-  return <div>Hello {user.name}</div>;
+  await new Promise((res) => {
+    setTimeout(() => {
+      res({});
+    }, 5000);
+  });
+  return <div>Hello 5 seconds later!</div>;
 }
 
 export const GET: Handler = async () => {
