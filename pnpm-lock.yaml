@@ -157,6 +157,9 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+      zod-form-data:
+        specifier: ^2.0.2
+        version: 2.0.2(zod@3.23.8)
     devDependencies:
       '@flydotio/dockerfile':
         specifier: ^0.5.7
@@ -254,6 +257,9 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+      zod-form-data:
+        specifier: ^2.0.2
+        version: 2.0.2(zod@3.23.8)
     devDependencies:
       '@flydotio/dockerfile':
         specifier: ^0.5.7
@@ -6347,6 +6353,14 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod-form-data@2.0.2(zod@3.23.8):
+    resolution: {integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==}
+    peerDependencies:
+      zod: '>= 3.11.0'
+    dependencies:
+      zod: 3.23.8
+    dev: false
 
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}

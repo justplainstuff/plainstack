@@ -1,6 +1,6 @@
 import { Handler } from "plainweb";
 import RootLayout from "~/app/root";
-import z from "zod";
+import { zfd } from "zod-form-data";
 import { db } from "~/app/database/database";
 import { contacts } from "~/app/database/schema";
 import { FooterSection } from "~/app/components/footer-section";
@@ -9,7 +9,9 @@ import { SignupSection } from "~/app/components/signup-section";
 import { StackSection } from "~/app/components/stack-section";
 
 export const POST: Handler = async ({ req }) => {
-  const parsed = z.object({ email: z.string() }).safeParse(req.body);
+  const parsed = zfd
+    .formData({ email: zfd.text().refine((e) => e.includes("@")) })
+    .safeParse(req.body);
   if (!parsed.success) {
     return (
       <div class="text-lg text-error leading-8">

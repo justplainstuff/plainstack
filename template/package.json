@@ -29,7 +29,8 @@
     "morgan": "^1.10.0",
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.7",

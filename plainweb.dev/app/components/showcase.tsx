@@ -98,7 +98,21 @@ export function Video({ title, url, string }: VideoProps) {
   {
     title: "Forms",
     content: async () => {
-      const safeCode = await renderCode("");
+      const code = `// app/routes/signup.tsx
+      
+export const POST: Handler = async ({ req }) => {
+  const parsed = zfd
+    .formData({ email: zfd.text().refine((e) => e.includes("@")) })
+    .safeParse(req.body);
+  if (!parsed.success) {
+    return <div>Please provide a valid email address</div>;
+  }
+  await createContact({ email: parsed.data.emaill });
+  return <div>Thanks for subscribing!</div>;
+};
+
+      `;
+      const safeCode = await renderCode(code);
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
