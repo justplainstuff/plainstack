@@ -14,9 +14,10 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "@kitajs/html": "^4.1.0",
-    "express": "^4.19.2"
+  "peerDependencies": {
+    "drizzle-orm": "^0.30.10",
+    "express": "^4.19.2",
+    "@kitajs/html": "^4.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

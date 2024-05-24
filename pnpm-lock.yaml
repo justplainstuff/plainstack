@@ -99,6 +99,9 @@ importers:
       '@kitajs/html':
         specifier: ^4.1.0
         version: 4.1.0
+      drizzle-orm:
+        specifier: ^0.30.10
+        version: 0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
       express:
         specifier: ^4.19.2
         version: 4.19.2

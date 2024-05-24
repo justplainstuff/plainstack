@@ -11,3 +11,5 @@ export {
 } from "./handler";
 export { html, json, redirect, stream } from "./plain-response";
 export { flyHeaders } from "./middleware";
+export { isolate } from "./isolate";
+export { migrate } from "./migrate";

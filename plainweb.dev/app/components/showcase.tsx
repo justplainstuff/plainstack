@@ -133,7 +133,28 @@ const contacts = await db.query.contacts.findMany({
   {
     title: "Testing",
     content: async () => {
-      const safeCode = await renderCode("");
+      const code = `// app/services/users.test.ts
+
+describe("users", async () => {
+  before(() => migrate(db));
+ 
+  test("createUser already exists", async () =>
+    isolate(db, async (tx) => {
+      await createUser(tx, "aang@example.org");
+
+      await assert.rejects(async () => {
+        await createUser(tx, "aang@example.org");
+      });
+    }));
+});
+
+// pnpm test
+// ▶ users
+//  ✔ createUser (1.838375ms)
+//  ✔ createUser already exists (0.833208ms)
+
+`;
+      const safeCode = await renderCode(code);
       return <div>{safeCode}</div>;
     },
   },
