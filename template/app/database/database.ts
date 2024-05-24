@@ -6,3 +6,4 @@ import * as schema from "./schema";
 export const connection: Database = new BetterSqlite3Database(env.DB_URL);
 connection.pragma("journal_mode = WAL");
 export const db = drizzle<typeof schema>(connection, { schema });
+export type Db = typeof db;
