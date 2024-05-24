@@ -6,6 +6,7 @@ import errorHandler from "errorhandler";
 import morgan from "morgan";
 import helmet from "helmet";
 
+// TODO add pending migrations middleware with one click fixing
 export async function http(): Promise<Express> {
   const app = express();
   if (env.NODE_ENV === "development") app.use(morgan("dev"));

@@ -15,7 +15,7 @@
     "db:migrate": "tsx app/cli/migrate.ts",
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",
-    "test": "node --import tsx --test app/**/*.test.ts"
+    "test": "NODE_ENV=test node --import tsx --test app/**/*.test.ts"
   },
   "dependencies": {
     "@kitajs/html": "^4.1.0",

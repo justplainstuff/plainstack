@@ -26,7 +26,7 @@ export async function HeroSection() {
         <div class="select-all cursor-text rounded-lg bg-slate-200 px-2 py-1 inline-block">
           <pre class="text-xl">npx create-plainweb</pre>
         </div>{" "}
-        (heavy wip)
+        (wip)
       </div>
       <div class="mx-auto mt-20">
         <Showcase />
