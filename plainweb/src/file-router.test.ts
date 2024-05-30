@@ -1,55 +1,105 @@
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { expressifyFileRoutes } from "./file-router";
+import {
+  LoadedFileRoute,
+  expressRouter,
+  getExpressRoutePath,
+} from "./file-router";
+import express from "express";
+import supertest from "supertest";
 
-describe("expressifyFileRoutes", () => {
+describe("getExpressRoutePath", () => {
+  const dir = "/path/to/routes";
+
   test("index route", () => {
-    const fileRoutes = [{ filePath: "index.tsx", routePath: "index.tsx" }];
-    const expectedRoutes = [{ filePath: "index.tsx", routePath: "/" }];
-    const convertedRoutes = expressifyFileRoutes(fileRoutes);
-    assert.deepEqual(convertedRoutes, expectedRoutes);
+    const filePath = `${dir}/index.tsx`;
+    const expectedRoute = "/";
+    const convertedRoute = getExpressRoutePath({ dir, filePath });
+    assert.strictEqual(convertedRoute, expectedRoute);
   });
-  test("converts file routes to Express.js routes", () => {
-    const fileRoutes = [
-      { filePath: "pages/index.tsx", routePath: "pages/index.tsx" },
-      { filePath: "pages/about-us.tsx", routePath: "pages/about-us.tsx" },
-      { filePath: "pages/users/[id].tsx", routePath: "pages/users/[id].tsx" },
-      {
-        filePath: "pages/posts/[...slug].tsx",
-        routePath: "pages/posts/[...slug].tsx",
-      },
-    ];
 
+  test("index route no root dir", () => {
+    const filePath = `${dir}/index.tsx`;
+    const expectedRoute = "/";
+    const convertedRoute = getExpressRoutePath({
+      dir: "/path/to/routes",
+      filePath,
+    });
+    assert.strictEqual(convertedRoute, expectedRoute);
+  });
+
+  test("converts file paths to Express.js routes", () => {
+    const filePaths = [
+      `${dir}/pages/index.tsx`,
+      `${dir}/pages/about-us.tsx`,
+      `${dir}/pages/users/[id].tsx`,
+      `${dir}/pages/posts/[...slug].tsx`,
+    ];
     const expectedRoutes = [
-      { filePath: "pages/index.tsx", routePath: "/pages" },
-      { filePath: "pages/about-us.tsx", routePath: "/pages/about-us" },
-      { filePath: "pages/users/[id].tsx", routePath: "/pages/users/:id" },
-      {
-        filePath: "pages/posts/[...slug].tsx",
-        routePath: "/pages/posts/:slug(*)",
-      },
+      "/pages",
+      "/pages/about-us",
+      "/pages/users/:id",
+      "/pages/posts/:slug(*)",
     ];
-
-    const convertedRoutes = expressifyFileRoutes(fileRoutes);
-    assert.deepEqual(convertedRoutes, expectedRoutes);
+    filePaths.forEach((filePath, index) => {
+      const convertedRoute = getExpressRoutePath({ dir, filePath });
+      assert.strictEqual(convertedRoute, expectedRoutes[index]);
+    });
   });
 
   test("handles multiple dynamic params in the same segment", () => {
-    const fileRoutes = [
+    const filePath = `${dir}/pages/users/[id]/posts/[postId].tsx`;
+    const expectedRoute = "/pages/users/:id/posts/:postId";
+    const convertedRoute = getExpressRoutePath({ dir, filePath });
+    assert.strictEqual(convertedRoute, expectedRoute);
+  });
+
+  test("handles index routes in subdirectories", () => {
+    const filePath = `${dir}/pages/blog/index.tsx`;
+    const expectedRoute = "/pages/blog";
+    const convertedRoute = getExpressRoutePath({ dir, filePath });
+    assert.strictEqual(convertedRoute, expectedRoute);
+  });
+});
+
+describe("expressRouter", () => {
+  test("creates Express.js router with GET and POST routes", async () => {
+    const routes: LoadedFileRoute[] = [
       {
-        filePath: "pages/users/[id]/posts/[postId].tsx",
-        routePath: "pages/users/[id]/posts/[postId].tsx",
+        filePath: "/routes/pages/index.tsx",
+        GET: async ({ req, res }) => {
+          return { message: "GET /pages" };
+        },
+        POST: async ({ req, res }) => {
+          return { message: "POST /pages" };
+        },
+      },
+      {
+        filePath: "/routes/pages/about.tsx",
+        GET: async ({ req, res }) => {
+          return { message: "GET /pages/about" };
+        },
       },
     ];
 
-    const expectedRoutes = [
-      {
-        filePath: "pages/users/[id]/posts/[postId].tsx",
-        routePath: "/pages/users/:id/posts/:postId",
-      },
-    ];
+    const router = expressRouter({
+      loadedFileRoutes: routes,
+      dir: "routes",
+      verbose: 3,
+    });
 
-    const convertedRoutes = expressifyFileRoutes(fileRoutes);
-    assert.deepEqual(convertedRoutes, expectedRoutes);
+    const app = express();
+    app.use(router);
+
+    const getResponse = await supertest(app).get("/pages");
+    assert.deepEqual(JSON.parse(getResponse.text), { message: "GET /pages" });
+
+    const postResponse = await supertest(app).post("/pages");
+    assert.deepEqual(JSON.parse(postResponse.text), { message: "POST /pages" });
+
+    const aboutResponse = await supertest(app).get("/pages/about");
+    assert.deepEqual(JSON.parse(aboutResponse.text), {
+      message: "GET /pages/about",
+    });
   });
 });

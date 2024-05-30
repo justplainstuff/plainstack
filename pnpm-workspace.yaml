@@ -1,5 +1,5 @@
 packages:
-  - "plainweb.dev"
+  - "web"
   - "template"
   - "plainweb"
   - "create-plainweb"

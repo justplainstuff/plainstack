@@ -1,0 +1,34 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1716128063337,
+      "tag": "0000_wooden_bromley",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1716748923634,
+      "tag": "0001_overrated_captain_stacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1717094901001,
+      "tag": "0002_chunky_hiroim",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1717863162750,
+      "tag": "0003_last_ben_urich",
+      "breakpoints": true
+    }
+  ]
+}

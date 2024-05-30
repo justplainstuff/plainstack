@@ -3,13 +3,7 @@ import { before, describe, test } from "node:test";
 import assert from "node:assert/strict";
 import { text, sqliteTable, int } from "drizzle-orm/sqlite-core";
 import { drizzle } from "drizzle-orm/better-sqlite3";
-import {
-  PersistedTask,
-  Task,
-  _runTasks,
-  composeStartableTask,
-  perform,
-} from "./task";
+import { Task, _runTasks, composeStartableTask, perform } from "./task";
 import { defineDatabaseTask } from "./database";
 import { isolate } from "../isolate";
 import { eq } from "drizzle-orm";

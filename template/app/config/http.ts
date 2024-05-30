@@ -23,6 +23,6 @@ export async function http() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
-  app.use(await fileRouter({ dir: "app/routes", debug: true }));
+  app.use(await fileRouter({ dir: "app/routes", verbose: 1 }));
   app.listen(env.PORT);
 }

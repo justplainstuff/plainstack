@@ -11,7 +11,7 @@
     },
     "test": {},
     "dev": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     }

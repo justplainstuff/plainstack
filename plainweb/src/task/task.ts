@@ -46,7 +46,7 @@ export async function loadStartableTask(
   const debug = opts?.debug ?? false;
   const error = opts?.error;
 
-  debug && console.log(`Loading tasks from ${tasksDir}`);
+  debug && console.log(`[task] Loading tasks from ${tasksDir}`);
 
   try {
     const files = await fs.readdir(tasksDir);
@@ -54,7 +54,7 @@ export async function loadStartableTask(
 
     if (files.length !== taskFiles.length) {
       console.warn(
-        "Warning: Found non-task files or folders in the tasks directory"
+        "[task] Warning: Found non-task files or folders in the tasks directory"
       );
     }
 
@@ -63,10 +63,12 @@ export async function loadStartableTask(
         .map(async (file) => {
           const filePath = path.join(tasksDir as string, file);
           const absoluteFilePath = path.join(process.cwd(), filePath);
-          console.log(`Loading task from ${filePath}`);
+          console.log(`[task] Loading task from ${filePath}`);
           const taskModule = await import(absoluteFilePath);
           if (!taskModule.default || !taskModule.default.default.start) {
-            console.error(`No default export found in task at ${filePath}`);
+            console.error(
+              `[task] No default export found in task at ${filePath}`
+            );
             return;
           }
           const task = taskModule.default.default as Task<unknown>;
@@ -76,7 +78,7 @@ export async function loadStartableTask(
         .filter(Boolean) as Promise<StartableTask>[]
     );
   } catch (error) {
-    console.error("Error loading tasks:", error);
+    console.error("[task] Error loading tasks:", error);
     return [];
   }
 }
@@ -88,11 +90,10 @@ export function _runTasks(
   const debug = opts?.debug ?? false;
 
   if (debug) {
-    console.log("Starting tasks:");
+    console.log("[task] Starting tasks:");
     runnableTasks.forEach((task) => {
-      console.log(`  * ${task.name}`);
+      console.log(`   * ${task.name}`);
     });
-    console.log();
   }
 
   try {
@@ -230,14 +231,14 @@ export function defineTaskWithAdapter(
         throw new Error(`pollIntervall in task ${name} must be positive`);
 
       if (debug) {
-        console.log(`Starting task: ${name}`);
+        console.log(`[task] Starting task: ${name}`);
       }
 
       let executing = false;
 
       const timeout = setInterval(async () => {
         if (executing) {
-          console.log(`Protect task ${name} from overrun`);
+          console.log(`[task] Protect task ${name} from overrun`);
           return;
         }
 
@@ -245,7 +246,8 @@ export function defineTaskWithAdapter(
         const start = Date.now();
 
         try {
-          debug && console.log(`Run task ${name} for ${pollIntervall}ms`);
+          debug &&
+            console.log(`[task] Run task ${name} for ${pollIntervall}ms`);
 
           while (Date.now() - start < pollIntervall) {
             try {
@@ -262,7 +264,7 @@ export function defineTaskWithAdapter(
 
               debug &&
                 console.log(
-                  `Fetched ${Array.isArray(tasks) ? tasks.length : 1} job(s) for task ${name}`
+                  `[task] Fetched ${Array.isArray(tasks) ? tasks.length : 1} job(s) for task ${name}`
                 );
 
               const toProcess = Array.isArray(tasks) ? tasks : [tasks];
@@ -277,7 +279,10 @@ export function defineTaskWithAdapter(
                     })
                     .catch(async (err) => {
                       debug &&
-                        console.log(`Error processing task ${name}:`, err);
+                        console.log(
+                          `[task] Error processing task ${name}:`,
+                          err
+                        );
                       try {
                         await adapterFailure?.({ task, err });
                         await failure?.({ data: task.data, err });
@@ -292,18 +297,16 @@ export function defineTaskWithAdapter(
 
               debug &&
                 console.log(
-                  `Processed ${toProcess.length} job(s) for task ${name}`
+                  `[task] Processed ${toProcess.length} job(s) for task ${name}`
                 );
             } catch (err) {
               // TODO make logging configurable
-              console.error(err);
               error?.({ err });
 
-              debug &&
-                console.log(
-                  `Error occurred while processing task ${name}:`,
-                  err
-                );
+              console.error(
+                `[task] Error occurred while processing task ${name}:`,
+                err
+              );
             }
           }
         } finally {

@@ -1,5 +1,6 @@
 import Mail from "nodemailer/lib/mailer";
-import nodemailer, { SentMessageInfo } from "nodemailer";
+import nodemailer, { type SentMessageInfo } from "nodemailer";
+import JSONTransport from "nodemailer/lib/json-transport";
 
 const devTransporter = nodemailer.createTransport({
   jsonTransport: true,
@@ -11,7 +12,7 @@ export const transporter: {
   transporter: devTransporter,
 };
 
-export const outbox: SentMessageInfo[] = [];
+export const outbox: JSONTransport.SentMessageInfo[] = [];
 
 export function useTransporter(mail: nodemailer.Transporter) {
   transporter.transporter = mail;

@@ -6,7 +6,7 @@ export async function isolate<Schema extends Record<string, unknown>>(
   fn: (db: BetterSQLite3Database<Schema>) => Promise<void>
 ) {
   if (process.env.NODE_ENV !== "test") {
-    throw new Error("Make sure NODE_ENV=test is set before running tests");
+    throw new Error("Make sure NODE_ENV=test is set when running tests");
   }
   // TODO check if pending migrations, and print warning if so
   let err: Error | null = null;
@@ -19,12 +19,16 @@ export async function isolate<Schema extends Record<string, unknown>>(
     } catch (e) {
       err = e as Error;
     }
-  } catch (e) {
-    console.error(e);
-    throw e;
   } finally {
     db.run(sql.raw("ROLLBACK"));
   }
 
-  if (err) throw err;
+  if (err) {
+    // rethrow the error with the original error attached
+    const e = new Error(`Rethrowing the "${err.message}" error`);
+    // @ts-ignore
+    e.original_error = err;
+    e.stack = err.stack;
+    throw e;
+  }
 }

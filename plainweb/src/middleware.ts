@@ -31,6 +31,7 @@ export const flyHeaders: express.RequestHandler = function flyHeaders(
   return next();
 };
 
+// TODO implement
 export function pendingMigrations<T extends Record<string, unknown>>({
   database,
 }: {

@@ -107,3 +107,11 @@ export function json(
     status: opts?.status,
   };
 }
+
+export function notFound(): PlainResponse {
+  return {
+    _tag: "PlainResponse",
+    status: 404,
+    body: "Not Found",
+  };
+}
