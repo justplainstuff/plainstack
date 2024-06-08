@@ -12,7 +12,6 @@ export const envSchema = z.object({
   SMTP_PASS: z.string(),
   CF_TURNSTILE_SECRET: z.string(),
   CF_TURNSTILE_SITEKEY: z.string(),
-  ADMINER_PASSWORD: z.string().min(6),
 });
 
 export type Env = z.infer<typeof envSchema>;

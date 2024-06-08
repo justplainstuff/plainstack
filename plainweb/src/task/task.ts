@@ -246,8 +246,8 @@ export function defineTaskWithAdapter(
         const start = Date.now();
 
         try {
-          debug &&
-            console.log(`[task] Run task ${name} for ${pollIntervall}ms`);
+          // debug &&
+          //   console.log(`[task] Run task ${name} for ${pollIntervall}ms`);
 
           while (Date.now() - start < pollIntervall) {
             try {

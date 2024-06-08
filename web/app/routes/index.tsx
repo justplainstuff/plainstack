@@ -1,4 +1,4 @@
-import { Handler, stream } from "plainweb";
+import { Handler } from "plainweb";
 import Layout from "~/app/layout";
 import { zfd } from "zod-form-data";
 import { FooterSection } from "~/app/components/footer-section";
@@ -10,7 +10,6 @@ import express from "express";
 import { createContact } from "~/app/services/contacts";
 import { ShowcaseSection } from "~/app/components/showcase-section";
 import { Database } from "~/app/config/database";
-import { Suspense } from "@kitajs/html/suspense";
 
 async function validateTurnstile(req: express.Request, token: string) {
   const ip = req.header("CF-Connecting-IP");
@@ -77,19 +76,13 @@ export const POST: Handler = async ({ req, res }) => {
 };
 
 export const GET: Handler = async () => {
-  return stream((rid) => (
+  return (
     <Layout>
       <HeroSection />
-      <Suspense
-        rid={rid}
-        fallback={<div>Loading...</div>}
-        catch={() => <div>Something went wrong</div>}
-      >
-        <StackSection />
-        <ShowcaseSection />
-        <SignupSection />
-        <FooterSection />
-      </Suspense>
+      <StackSection />
+      <ShowcaseSection />
+      <SignupSection />
+      <FooterSection />
     </Layout>
-  ));
+  );
 };

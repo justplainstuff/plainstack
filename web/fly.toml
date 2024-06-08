@@ -36,6 +36,10 @@ swap_size_mb = 512
   timeout = "2s"
   path = "/health"
 
+[[statics]]
+  guest_path = "/app/web/public"
+  url_prefix = "/public"
+
 [[vm]]
   size = 'shared-cpu-1x'
   memory = '512mb'

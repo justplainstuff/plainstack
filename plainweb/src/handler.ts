@@ -22,7 +22,7 @@ export type JSONSerializable =
 
 export type Handler = (
   args: HandlerArgs
-) => Promise<PlainResponse | JSX.Element | JSONSerializable>;
+) => Promise<ExpressResponse | PlainResponse | JSX.Element | JSONSerializable>;
 
 // escape hatch so users can use the express.Response API directly
 export type ExpressResponse = () => void;

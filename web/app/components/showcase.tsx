@@ -17,8 +17,10 @@ export const GET: Handler = async () => {
       Click Me
     </button>
   );
-};       `;
-      const safeCode = await renderCode(code);
+};       
+
+`;
+      const safeCode = await renderCode(code, "tsx");
       return <div>{safeCode}</div>;
     },
   },
@@ -39,7 +41,7 @@ export const GET: Handler = async () => {
 // curl localhost:3000/health -> {"status":"ok"}
 
 `;
-      const safeCode = await renderCode(code);
+      const safeCode = await renderCode(code, "tsx");
       return <div>{safeCode}</div>;
     },
   },
@@ -67,7 +69,7 @@ export const GET: Handler = async () => {
 };
 
 `;
-      const safeCode = await renderCode(code);
+      const safeCode = await renderCode(code, "tsx");
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
@@ -88,8 +90,8 @@ export const POST: Handler = async ({ req }) => {
   return <div>Thanks for subscribing!</div>;
 };
 
-      `;
-      const safeCode = await renderCode(code);
+`;
+      const safeCode = await renderCode(code, "tsx");
       return <div class="bg-[#282A36] rounded-lg">{safeCode}</div>;
     },
   },
@@ -270,22 +272,19 @@ export const env: Env = envSchema.parse(process.env);
 
 export async function Showcase() {
   return (
-    <div
-      x-data={`{open: '${features[0]!.title}'}`}
-      class="mt-10 shadow-xl rounded-lg flex"
-    >
-      <div class="flex flex-col items-start rounded-l-lg whitespace-nowrap">
+    <div x-data={`{open: '${features[0]!.title}'}`} class="mt-10">
+      <div class="flex flex-row items-start">
         {features.map((feature) => (
           <button
             x-on:click={`open = '${feature.title}'`}
-            class={`btn btn-ghost w-full justify-start ${feature.title === features[0]!.title ? "btn-active" : ""}`}
+            class={`btn btn-ghost justify-start ${feature.title === features[0]!.title ? "btn-active" : ""}`}
             x-bind:class={`{'btn-active': open === '${feature.title}'}`}
           >
             {Html.escapeHtml(feature.title)}
           </button>
         ))}
       </div>
-      <div class="border-l-2 p-2  px-2 lg:px-6 rounded-lg w-full bg-[#282A36] overflow-x-auto">
+      <div class="mt-2 border-l-2 p-2 px-2 lg:px-6 rounded-lg w-full bg-[#282A36] overflow-x-auto">
         {features.map((feature, idx) => {
           const safe = feature.content;
           return (

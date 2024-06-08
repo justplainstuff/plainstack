@@ -251,6 +251,9 @@ importers:
       '@kitajs/html':
         specifier: 4.1.0
         version: 4.1.0
+      '@shikijs/transformers':
+        specifier: ^1.6.3
+        version: 1.6.3
       better-sqlite3:
         specifier: ^10.0.0
         version: 10.0.0
@@ -275,9 +278,9 @@ importers:
       express-basic-auth:
         specifier: ^1.2.1
         version: 1.2.1
-      express-slow-down:
-        specifier: ^2.0.3
-        version: 2.0.3(express@4.19.2)
+      express-rate-limit:
+        specifier: ^7.3.1
+        version: 7.3.1(express@4.19.2)
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
@@ -287,6 +290,9 @@ importers:
       marked:
         specifier: ^12.0.2
         version: 12.0.2
+      marked-shiki:
+        specifier: ^1.1.0
+        version: 1.1.0(marked@12.0.2)(shiki@1.6.0)
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -297,7 +303,7 @@ importers:
         specifier: workspace:*
         version: link:../plainweb
       shiki:
-        specifier: ^1.5.2
+        specifier: ^1.6.0
         version: 1.6.0
       tsx:
         specifier: ^4.10.3
@@ -1634,6 +1640,16 @@ packages:
 
   /@shikijs/core@1.6.0:
     resolution: {integrity: sha512-NIEAi5U5R7BLkbW1pG/ZKu3eb1lzc3/+jD0lFsuxMT7zjaf9bbNwdNyMr7zh/Zl8EXQtQ+MYBAt5G+JLu+5DlA==}
+    dev: false
+
+  /@shikijs/core@1.6.3:
+    resolution: {integrity: sha512-QnJKHFUW95GnlJLJGP6QLx4M69HM0KlXk+R2Y8lr/x4nAx1Yb/lsuxq4XwybuUjTxbJk+BT0g/kvn0bcsjGGHg==}
+    dev: false
+
+  /@shikijs/transformers@1.6.3:
+    resolution: {integrity: sha512-ptBuP/IIeqCzK3zZO/knFICZWs58uZWzbv7ND+bKOewe5NcCjZfSiMyzFwOyl23ewPJ1APjRBwLi6Asrodmmxw==}
+    dependencies:
+      shiki: 1.6.3
     dev: false
 
   /@tailwindcss/typography@0.5.13(tailwindcss@3.4.3):
@@ -3408,23 +3424,13 @@ packages:
       basic-auth: 2.0.1
     dev: false
 
-  /express-rate-limit@7.2.0(express@4.19.2):
-    resolution: {integrity: sha512-T7nul1t4TNyfZMJ7pKRKkdeVJWa2CqB8NA1P8BwYaoDI5QSBZARv5oMS43J7b7I5P+4asjVXjb7ONuwDKucahg==}
+  /express-rate-limit@7.3.1(express@4.19.2):
+    resolution: {integrity: sha512-BbaryvkY4wEgDqLgD18/NSy2lDO2jTuT9Y8c1Mpx0X63Yz0sYd5zN6KPe7UvpuSVvV33T6RaE1o1IVZQjHMYgw==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: 4 || 5 || ^5.0.0-beta.1
     dependencies:
       express: 4.19.2
-    dev: false
-
-  /express-slow-down@2.0.3(express@4.19.2):
-    resolution: {integrity: sha512-vATCiFd8uQHtTeK5/Q0nLUukhZh+RV5zkcHxLQr0X5dEFVEYqzVXEe48nW23Z49fwtR+ApD9zn9sZRisTCR99w==}
-    engines: {node: '>= 16'}
-    peerDependencies:
-      express: 4 || 5 || ^5.0.0-beta.1
-    dependencies:
-      express: 4.19.2
-      express-rate-limit: 7.2.0(express@4.19.2)
     dev: false
 
   /express@4.19.2:
@@ -4568,6 +4574,16 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /marked-shiki@1.1.0(marked@12.0.2)(shiki@1.6.0):
+    resolution: {integrity: sha512-PNiC0X4rYnzF63T6CDscwTxQB8l5Aur9XR7MRNBi/Y9nSxmPxasWT+V5OVam8Pj+NycWjzG6idO7fbc2bDD16w==}
+    peerDependencies:
+      marked: '>=7.0.0'
+      shiki: '>=1.0.0'
+    dependencies:
+      marked: 12.0.2
+      shiki: 1.6.0
+    dev: false
+
   /marked@12.0.2:
     resolution: {integrity: sha512-qXUm7e/YKFoqFPYPa3Ukg9xlI5cyAtGmyEIzMfW//m6kXwCy2Ps9DYf5ioijFKQ8qyuscrHoY04iJGctu2Kg0Q==}
     engines: {node: '>= 18'}
@@ -5658,6 +5674,12 @@ packages:
     resolution: {integrity: sha512-P31ROeXcVgW/k3Z+vUUErcxoTah7ZRaimctOpzGuqAntqnnSmx1HOsvnbAB8Z2qfXPRhw61yptAzCsuKOhTHwQ==}
     dependencies:
       '@shikijs/core': 1.6.0
+    dev: false
+
+  /shiki@1.6.3:
+    resolution: {integrity: sha512-lE1/YGlzFY0hQSyEfsZj18xGrTWxyhFQkaiILALqTBZPbJeYFWpbUhlmTGPOupYB/qC+H6sV4UznJzcEh3WMHQ==}
+    dependencies:
+      '@shikijs/core': 1.6.3
     dev: false
 
   /side-channel@1.0.4:
