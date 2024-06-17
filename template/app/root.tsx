@@ -22,7 +22,7 @@ export default function RootLayout(
             name="description"
             content={props.description || "Description"}
           />
-          <link rel="stylesheet" href="/output.css" />
+          <link rel="stylesheet" href="/public/output.css" />
           <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
           <script defer src="//unpkg.com/alpinejs"></script>
           {props.head ? Html.escapeHtml(props.head) : null}

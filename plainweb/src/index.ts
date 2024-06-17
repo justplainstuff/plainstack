@@ -1,7 +1,4 @@
-export type PlainWebConfig = {
-  port: string;
-};
-
+// http & web
 export { type FileRoute, fileRouter } from "./file-router";
 export {
   type HandlerArgs,
@@ -11,11 +8,20 @@ export {
 } from "./handler";
 export { html, json, redirect, stream, notFound } from "./plain-response";
 export { flyHeaders, redirectWWW } from "./middleware";
+
+// mail
+export { outbox, sendMail, useTransporter } from "./mail";
+
+// testing
 export { isolate } from "./isolate";
+export { migrate } from "./migrate";
 export { testHandler } from "./test-handler";
+
+// tasks
 export { type Task, runTasks, perform, type DefineTaskOpts } from "./task/task";
 export { type Database, defineDatabaseTask } from "./task/database";
 export { defineInmemoryTask } from "./task/inmemory";
-export { outbox, sendMail, useTransporter } from "./mail";
-export { migrate } from "./migrate";
-export { admin } from "./admin/admin";
+
+// unstable
+import { admin } from "./admin/admin";
+export const unstable_admin = admin;

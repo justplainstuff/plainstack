@@ -22,8 +22,14 @@ RUN apt-get update -qq && \
 # Install node modules
 COPY --link . .
 
+RUN npm install -g pnpm@8.9.1
+RUN pnpm install --prod false 
+RUN pnpm build lint test
+
 # Final stage for app image
 FROM base
+
+RUN npm install -g pnpm@8.9.1
 
 # Copy built application
 COPY --from=build /app /app
@@ -34,4 +40,4 @@ VOLUME /data
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "pnpm", "start" ]
