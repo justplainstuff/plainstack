@@ -86,8 +86,8 @@ export const GET: Handler = async () => {
           x-data="{}"
           class="mt-10 text-xl leading-8 text-neutral-700 text-center"
         >
-          plainweb is a micro framework using HTMX, SQLite and TypeScript to
-          help you build web apps with less complexity and more{" "}
+          plainweb is a framework using HTMX, SQLite and TypeScript for less
+          complexity and more{" "}
           <span
             class="underline cursor-pointer"
             x-on:click="confetti({particleCount: 100, spread: 70, origin: { y: 0.6 }});"
@@ -111,8 +111,8 @@ export const GET: Handler = async () => {
         </div>
         <div class="mt-3">
           <span>
-            Request handling, form validation, error handling and database
-            access in a single file-based route. Full type-safety.
+            A file-based route with request handling, form validation, error
+            handling and database access.
           </span>
         </div>
       </div>

@@ -41,7 +41,7 @@ export default function Layout(
               "Build web app with less complexity and more joy."
             }
           />
-          <link rel="icon" type="image/x-icon" href="/publis/favicon.ico" />
+          <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
           <link rel="stylesheet" href="/public/output.css" />
           <script
             defer

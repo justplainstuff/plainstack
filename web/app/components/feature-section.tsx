@@ -20,7 +20,7 @@ export function FeatureSection() {
       <h2 class="text-4xl font-bold tracking-tight text-neutral">Features</h2>
       <div class="mt-10 text-xl grid grid-cols-2">
         {features.map((feature) => (
-          <p safe>✅ {feature}</p>
+          <li safe>{feature}</li>
         ))}
       </div>
     </div>

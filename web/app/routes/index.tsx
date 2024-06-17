@@ -81,7 +81,6 @@ export const GET: Handler = async () => {
     <Layout>
       <HeroSection />
       <StackSection />
-      <FeatureSection />
       <ShowcaseSection />
       <SignupSection />
       <FooterSection />
