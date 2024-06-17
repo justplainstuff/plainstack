@@ -45,7 +45,7 @@ export type Contact = typeof contacts.$inferSelect;
 1. `pnpm db:gen`: creates new migration files
 2. `pnpm db:apply`: applies all pending migrations
 
-## Usage
+## Queries
 
 ```tsx
 import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
@@ -58,6 +58,10 @@ const contact = await db.query.contacts.findFirst({
   where: (contact) => eq(contact.email, "walter@example.org"),
 });
 ```
+
+## Drizzle Studio
+
+`pnpm db:studio` starts drizzle studio, a GUI for managing the database.
 
 ## Drizzle
 

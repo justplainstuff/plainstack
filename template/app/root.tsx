@@ -10,7 +10,7 @@ export default function RootLayout(
   return (
     <>
       {"<!doctype html>"}
-      <html lang="en" data-theme="light">
+      <html lang="en">
         <head>
           <meta charset="UTF-8" />
           <meta

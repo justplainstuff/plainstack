@@ -4,10 +4,10 @@ export function SignupSection() {
   return (
     <div class="mx-auto max-w-4xl pb-24 py-10 sm:pb-32 px-8 text-center">
       <h2 class="text-4xl font-bold tracking-tight text-neutral">
-        Stay Up To Date
+        Stay up to date
       </h2>
       <p class="text-neutral-700 mt-6 text-xl max-w-xl mx-auto">
-        Leave your email to receive 1-2 updates a month, no spam, unsubscribe
+        Leave your email to receive max 2 updates a month, no spam, unsubscribe
         anytime.
       </p>
       <form class="join mt-10" hx-post="/" hx-swap="outerHTML">

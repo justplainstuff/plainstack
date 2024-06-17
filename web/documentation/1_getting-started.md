@@ -13,21 +13,25 @@ npx create-plainweb
 And follow the prompts to set up your project.
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 This will start the development server at `http://localhost:3000`.
 
-Head over to [Directory Structure](/docs/directory-structure) to learn about the starter.
+## Commands
 
-## A solid foundation
+These are the most important commands for development:
 
-plainweb is not a framework, so it won't abstract away tools and hide them from you. plainweb is mostly built on top of:
+- `npm run dev` runs the development server in watch mode
+- `npm run test` runs tests with the built-in Node test runner (Node 22 is recommended)
+- `npm run db:push` pushes the `schema.ts` to the database without going through the migration process, useful for development
+- `npm run db:gen` generates the migration files
+- `npm run db:apply` applies the migrations
+- `npm run db:studio` starts drizzle studio, a GUI for managing the database
+- `npm run build` type checks your app and minifies the CSS
+- `npm run lint` runs the linter, including cross-site scripting scanning
+- `npm run fix` fixes linting errors
 
-- [htmx](https://htmx.org/)
-- [drizzle](https://orm.drizzle.team/docs/get-started-sqlite)
-- [tailwindcss](https://tailwindcss.com/docs/utility-first)
-- [zod](https://zod.dev/)
-- [express](https://expressjs.com/en/guide/routing.html)
+## Next steps
 
-It's a good idea to get familiar with them to make most of plainweb. Don't worry, you'll have the chance to dig into each of them later.
+Head over to [Directory Structure](/docs/directory-structure) to build or read about the [motivation](/docs/motivation) behind plainweb.

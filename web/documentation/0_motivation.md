@@ -9,7 +9,7 @@ plainweb is a set of tools, documentation and design principles for building sim
 It has 3 parts:
 
 1. This documentation
-2. `create-plainweb`: Creates a starter project with HTMX, SQLite and TypeScript
+2. `create-plainweb`: A CLI tool to create a starter project with HTMX, SQLite and TypeScript
 3. `plainweb`: A small library glueing existing tools together
 
 ## Is it a framework?
@@ -18,7 +18,13 @@ Unlike frameworks like Rails or Django, plainweb doesn't abstract away its depen
 
 `create-plainweb` (starter) and `plainweb` (library) provide the building blocks. The docs show how to compose them.
 
-This also means that the lock-in is minimal. In case `plainweb` stops fitting your needs or gets abandonned, it's easy to eject.
+This also means that the lock-in is minimal. In case `plainweb` stops fitting your needs or gets abandoned, it's easy to eject. You should have a solid grasp of following tools:
+
+- [htmx](https://htmx.org/)
+- [drizzle](https://orm.drizzle.team/docs/get-started-sqlite)
+- [tailwindcss](https://tailwindcss.com/docs/utility-first)
+- [zod](https://zod.dev/)
+- [express](https://expressjs.com/en/guide/routing.html)
 
 ## Motivation
 
@@ -28,7 +34,7 @@ I wanted something that:
 
 1. is a single long-running process to deploy and manage
 2. has full type-safe database queries and type-safe React-like `.tsx` components
-3. addreses 80% of common full-stack concerns like emails, task queues and routing
+3. addresses 80% of common full-stack concerns like emails, task queues and routing
 4. doesn't have a frontend build process
 
 ## Is it for you?
