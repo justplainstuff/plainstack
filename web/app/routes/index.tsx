@@ -10,7 +10,6 @@ import express from "express";
 import { createContact } from "~/app/services/contacts";
 import { ShowcaseSection } from "~/app/components/showcase-section";
 import { Database } from "~/app/config/database";
-import { FeatureSection } from "~/app/components/feature-section";
 
 async function validateTurnstile(req: express.Request, token: string) {
   const ip = req.header("CF-Connecting-IP");
