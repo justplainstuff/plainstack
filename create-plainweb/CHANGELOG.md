@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.15
+
+### Patch Changes
+
+- smaller fixes
+
 ## 0.0.14
 
 ### Patch Changes

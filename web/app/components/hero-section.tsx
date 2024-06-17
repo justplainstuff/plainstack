@@ -82,12 +82,12 @@ export const GET: Handler = async () => {
         plainweb
       </h1>
       <div class="mx-auto max-w-xl">
-        <p
+        <h2
           x-data="{}"
-          class="mt-10 text-xl leading-8 text-neutral-700 text-center"
+          class="mt-10 text-2xl leading-8 text-neutral-700 text-center"
         >
-          plainweb is a framework using HTMX, SQLite and TypeScript to build web
-          apps with less complexity and more{" "}
+          plainweb is a framework using HTMX, SQLite and TypeScript for less
+          complexity and more{" "}
           <span
             class="underline cursor-pointer"
             x-on:click="confetti({particleCount: 100, spread: 70, origin: { y: 0.6 }});"
@@ -95,7 +95,7 @@ export const GET: Handler = async () => {
             joy
           </span>{" "}
           🎉
-        </p>
+        </h2>
       </div>
       <div class="mt-10 text-center">
         <div class="select-all cursor-text rounded-lg bg-slate-200 px-5 py-2.5 inline-block">
@@ -108,6 +108,12 @@ export const GET: Handler = async () => {
         </div>
         <div class="bg-[#282A36] rounded-lg px-5 py-4 hidden sm:block">
           <div class="overflow-x-auto">{safeDesktopCode}</div>
+        </div>
+        <div class="mt-3">
+          <span class="text-neutral-700  text-lg">
+            ☝ A file-based route with request handling, form validation, error
+            handling and database access.
+          </span>
         </div>
       </div>
     </div>

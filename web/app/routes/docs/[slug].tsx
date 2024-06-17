@@ -9,9 +9,18 @@ export const GET: Handler = async ({ req }) => {
   const safeContent = currentPage.content;
   return (
     <Layout title={currentPage.title}>
-      <div class="max-w-5xl mx-auto">
+      <div class="max-w-5xl mx-auto px-0 sm:px-2">
         <div role="alert" class="alert alert-warning my-8">
-          <span>plainweb is work in progress, APIs are subject to change!</span>
+          <span>
+            plainweb is work in progress!{" "}
+            <a
+              href="https://github.com/joseferben/plainweb/issues"
+              class="btn-link"
+            >
+              Early feedback
+            </a>{" "}
+            is very welcome and much appreciated!
+          </span>
         </div>
         <div class="flex flex-col sm:flex-row mt-4 mb-24">
           <div class="flex justify-around items-start">

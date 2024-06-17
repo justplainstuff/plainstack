@@ -28,7 +28,7 @@ export async function getDocumentationPages(): Promise<DocumentationPage[]> {
     transformerMetaWordHighlight,
   } = await import("@shikijs/transformers");
   const highlighter = await getHighlighter({
-    langs: ["md", "typescript", "bash", "tsx"],
+    langs: ["md", "typescript", "bash", "tsx", "json"],
     themes: ["dracula-soft"],
   });
   const markedShiki = (await import("marked-shiki")).default;
