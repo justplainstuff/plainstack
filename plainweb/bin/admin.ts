@@ -2,8 +2,7 @@
 
 import express from "express";
 import BetterSqlite3Database, { Database } from "better-sqlite3";
-import { admin } from "../src";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { unstable_admin } from "../src";
 
 function migrateAndSeed(connection: Database) {
   const run = `
@@ -79,7 +78,7 @@ async function start() {
   migrateAndSeed(connection);
   const app = express();
   app.use(express.urlencoded({ extended: true }));
-  app.use("/admin", await admin(connection));
+  app.use("/admin", await unstable_admin(connection));
   app.listen(3000);
   console.log("Server started on http://localhost:3000");
 }

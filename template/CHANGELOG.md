@@ -1,5 +1,14 @@
 # my-app
 
+## 1.0.5
+
+### Patch Changes
+
+- many fixes
+- fix tests
+- Updated dependencies
+  - plainweb@0.0.5
+
 ## 1.0.4
 
 ### Patch Changes
