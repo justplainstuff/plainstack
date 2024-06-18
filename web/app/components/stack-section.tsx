@@ -5,13 +5,13 @@ const tech: {
   alt: string;
   href?: string;
 }[] = [
-  {
-    name: "grug",
-    width: 745,
-    height: 663,
-    alt: "Grug Brained Developer",
-    href: "https://grugbrain.dev/",
-  },
+  // {
+  //   name: "grug",
+  //   width: 745,
+  //   height: 663,
+  //   alt: "Grug Brained Developer",
+  //   href: "https://grugbrain.dev/",
+  // },
   { name: "htmx", width: 666, height: 126, alt: "HTMX" },
   { name: "sqlite", width: 666, height: 316, alt: "SQLite" },
   { name: "typescript", width: 666, height: 234, alt: "TypeScript" },

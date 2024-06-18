@@ -7,12 +7,18 @@ export async function renderCode(
   if (cache.has(code)) {
     return cache.get(code);
   }
-  const { codeToHtml } = await import("shiki");
-  const rendered = await codeToHtml(code, {
-    lang: lang,
-    theme: "dracula-soft",
-  });
+  try {
+    const { codeToHtml } = await import("shiki");
+    const rendered = await codeToHtml(code, {
+      lang: lang,
+      theme: "dracula-soft",
+    });
 
-  cache.set(code, rendered);
-  return rendered;
+    cache.set(code, rendered);
+    return rendered;
+  } catch (e) {
+    // clearing cache on error
+    cache.clear();
+    throw e;
+  }
 }

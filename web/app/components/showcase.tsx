@@ -272,8 +272,8 @@ export const env: Env = envSchema.parse(process.env);
 
 export async function Showcase() {
   return (
-    <div x-data={`{open: '${features[0]!.title}'}`} class="mt-10">
-      <div class="flex flex-row items-start">
+    <div x-data={`{open: '${features[0]!.title}'}`} class="mt-10 flex md:block">
+      <div class="flex flex-col md:flex-row items-start">
         {features.map((feature) => (
           <button
             x-on:click={`open = '${feature.title}'`}
