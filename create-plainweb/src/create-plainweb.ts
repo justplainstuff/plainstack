@@ -400,6 +400,25 @@ async function gitInitStep(ctx: Context) {
   });
 }
 
+async function createEnvStep(ctx: Context) {
+  let envPath = path.join(ctx.cwd, ".env");
+  if (fs.existsSync(envPath)) {
+    log("");
+    info("Nice!", `An .env file already exists`);
+    return;
+  }
+
+  log("");
+  await loadingIndicator({
+    start: "Creating .env file...",
+    end: ".env file created",
+    while: async () => {
+      await fs.promises.writeFile(envPath, "NODE_ENV=development", "utf-8");
+    },
+    ctx,
+  });
+}
+
 async function doneStep(ctx: Context) {
   let projectDir = path.relative(process.cwd(), ctx.cwd);
 
@@ -422,11 +441,6 @@ async function doneStep(ctx: Context) {
       "README.md"
     )} for development and deploy instructions.`
   );
-  await sleep(100);
-  // log(
-  //   `\n${prefix}Join the community at ${color.cyan(`https://rmx.as/discord`)}\n`
-  // );
-  await sleep(200);
 }
 
 type PackageManager = "npm" | "yarn" | "pnpm" | "bun";
@@ -612,6 +626,7 @@ export async function createPlainweb(argv: string[]) {
     installDependenciesQuestionStep,
     installDependenciesStep,
     gitInitStep,
+    createEnvStep,
     doneStep,
   ];
 
