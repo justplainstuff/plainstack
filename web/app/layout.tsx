@@ -38,7 +38,7 @@ export default function Layout(
             name="description"
             content={
               props.description ||
-              "Build web app with less complexity and more joy."
+              "plainweb is a framework using HTMX, SQLite and TypeScript for less complexity and more joy."
             }
           />
           <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
