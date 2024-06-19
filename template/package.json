@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm dev:app\" \"pnpm dev:tw\" \"pnpm db:studio\"",

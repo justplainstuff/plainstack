@@ -14,7 +14,7 @@ export const GET: Handler = async () => {
           <li>
             <a
               aria-label="Read the docs"
-              href="/docs/getting-started"
+              href="https://www.plainweb.dev/docs/getting-started"
               class="flex items-center"
             >
               <DocumentLogo />

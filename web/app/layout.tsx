@@ -61,6 +61,11 @@ export default function Layout(
             defer
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"
           ></script>
+          <script
+            defer
+            data-domain="plainweb.dev"
+            src="https://plausible.io/js/script.js"
+          ></script>
           {props.head ? Html.escapeHtml(props.head) : null}
         </head>
         <div class="navbar bg-base-100">
@@ -91,7 +96,7 @@ export default function Layout(
               </li>
               <li>
                 <a
-                  aria-label="Check the projdct out on GitHub"
+                  aria-label="Check out the project on GitHub"
                   href="https://www.github.com/joseferben/plainweb"
                 >
                   <Github />

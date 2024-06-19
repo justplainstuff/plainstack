@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.16
+
+### Patch Changes
+
+- write env file
+
 ## 0.0.15
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.7
+
+### Patch Changes
+
+- write env file
+
 ## 0.0.6
 
 ### Patch Changes

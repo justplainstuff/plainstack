@@ -10,6 +10,13 @@ Run the following command to create a new plainweb starter project:
 npx create-plainweb
 ```
 
+Make sure you are running Node 22 or higher.
+
+```bash
+node --version
+> v22.2.0
+```
+
 And follow the prompts to set up your project.
 
 ```bash

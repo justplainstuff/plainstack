@@ -1,5 +1,12 @@
 # plainweb.dev
 
+## 1.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - plainweb@0.0.7
+
 ## 1.0.6
 
 ### Patch Changes
