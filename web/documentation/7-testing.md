@@ -1,13 +1,32 @@
----
-title: Testing
----
-
 # Testing
 
-One of the main benefits of running SQLite is easy testing. There is not need to spin up another database for testing.
-To further keep things simple, plainweb uses the new built-in Node.js test runner.
+One of the main benefits of running SQLite is testing. There is not need to spin up another database to run tests.
 
-## Example setup
+To further keep things simple, plainweb uses the built-in Node.js test runner and the built-in assertion library.
+
+## Testing Services
+
+Let's test a `createUser` function in `app/services/users.ts`.
+
+```typescript
+import { eq } from "drizzle-orm";
+import { Database } from "~/app/config/database";
+import { users } from "~/app/config/schema";
+
+export async function createUser(db: Database, email: string) {
+  if (
+    await db.query.users.findFirst({
+      where: (user) => eq(user.email, email),
+    })
+  )
+    throw new Error("User already exists");
+  const created = { email: email, created: Date.now() };
+  await db.insert(users).values(created);
+  return created;
+}
+```
+
+plainweb calls functions in `app/services` services because they encapsulate business logic. Pass in the database as first argument to avoid hardcoding the database connection. This allows for better testability, because you can pass in the database transaction handle using `isolate`.
 
 ```typescript
 import { test, describe, before } from "node:test";
@@ -18,11 +37,6 @@ import { isolate, migrate } from "plainweb";
 
 describe("users", async () => {
   before(() => migrate(database));
-
-  test("createUser", async () =>
-    isolate(database, async (tx) => {
-      await createUser(tx, "aang@example.org");
-    }));
 
   test("createUser already exists", async () =>
     isolate(database, async (tx) => {
@@ -35,26 +49,13 @@ describe("users", async () => {
 });
 ```
 
-Note the `isolate` function. It runs the test in a separate database transaction, which gets rolled back after the test is done. This ensures the database is always in a clean state after a test.
+`isolate` runs the test in a separate database transaction, which gets rolled back after the test is done. This ensures the database is always in a clean state after a test.
 
-Use the `migrate` helper to run migrations before running tests.
-
-### Testing services
-
-plainweb calls functions in `app/services` services because they encapsulate business logic. Pass in the database as first argument to avoid hardcoding the database connection. This allows for better testability, because you can pass in the database transaction handle using `isolate`.
-
-```typescript
-import { database } from "~/app/config/database";
-import { createUser } from "~/app/services/users";
-
-test("some test involving users", async () => {
-  await isolate(database, async (tx) => {
-    await createUser(tx, "aang@example.org");
-  });
-});
-```
+`migrate` runs migrations before running the test suite.
 
 ### Testing handlers
+
+plainweb provides a `testHandler` helper to test `GET` and `POST` handlers.
 
 ```typescript
 import { before, test, describe } from "node:test";
@@ -94,6 +95,12 @@ describe("double opt in", () => {
 });
 ```
 
+In order to test a handler you need a mock request and a database handle.
+
+Create a mock request using `node-mocks-http`.
+
+It's important to pass in the database handle, so the handler is running in the same `isolate` transaction.
+
 ### Testing emails
 
 During testing `NODE_ENV` is set to `testing` and emails are sent to `outbox`.
@@ -106,7 +113,3 @@ import assert from "node:assert";
 
 assert.equal(outbox[0]!.message.includes("successfully"), true);
 ```
-
-### Testing tasks
-
-WIP

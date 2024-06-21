@@ -1,9 +1,27 @@
 import Html from "@kitajs/html";
 
-function Github() {
+function XIcon() {
   return (
     <svg
-      class="h-5 w-5"
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      fill="none"
+      viewBox="0 0 1200 1227"
+      class="size-7"
+    >
+      <path
+        fill="#000"
+        d="M714.163 519.284 1160.89 0h-105.86L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.625-476.152 327.181 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.894-377.686-540.24h162.604l304.797 435.991 47.468 67.894 396.2 566.721H892.476L569.165 687.854v-.026Z"
+      />
+    </svg>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg
+      class="size-7"
       viewBox="0 0 256 250"
       width="1em"
       height="1em"
@@ -21,8 +39,10 @@ export default function Layout(
     head?: string | Promise<string>;
     description?: string;
     title?: string;
+    hideDocs?: boolean;
   }>
 ) {
+  const safeHead = props.head;
   return (
     <>
       {"<!doctype html>"}
@@ -38,15 +58,12 @@ export default function Layout(
             name="description"
             content={
               props.description ||
-              "plainweb is a framework using HTMX, SQLite and TypeScript for less complexity and more joy."
+              "plainweb is a framework combining HTMX, SQLite and TypeScript for less complexity and more joy."
             }
           />
           <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
           <link rel="stylesheet" href="/public/output.css" />
-          <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-          ></script>
+
           <script
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"
@@ -66,7 +83,7 @@ export default function Layout(
             data-domain="plainweb.dev"
             src="https://plausible.io/js/script.js"
           ></script>
-          {props.head ? Html.escapeHtml(props.head) : null}
+          {props.head ? <>{safeHead}</> : null}
         </head>
         <div class="navbar bg-base-100">
           <div class="flex-1">
@@ -75,31 +92,35 @@ export default function Layout(
             </a>
           </div>
           <div class="flex-none">
+            <div id="docsearch"></div>
             <ul class="menu menu-horizontal px-1">
-              <li>
-                <a
-                  aria-label="Read the docs"
-                  href="/docs/getting-started"
-                  preload
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="size-5"
+              {props.hideDocs ? null : (
+                <li>
+                  <a
+                    aria-label="Read the docs"
+                    href="/docs/getting-started"
+                    preload
+                    class={"text-lg text-neutral-700"}
                   >
-                    <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" />
-                    <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                  </svg>
-                  Docs
-                </a>
-              </li>
+                    Docs
+                  </a>
+                </li>
+              )}
               <li>
                 <a
                   aria-label="Check out the project on GitHub"
                   href="https://www.github.com/joseferben/plainweb"
                 >
-                  <Github />
+                  <GithubIcon />
+                </a>
+              </li>
+              <li>
+                <a
+                  aria-label="follow me on x/twitter"
+                  href="https://www.x.com/joseferben"
+                  class="link"
+                >
+                  <XIcon />
                 </a>
               </li>
             </ul>

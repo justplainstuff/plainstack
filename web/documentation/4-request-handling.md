@@ -1,49 +1,14 @@
----
-title: Routing
----
+# Request Handling
 
-# Routing
-
-The file router as enabled by default. It implements file-based routing similar to Next.js by mapping `.tsx` files to express routes.
-
-Every file may export a `GET` and a `POST` handler that are mapped to the corresponding HTTP method.
-
-```tsx
-import { Handler } from "plainweb";
-
-export const GET: Handler = async () => {
-  return <div>Hello world</div>;
-};
-```
-
-## Setup
-
-```typescript
-import { fileRouter } from "plainweb";
-import express from "express";
-
-const app = express();
-app.use(await fileRouter({ dir: "app/routes" }));
-```
-
-## Routing rules
-
-The routing rules roughly follow the Next.js Pages Router conventions.
-
-| File path                | Express route     | Example match         | Params                        |
-| ------------------------ | ----------------- | --------------------- | ----------------------------- |
-| `routes/index.tsx`       | `/`               | `/`                   |                               |
-| `routes/about.tsx`       | `/about`          | `/about`              |                               |
-| `routes/users/index.tsx` | `/users`          | `/users`              |                               |
-| `routes/users.tsx`       | `/users`          | `/users`              |                               |
-| `routes/users/[id].tsx`  | `/users/:id`      | `/users/123`          | `{id: 123}`                   |
-| `routes/posts/[...slug]` | `/posts/:slug(*)` | `/posts/hotels/italy` | `{slug: ["hotels", "italy"]}` |
-| `routes/users.test.ts`   | `-` (ignored)     | `-`                   |                               |
-| `routes/find-orders.ts`  | `-` (ignored)     | `-`                   |                               |
+A handler in plainweb is a function that takes a request and returns a response.
 
 ## Response
 
-Return a `JSX.Element` or a string to render a HTML response.
+plainweb was designed to make the most common use cases simple. Returning HTML or JSON is inferred be returning either a `JSX.Element` or an object.
+
+### HTML
+
+Return a `JSX.Element` or a string to render a HTML response. (`JSX.Element` is really just `string | Promise<string>`!)
 
 ```tsx
 import { Handler } from "plainweb";
@@ -59,6 +24,25 @@ export const GET: Handler = async () => {
 };
 ```
 
+Returning HTML directly is a shorthand for `html`:
+
+```tsx
+import { Handler, html } from "plainweb";
+
+export const GET: Handler = async () => {
+  return html(
+    <html>
+      <body>
+        <div>Hello world</div>
+      </body>
+    </html>,
+    { status: 200 }
+  );
+};
+```
+
+### JSON
+
 Return an object to render a JSON response.
 
 ```tsx
@@ -68,6 +52,21 @@ export const GET: Handler = async () => {
   return { hello: ["world1", "world2"] };
 };
 ```
+
+Returning an object tells plainweb to infer the response type as JSON.
+The returned object needs to be JSON serializable, so you can't return functions or promises.
+
+The above is a shorthand for `json`:
+
+```tsx
+import { Handler, json } from "plainweb";
+
+export const GET: Handler = async () => {
+  return json({ hello: ["world1", "world2"] }, { status: 200 });
+};
+```
+
+### Redirect
 
 In order to redirect, use the `redirect` function.
 
@@ -79,7 +78,11 @@ export const GET: Handler = async () => {
 };
 ```
 
-As an escape hatch, you can always use the `express.Response API` directly. Make sure to wrap your code in a function:
+### Express Response
+
+If the convenient helper functions are not enough, you can always use the `express.Response` directly. This escape hatch allows you to use the full power of express.
+
+Make sure to wrap your response creating code in a callback function:
 
 ```tsx
 import { Handler, handleResponse } from "plainweb";
@@ -91,7 +94,7 @@ export const GET: Handler = async ({ res }) => {
 };
 ```
 
-## Route params
+## Params
 
 In a route `routes/orgs/[orgId]/users/[userId].tsx`, you can use `req.params` get the parameters in a route.
 
@@ -109,9 +112,9 @@ export const GET: Handler = async ({ req }) => {
 
 Express routed the request already to the matching handler, so you don't have to parse the params using zod.
 
-## Query strings
+## Query Strings
 
-Let's say a request`/users?sort=id` hits the `GET` handler below:
+Let's say a request `/users?sort=id` hits the `GET` handler below:
 
 ```tsx
 import { Handler } from "plainweb";
@@ -136,7 +139,7 @@ export const GET: Handler = async ({ req }) => {
 };
 ```
 
-## Parsing form data
+## Form Data
 
 `zod` can not be used to parse form data directly, but you can use the `zod-form-data` package to do so:
 
@@ -158,6 +161,57 @@ export const GET: Handler = async () => {
   );
 };
 ```
+
+## Streaming
+
+Thanks to [kitajs](https://github.com/kitajs/html) you can stream responses using `Suspense`, just like in React.
+
+Let's say you have a slow async component `HelloDelayed` that takes a long time to render.
+
+```tsx
+async function HelloDelayed() {
+  await new Promise((res) => {
+    setTimeout(() => {
+      res({});
+    }, 5000);
+  });
+  return <div>Hello 5 seconds later!</div>;
+}
+```
+
+Use `<Suspense />` to render a fallback component while the slow component is loading.
+
+```tsx
+import { Suspense } from "@kitajs/html/suspense";
+import { Handler, stream } from "plainweb";
+
+async function HelloDelayed() {
+  await new Promise((res) => {
+    setTimeout(() => {
+      res({});
+    }, 5000);
+  });
+  return <div>Hello 5 seconds later!</div>;
+}
+
+export const GET: Handler = async () => {
+  return stream((rid) => (
+    <Suspense
+      rid={rid}
+      fallback={<div>Loading...</div>}
+      catch={() => <div>Something went wrong</div>}
+    >
+      <HelloDelayed />
+    </Suspense>
+  ));
+};
+```
+
+Provide a callback to the `stream` function that returns the streamed JSX.Element. Make sure to use `rid` as the streaming id.
+
+This is useful if you don't want to delay rendering the whole page until the slow component is loaded.
+
+All without explicit client-side JavaScript!
 
 ## Layouts
 

@@ -1,7 +1,3 @@
----
-title: Directory Structure
----
-
 # Directory Structure
 
 Running `npx create-plainweb` will create a starter project with the structure below.

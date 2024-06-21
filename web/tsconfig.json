@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "public/**/*.js"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "declaration": true,

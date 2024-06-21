@@ -22,7 +22,7 @@ function addDatabase(
   next();
 }
 
-export async function http(): Promise<express.Application> {
+export async function app(): Promise<express.Application> {
   const app = express();
   if (env.NODE_ENV !== "production") app.use(morgan("dev"));
   if (env.NODE_ENV === "production") app.use(morgan("combined"));
@@ -38,6 +38,5 @@ export async function http(): Promise<express.Application> {
   app.use(express.urlencoded({ extended: true }));
   app.use(addDatabase);
   app.use(await fileRouter({ dir: "app/routes", verbose: 3 }));
-  app.listen(env.PORT);
   return app;
 }

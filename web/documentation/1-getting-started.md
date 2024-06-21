@@ -1,7 +1,3 @@
----
-title: Getting Started
----
-
 # Getting Started
 
 Run the following command to create a new plainweb starter project:

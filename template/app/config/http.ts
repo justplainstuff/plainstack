@@ -13,15 +13,6 @@ const limiter = rateLimit({
   message: "Too many requests, please try again in a few seconds",
 });
 
-function addDatabase(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  res.locals.database = database;
-  next();
-}
-
 export async function http(): Promise<express.Application> {
   const app = express();
   if (env.NODE_ENV !== "production") app.use(morgan("dev"));
@@ -36,7 +27,10 @@ export async function http(): Promise<express.Application> {
   app.use(compression());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(addDatabase);
+  app.use((req, res, next) => {
+    res.locals.database = database;
+    next();
+  });
   app.use(await fileRouter({ dir: "app/routes", verbose: 3 }));
   app.listen(env.PORT);
   return app;

@@ -6,8 +6,8 @@ export function SignupSection() {
       <h2 class="text-4xl font-bold tracking-tight text-neutral">
         Stay up to date
       </h2>
-      <p class="text-neutral-700 mt-6 text-xl max-w-xl mx-auto">
-        Receive max 2 updates a month, no spam, unsubscribe anytime.
+      <p class="text-neutral-700 mt-6 max-w-xl mx-auto">
+        Receive ~2 updates a month, no spam, unsubscribe anytime.
       </p>
       <form class="join mt-10" hx-post="/" hx-swap="outerHTML">
         <input

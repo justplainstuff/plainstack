@@ -1,8 +1,4 @@
----
-title: What is plainweb?
----
-
-# What is plainweb?
+# About
 
 plainweb is a set of tools, documentation and design principles for building simpler web apps on top of HTMX, SQLite and TypeScript.
 
@@ -22,7 +18,7 @@ This also means that the lock-in is minimal. In case `plainweb` stops fitting yo
 
 - [htmx](https://htmx.org/)
 - [drizzle](https://orm.drizzle.team/docs/get-started-sqlite)
-- [tailwindcss](https://tailwindcss.com/docs/utility-first)
+- [tailwind](https://tailwindcss.com/docs/utility-first)
 - [zod](https://zod.dev/)
 - [express](https://expressjs.com/en/guide/routing.html)
 
