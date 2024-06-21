@@ -8,7 +8,7 @@ export const GET: Handler = async ({ req }) => {
   if (!currentPage) return notFound();
   const safeContent = currentPage.content;
   return (
-    <Layout title={currentPage.title}>
+    <Layout title={`plainweb - ${currentPage.title}`}>
       <div class="max-w-5xl mx-auto px-0 sm:px-2">
         <div role="alert" class="alert alert-warning my-8">
           <span>

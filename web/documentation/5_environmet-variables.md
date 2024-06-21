@@ -4,7 +4,7 @@ title: Environment Variables
 
 # Environment Variables
 
-plainweb uses [dotenv](https://github.com/motdotla/dotenv) and [zod](zod.dev) to parse environment variables.
+plainweb uses [dotenv](https://github.com/motdotla/dotenv) and [zod](https://zod.dev) to parse environment variables.
 
 ## Setup
 

@@ -7,10 +7,12 @@ import { isolate, migrate } from "plainweb";
 describe("users", async () => {
   before(() => migrate(database));
 
-  test("createUser", async () =>
-    isolate(database, async (tx) => {
+  test("createUser", async () => {
+    await isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
-    }));
+    });
+    // TOOD add assertion
+  });
 
   test("createUser already exists", async () =>
     isolate(database, async (tx) => {
