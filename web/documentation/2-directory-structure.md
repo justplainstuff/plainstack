@@ -29,7 +29,7 @@ This directory contains the main application code and everything that doesn't ne
 
 ### `cli`
 
-One-off scripts that are aliased in `package.json`. This provides a low-overhead, simple convention for adding CLI entrypoints such as `pnpm db:gen`, `pnpm start`, or `pnpm dev`.
+One-off scripts that are aliased in `package.json`. This provides a low-overhead, simple convention for adding CLI entrypoints such as `npm run db:gen`, `npm run start`, or `npm run dev`.
 
 ### `components`
 
@@ -65,7 +65,7 @@ Defines background tasks that are stored in the simple SQLite-based task queue.
 
 ## `migrations`
 
-Running `pnpm db:gen` creates new migration files in this directory. Use `pnpm db:apply` to apply all migrations stored here.
+Running `npm run db:gen` creates new migration files in this directory. Use `npm run db:apply` to apply all migrations stored here.
 
 ## `drizzle.config.ts`
 
