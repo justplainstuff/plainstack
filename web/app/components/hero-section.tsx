@@ -4,7 +4,7 @@ import { getNrOfSparks } from "~/app/services/confetti";
 export async function HeroSection() {
   const nrOfSparks = await getNrOfSparks();
   return (
-    <div class="mx-auto max-w-5xl pb-24 py-10 sm:pb-32 px-2 md:px-8 mt-20 lg:mt-26">
+    <div class="mx-auto max-w-5xl pb-24 py-10 sm:pb-32 px-4 md:px-8 mt-20 lg:mt-26">
       <h1 class="text-6xl md:text-8xl font-bold tracking-tight text-neutral text-center">
         plainweb
       </h1>

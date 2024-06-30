@@ -158,6 +158,7 @@ async function serve() {
 }
 
 void serve();
+
 `;
       const safeCode = await renderCode(code, "typescript");
       return <div>{safeCode}</div>;
