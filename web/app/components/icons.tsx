@@ -10,7 +10,7 @@ export function LeafIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-leaf"
+      class="size-5"
     >
       <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
       <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
@@ -30,7 +30,7 @@ export function PlayIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-play"
+      class="size-5"
     >
       <polygon points="6 3 20 12 6 21 6 3" />
     </svg>
@@ -49,7 +49,7 @@ export function FolderTreeIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-folder-tree"
+      class="size-5"
     >
       <path d="M20 10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2.5a1 1 0 0 1-.8-.4l-.9-1.2A1 1 0 0 0 15 3h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1Z" />
       <path d="M20 21a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-2.9a1 1 0 0 1-.88-.55l-.42-.85a1 1 0 0 0-.92-.6H13a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1Z" />
@@ -71,7 +71,7 @@ export function RouteIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-route"
+      class="size-5"
     >
       <circle cx="6" cy="19" r="3" />
       <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
@@ -92,7 +92,7 @@ export function PhoneIncomingIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-phone-incoming"
+      class="size-5"
     >
       <polyline points="16 2 16 8 22 8" />
       <line x1="22" x2="16" y1="2" y2="8" />
@@ -113,7 +113,7 @@ export function DatabaseIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-database"
+      class="size-5"
     >
       <ellipse cx="12" cy="5" rx="9" ry="3" />
       <path d="M3 5V19A9 3 0 0 0 21 19V5" />
@@ -134,7 +134,7 @@ export function ContainerIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-container"
+      class="size-5"
     >
       <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" />
       <path d="M10 21.9V14L2.1 9.1" />
@@ -157,7 +157,7 @@ export function TestTubeDiagonalIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-test-tube-diagonal"
+      class="size-5"
     >
       <path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01a2.83 2.83 0 0 1 0-4L17 3" />
       <path d="m16 2 6 6" />
@@ -178,7 +178,7 @@ export function ListTodoIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-list-todo"
+      class="size-5"
     >
       <rect x="3" y="5" width="6" height="6" rx="1" />
       <path d="m3 17 2 2 4-4" />
@@ -201,7 +201,7 @@ export function CloudUploadIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-cloud-upload"
+      class="size-5"
     >
       <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
       <path d="M12 12v9" />
@@ -241,7 +241,7 @@ export function PizzaIcon() {
       stroke-width="1"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="lucide lucide-pizza"
+      class="size-5"
     >
       <path d="M15 11h.01" />
       <path d="M11 15h.01" />
