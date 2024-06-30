@@ -1,14 +1,14 @@
 # Request Handling
 
-A handler in plainweb is a function that takes a request and returns a response.
+In plainweb, a handler is a function that processes an incoming request and returns a response. This document outlines the various ways to handle requests and generate responses.
 
-## Response
+## Response Types
 
-plainweb was designed to make the most common use cases simple. Returning HTML or JSON is inferred be returning either a `JSX.Element` or an object.
+plainweb simplifies common use cases by inferring the response type based on the returned value.
 
-### HTML
+### HTML Responses
 
-Return a `JSX.Element` or a string to render a HTML response. (`JSX.Element` is really just `string | Promise<string>`!)
+Return a `JSX.Element` or a string to render an HTML response. In plainweb, `JSX.Element` is essentially `string | Promise<string>`.
 
 ```tsx
 import { Handler } from "plainweb";
@@ -24,7 +24,7 @@ export const GET: Handler = async () => {
 };
 ```
 
-Returning HTML directly is a shorthand for `html`:
+For more control, use the `html` helper function:
 
 ```tsx
 import { Handler, html } from "plainweb";
@@ -41,9 +41,9 @@ export const GET: Handler = async () => {
 };
 ```
 
-### JSON
+### JSON Responses
 
-Return an object to render a JSON response.
+Return a plain object to generate a JSON response:
 
 ```tsx
 import { Handler } from "plainweb";
@@ -53,10 +53,7 @@ export const GET: Handler = async () => {
 };
 ```
 
-Returning an object tells plainweb to infer the response type as JSON.
-The returned object needs to be JSON serializable, so you can't return functions or promises.
-
-The above is a shorthand for `json`:
+For more control, use the `json` helper function:
 
 ```tsx
 import { Handler, json } from "plainweb";
@@ -66,9 +63,11 @@ export const GET: Handler = async () => {
 };
 ```
 
-### Redirect
+Note: The returned object must be JSON-serializable (no functions or promises).
 
-In order to redirect, use the `redirect` function.
+### Redirects
+
+Use the `redirect` function to perform redirects:
 
 ```tsx
 import { Handler, redirect } from "plainweb";
@@ -78,14 +77,12 @@ export const GET: Handler = async () => {
 };
 ```
 
-### Express Response
+### Express Response (Escape Hatch)
 
-If the convenient helper functions are not enough, you can always use the `express.Response` directly. This escape hatch allows you to use the full power of express.
-
-Make sure to wrap your response creating code in a callback function:
+For full control, you can access the Express `Response` object directly:
 
 ```tsx
-import { Handler, handleResponse } from "plainweb";
+import { Handler } from "plainweb";
 
 export const GET: Handler = async ({ res }) => {
   return () => {
@@ -94,9 +91,11 @@ export const GET: Handler = async ({ res }) => {
 };
 ```
 
-## Params
+## Request Parameters
 
-In a route `routes/orgs/[orgId]/users/[userId].tsx`, you can use `req.params` get the parameters in a route.
+### Route Parameters
+
+For a route like `routes/orgs/[orgId]/users/[userId].tsx`, access parameters using `req.params`:
 
 ```tsx
 import { Handler } from "plainweb";
@@ -110,45 +109,42 @@ export const GET: Handler = async ({ req }) => {
 };
 ```
 
-Express routed the request already to the matching handler, so you don't have to parse the params using zod.
+### Query Strings
 
-## Query Strings
-
-Let's say a request `/users?sort=id` hits the `GET` handler below:
-
-```tsx
-import { Handler } from "plainweb";
-
-export const GET: Handler = async ({ req }) => {
-  const { sort } = req.query;
-  return { users: await getUsers({ sort }) };
-};
-```
-
-It's good practice to parse query strings using zod:
+Access query parameters via `req.query`. It's recommended to parse them using `zod`:
 
 ```tsx
 import { z } from "zod";
 import { Handler } from "plainweb";
 
 export const GET: Handler = async ({ req }) => {
-  const { sort } = req.query;
-  const parsed = z.object({ sort: z.string() }).safeParse(req.query);
-  if (!parsed.success) return <div>Invalid sort</div>;
-  return <div>Sorted by {parsed.data.sort}</div>;
+  const schema = z.object({ sort: z.string() });
+  const result = schema.safeParse(req.query);
+
+  if (!result.success) {
+    return <div>Invalid sort parameter</div>;
+  }
+
+  return <div>Sorted by {result.data.sort}</div>;
 };
 ```
 
-## Form Data
+### Form Data
 
-`zod` can not be used to parse form data directly, but you can use the `zod-form-data` package to do so:
+Use the `zod-form-data` package to parse form data:
 
 ```tsx
+import { zfd } from "zod-form-data";
 import { Handler } from "plainweb";
 
 export const POST: Handler = async ({ req }) => {
-  const parsed = zfd.formData({ value: zfd.text() }).safeParse(req.body);
-  if (!parsed.success && parsed.success === "ping") return <div>Pong!</div>;
+  const schema = zfd.formData({ value: zfd.text() });
+  const result = schema.safeParse(req.body);
+
+  if (result.success && result.data.value === "ping") {
+    return <div>Pong!</div>;
+  }
+
   return <div>Ping?</div>;
 };
 
@@ -162,35 +158,16 @@ export const GET: Handler = async () => {
 };
 ```
 
-## Streaming
+## Streaming Responses
 
-Thanks to [kitajs](https://github.com/kitajs/html) you can stream responses using `Suspense`, just like in React.
-
-Let's say you have a slow async component `HelloDelayed` that takes a long time to render.
-
-```tsx
-async function HelloDelayed() {
-  await new Promise((res) => {
-    setTimeout(() => {
-      res({});
-    }, 5000);
-  });
-  return <div>Hello 5 seconds later!</div>;
-}
-```
-
-Use `<Suspense />` to render a fallback component while the slow component is loading.
+plainweb supports streaming responses using `Suspense`, similar to React:
 
 ```tsx
 import { Suspense } from "@kitajs/html/suspense";
 import { Handler, stream } from "plainweb";
 
 async function HelloDelayed() {
-  await new Promise((res) => {
-    setTimeout(() => {
-      res({});
-    }, 5000);
-  });
+  await new Promise((resolve) => setTimeout(resolve, 5000));
   return <div>Hello 5 seconds later!</div>;
 }
 
@@ -207,31 +184,44 @@ export const GET: Handler = async () => {
 };
 ```
 
-Provide a callback to the `stream` function that returns the streamed JSX.Element. Make sure to use `rid` as the streaming id.
-
-This is useful if you don't want to delay rendering the whole page until the slow component is loaded.
-
-All without explicit client-side JavaScript!
+This allows rendering parts of the page immediately while slower components load asynchronously.
 
 ## Layouts
 
-Certain parts of your app might share the same layout. Layouts in plainweb are just JSX components that take the page content as `children` prop. It's up to you to wrap a page in a layouts. This makes things easy to read, understand and change without having to understand a layout nesting system.
+Layouts in plainweb are JSX components that wrap page content. They're simple to implement and use:
 
 ```tsx
-export default function Layout(props: Html.PropsWithChildren<{}>) {
+export default function Layout({ children }: Html.PropsWithChildren<{}>) {
   return (
     <>
       {"<!doctype html>"}
       <html lang="en">
         <head>
-          <meta charset="UTF-8" />
+          <meta charSet="UTF-8" />
+          <title>My App</title>
         </head>
-        <body>{props.children}</body>
+        <body>{children}</body>
       </html>
     </>
   );
 }
 ```
 
-It's a good idea to have a root layout where you define styles and scripts that are used by all pages, such as the tailwind css or analytics scripts.
-Layouts further down the page tree such as app layouts or blog layouts can be wrapped by the root layout.
+You can create a root layout for global styles and scripts, and nest more specific layouts within it:
+
+```tsx
+import RootLayout from "~/app/components/root-layout";
+import AppLayout from "~/app/components/app-layout";
+
+export const GET: Handler = async () => {
+  return (
+    <RootLayout>
+      <AppLayout>
+        <h1>Welcome to my app!</h1>
+      </AppLayout>
+    </RootLayout>
+  );
+};
+```
+
+This approach provides flexibility and clarity in managing your application's structure.
