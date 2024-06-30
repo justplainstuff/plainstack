@@ -4,11 +4,9 @@ import { zfd } from "zod-form-data";
 import { FooterSection } from "~/app/components/footer-section";
 import { HeroSection } from "~/app/components/hero-section";
 import { SignupSection } from "~/app/components/signup-section";
-import { StackSection } from "~/app/components/stack-section";
 import { env } from "~/app/config/env";
 import express from "express";
 import { createContact } from "~/app/services/contacts";
-import { ShowcaseSection } from "~/app/components/showcase-section";
 import { Database } from "~/app/config/database";
 import { FeatureSection } from "~/app/components/feature-section";
 
