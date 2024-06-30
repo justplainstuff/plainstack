@@ -76,7 +76,7 @@ export default function Layout(
               <li>
                 <a
                   aria-label="Check out the project on GitHub"
-                  href="https://www.github.com/joseferben/plainweb"
+                  href="https://github.com/joseferben/plainweb"
                 >
                   <GithubIcon />
                 </a>
@@ -84,7 +84,7 @@ export default function Layout(
               <li>
                 <a
                   aria-label="follow me on x/twitter"
-                  href="https://www.x.com/joseferben"
+                  href="https://x.com/joseferben"
                   class="link"
                 >
                   <XIcon />
