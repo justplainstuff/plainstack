@@ -53,7 +53,7 @@ export function FeatureSection() {
       <div class="my-10 text-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {features.map((feature) => (
           <div class="rounded-lg shadow border p-4">
-            <h2 safe class="text-xl font-bold tracking-tight text-neutral mb-4">
+            <h2 safe class="text-xl font-semibold text-neutral mb-4">
               {feature.title}
             </h2>
             <p class={"text-base"} safe>

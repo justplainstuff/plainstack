@@ -1,7 +1,35 @@
+import Html from "@kitajs/html";
 import { Handler, notFound } from "plainweb";
 import { FooterSection } from "~/app/components/footer-section";
+import {
+  CloudUploadIcon,
+  DatabaseIcon,
+  ContainerIcon,
+  FolderTreeIcon,
+  LeafIcon,
+  ListTodoIcon,
+  RouteIcon,
+  PizzaIcon,
+  PlayIcon,
+  PhoneIncomingIcon,
+  TestTubeDiagonalIcon,
+} from "~/app/components/icons";
 import Layout from "~/app/layout";
 import { getDocumentationPages, getHeadingId } from "~/app/services/page";
+
+const pageIcons: Record<string, JSX.Element> = {
+  motivation: LeafIcon(),
+  "getting-started": PlayIcon(),
+  "directory-structure": FolderTreeIcon(),
+  routing: RouteIcon(),
+  "request-handling": PhoneIncomingIcon(),
+  database: DatabaseIcon(),
+  "environmet-variables": ContainerIcon(),
+  testing: TestTubeDiagonalIcon(),
+  "task-queue": ListTodoIcon(),
+  deployment: CloudUploadIcon(),
+  recipes: PizzaIcon(),
+};
 
 export const GET: Handler = async ({ req }) => {
   const pages = await getDocumentationPages();
@@ -31,10 +59,15 @@ export const GET: Handler = async ({ req }) => {
           <div class="lg:w-1/4 lg:mr-8">
             <div class="lg:sticky lg:top-4 lg:self-start">
               <ul class="menu bg-base-200 w-full rounded-box mb-8 lg:mb-0">
-                {pages.map((page) =>
-                  page.slug === currentPage.slug ? (
+                {pages.map((page) => {
+                  const safeIcon = pageIcons[page.slug];
+                  const safeTitle = Html.escapeHtml(page.title);
+                  return page.slug === currentPage.slug ? (
                     <li>
-                      <a safe>{page.title}</a>
+                      <a>
+                        <span>{safeIcon}</span>
+                        {safeTitle}
+                      </a>
                       <ul>
                         {page.h2.map((h2) => (
                           <li>
@@ -51,16 +84,16 @@ export const GET: Handler = async ({ req }) => {
                   ) : (
                     <li>
                       <a
-                        safe
                         preload
                         href={`/docs/${page.slug}`}
                         class={page.slug === currentPage.slug ? "active" : ""}
                       >
-                        {page.title}
+                        <span>{safeIcon}</span>
+                        {safeTitle}
                       </a>
                     </li>
-                  )
-                )}
+                  );
+                })}
               </ul>
             </div>
           </div>

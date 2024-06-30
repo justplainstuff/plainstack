@@ -37,4 +37,4 @@ These are the most important commands for development:
 
 ## Next steps
 
-Head over to [Directory Structure](/docs/directory-structure) to build or read about the [motivation](/docs/motivation) behind plainweb.
+Head over to [Directory Structure](/docs/directory-structure) to dig into the starter project.
