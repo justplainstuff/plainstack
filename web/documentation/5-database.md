@@ -1,4 +1,4 @@
-# Database
+# SQL Database
 
 plainweb uses SQLite as database and [drizzle](https://orm.drizzle.team/docs/overview) for type-safe queries and migrations.
 
