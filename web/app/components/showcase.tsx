@@ -227,19 +227,8 @@ function renderTree(
 export async function Showcase() {
   return (
     <div x-data={`{open: '${features[0]!.title}'}`} class="mt-10 md:flex">
-      <div class="hidden md:block font-mono overflow-y-auto max-h-[calc(100vh-200px)] pr-4 flex-shrink-0">
+      <div class="font-mono overflow-y-auto max-h-[calc(100vh-200px)] pr-4 flex-shrink-0">
         {renderTree(fileTree)}
-      </div>
-      <div class="md:hidden flex flex-row items-start flex-wrap font-mono">
-        {features.map((feature) => (
-          <button
-            x-on:click={`open = '${feature.title}'`}
-            class={`btn font-semibold btn-sm btn-ghost ${feature.title === features[0]!.title ? "btn-active" : ""}`}
-            x-bind:class={`{'btn-active': open === '${feature.title}'}`}
-          >
-            {Html.escapeHtml(feature.title)}
-          </button>
-        ))}
       </div>
       <div class="mt-2 lg:mt-0 lg:ml-6 border-l-2 p-2 px-2 lg:px-6 rounded-lg w-full bg-[#282A36] overflow-x-auto">
         {features.map((feature, idx) => {
