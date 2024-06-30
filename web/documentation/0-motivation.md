@@ -61,7 +61,7 @@ While this approach simplifies development, it makes it harder to leverage exist
 
 Node.js is a mature and reliable runtime.
 
-Although Bun is generally faster than Node.js, plainweb might switch to Bun once it reaches a stable state.
+Bun is generally faster than Node.js and plainweb might switch to Bun once it reaches a stable state.
 
 ### Express (vs. Hono, Fastify)
 

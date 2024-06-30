@@ -22,7 +22,9 @@ function addDatabase(
   next();
 }
 
-export async function app(): Promise<express.Application> {
+export async function app(
+  redirects: Record<string, string>
+): Promise<express.Application> {
   const app = express();
   if (env.NODE_ENV !== "production") app.use(morgan("dev"));
   if (env.NODE_ENV === "production") app.use(morgan("combined"));
@@ -31,6 +33,15 @@ export async function app(): Promise<express.Application> {
   if (env.NODE_ENV === "development")
     app.use("/public", express.static("public"));
   if (env.NODE_ENV === "development") app.use(limiter);
+
+  app.use((req, res, next) => {
+    const target = redirects[req.path];
+    if (target) {
+      res.redirect(target);
+    } else {
+      next();
+    }
+  });
 
   app.use(flyHeaders);
   app.use(compression());

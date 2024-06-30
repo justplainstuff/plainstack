@@ -1,18 +1,31 @@
 # SQL Database
 
-plainweb uses SQLite as database and [drizzle](https://orm.drizzle.team/docs/overview) for type-safe queries and migrations.
+plainweb uses SQLite as its database engine and leverages [Drizzle](https://orm.drizzle.team/docs/overview) for type-safe queries and migrations. This combination provides a powerful and developer-friendly database solution.
 
 ## Setup
 
-```tsx
+### Connection
+
+First, set up the database connection:
+
+```typescript
+// app/config/database.ts
 import BetterSqlite3Database from "better-sqlite3";
+import { env } from "./env";
 
 export const connection: BetterSqlite3Database.Database =
   new BetterSqlite3Database(env.NODE_ENV === "test" ? ":memory:" : env.DB_URL);
+
+// Enable Write-Ahead Logging for better performance
 connection.pragma("journal_mode = WAL");
 ```
 
-```tsx
+### Drizzle Setup
+
+Next, configure drizzle:
+
+```typescript
+// app/config/database.ts
 import * as schema from "./schema";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 
@@ -20,9 +33,12 @@ export const database = drizzle<typeof schema>(connection, { schema });
 export type Database = typeof database;
 ```
 
-### Define tables
+## Schema Definition
 
-```tsx
+Define your database schema using Drizzle's type-safe table definitions:
+
+```typescript
+// app/config/schema.ts
 import { text, integer, sqliteTable, int } from "drizzle-orm/sqlite-core";
 
 export const contacts = sqliteTable("contacts", {
@@ -36,29 +52,88 @@ export const contacts = sqliteTable("contacts", {
 export type Contact = typeof contacts.$inferSelect;
 ```
 
-### Run migrations
+This approach provides type safety for your database operations and makes it easy to maintain your schema.
 
-1. `pnpm db:gen`: creates new migration files
-2. `pnpm db:apply`: applies all pending migrations
+## Migrations
+
+Drizzle provides a straightforward way to manage database migrations:
+
+1. Generate new migration files:
+
+   ```
+   npm run db:gen
+   ```
+
+2. Apply pending migrations:
+   ```
+   npm run db:apply
+   ```
+
+Make sure to run these commands whenever you make changes to your schema.
 
 ## Queries
 
-```tsx
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { Contact, contacts } from "~/app/config/schema";
+Here's an example of how to perform a query using drizzle:
+
+```typescript
 import { eq } from "drizzle-orm";
+import { database } from "~/app/config/database";
+import { contacts } from "~/app/config/schema";
 
-const db = new BetterSQLite3Database(":memory:");
+async function getContact(email: string) {
+  const contact = await database.query.contacts.findFirst({
+    where: eq(contacts.email, email),
+  });
+  return contact;
+}
+```
 
-const contact = await db.query.contacts.findFirst({
-  where: (contact) => eq(contact.email, "walter@example.org"),
-});
+This query is type-safe, and your IDE will provide autocomplete suggestions for table and column names.
+
+## Inserting
+
+Here's how you can insert data into the database:
+
+```typescript
+import { database } from "~/app/config/database";
+import { contacts } from "~/app/config/schema";
+
+async function createContact(email: string) {
+  await database.insert(contacts).values({
+    email,
+    created: Date.now(),
+    doubleOptInToken: generateToken(), // Implement this function
+  });
+}
+```
+
+## Updating
+
+Updating data is similarly straightforward:
+
+```typescript
+import { eq } from "drizzle-orm";
+import { database } from "~/app/config/database";
+import { contacts } from "~/app/config/schema";
+
+async function confirmDoubleOptIn(email: string) {
+  await database
+    .update(contacts)
+    .set({ doubleOptInConfirmed: Date.now() })
+    .where(eq(contacts.email, email));
+}
 ```
 
 ## Drizzle Studio
 
-`pnpm db:studio` starts drizzle studio, a GUI for managing the database.
+Drizzle provides a GUI for managing your database. You can start it with:
 
-## Drizzle
+```
+npm run db:studio
+```
 
-Head over to [drizzle](https://orm.drizzle.team/docs/overview), they have a great documentation.
+This tool is helpful for inspecting your database, running ad-hoc queries, and managing your data during development.
+
+## Docs
+
+For more detailed information about drizzle and its features, refer to the [official Drizzle documentation](https://orm.drizzle.team/docs/overview). It provides comprehensive guides on advanced querying, relationships, migrations, and more.

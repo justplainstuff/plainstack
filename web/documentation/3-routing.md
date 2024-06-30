@@ -24,7 +24,7 @@ app.use(await fileRouter({ dir: "app/routes" }));
 
 ## Routing rules
 
-The routing rules roughly follow the Next.js Pages Router conventions.
+The routing rules follow the Next.js Pages Router conventions.
 
 | File path                | Express route     | Example match         | Params                        |
 | ------------------------ | ----------------- | --------------------- | ----------------------------- |

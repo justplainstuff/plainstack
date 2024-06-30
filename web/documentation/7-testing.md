@@ -1,12 +1,10 @@
 # Testing
 
-One of the main benefits of running SQLite is testing. There is not need to spin up another database to run tests.
-
-To further keep things simple, plainweb uses the built-in Node.js test runner and the built-in assertion library.
+One of the key advantages of using SQLite in plainweb is simplified testing. There's no need to spin up a separate database for running tests. plainweb uses Node.js's built-in test runner and assertion library to keep things straightforward.
 
 ## Testing Services
 
-Let's test a `createUser` function in `app/services/users.ts`.
+Let's start by testing a `createUser` function in `app/services/users.ts`:
 
 ```typescript
 import { eq } from "drizzle-orm";
@@ -15,47 +13,48 @@ import { users } from "~/app/config/schema";
 
 export async function createUser(db: Database, email: string) {
   if (
-    await db.query.users.findFirst({
-      where: (user) => eq(user.email, email),
-    })
-  )
+    await db.query.users.findFirst({ where: (user) => eq(user.email, email) })
+  ) {
     throw new Error("User already exists");
-  const created = { email: email, created: Date.now() };
+  }
+  const created = { email, created: Date.now() };
   await db.insert(users).values(created);
   return created;
 }
 ```
 
-plainweb calls functions in `app/services` services because they encapsulate business logic. Pass in the database as first argument to avoid hardcoding the database connection. This allows for better testability, because you can pass in the database transaction handle using `isolate`.
+In plainweb, functions in `app/services` are called "services" because they encapsulate business logic. We pass the database as the first argument to avoid hardcoding the database connection, improving testability. This allows us to pass in the database transaction handle using `isolate`.
+
+Here's how to test the `createUser` service:
 
 ```typescript
 import { test, describe, before } from "node:test";
+import assert from "node:assert";
 import { createUser } from "~/app/services/users";
 import { database } from "~/app/config/database";
-import assert from "node:assert";
 import { isolate, migrate } from "plainweb";
 
 describe("users", async () => {
   before(() => migrate(database));
 
-  test("createUser already exists", async () =>
+  test("createUser throws error when user already exists", async () =>
     isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
-
-      await assert.rejects(async () => {
-        await createUser(tx, "aang@example.org");
+      await assert.rejects(() => createUser(tx, "aang@example.org"), {
+        message: "User already exists",
       });
     }));
 });
 ```
 
-`isolate` runs the test in a separate database transaction, which gets rolled back after the test is done. This ensures the database is always in a clean state after a test.
+Key points:
 
-`migrate` runs migrations before running the test suite.
+- `isolate` runs the test in a separate database transaction, which gets rolled back after the test is done. This ensures the database is always in a clean state after each test.
+- `migrate` runs migrations before executing the test suite.
 
-### Testing handlers
+## Testing Handlers
 
-plainweb provides a `testHandler` helper to test `GET` and `POST` handlers.
+plainweb provides a `testHandler` helper to test `GET` and `POST` handlers. Here's an example:
 
 ```typescript
 import { before, test, describe } from "node:test";
@@ -67,10 +66,10 @@ import { createRequest } from "node-mocks-http";
 import { contacts } from "~/app/config/schema";
 import { eq } from "drizzle-orm";
 
-describe("double opt in", () => {
+describe("double opt-in", () => {
   before(async () => await migrate(database));
 
-  test("send email with correct token and email", async () => {
+  test("confirms opt-in with correct token and email", async () => {
     await isolate(database, async (tx) => {
       await tx.insert(contacts).values({
         email: "walter@example.org",
@@ -82,28 +81,30 @@ describe("double opt in", () => {
       const req = createRequest({
         url: `/double-opt-in?token=123&email=walter@example.org`,
       });
+
       const res = await testHandler(GET, req, { database });
+
       const contact = await database.query.contacts.findFirst({
         where: eq(contacts.email, "walter@example.org"),
       });
-      assert.equal(contact?.doubleOptInConfirmed! > 0, true);
+
+      assert.ok(contact?.doubleOptInConfirmed! > 0);
       assert.equal(res._getStatusCode(), 200);
-      assert.equal(res._getData().includes("Thanks for signing up"), true);
-      assert.equal(outbox[0]!.message.includes("successfully"), true);
+      assert.ok(res._getData().includes("Thanks for signing up"));
+      assert.ok(outbox[0]?.message.includes("successfully"));
     });
   });
 });
 ```
 
-In order to test a handler you need a mock request and a database handle.
+Important notes for testing handlers:
 
-Create a mock request using `node-mocks-http`.
+1. Use `node-mocks-http` to create a mock request.
+2. Pass the database handle to ensure the handler runs in the same `isolate` transaction.
 
-It's important to pass in the database handle, so the handler is running in the same `isolate` transaction.
+## Testing Emails
 
-### Testing emails
-
-During testing `NODE_ENV` is set to `testing` and emails are sent to `outbox`.
+During testing, `NODE_ENV` is set to `testing`, and emails are sent to an `outbox` array instead of being actually sent. You can assert on the contents of these emails:
 
 ```typescript
 import { outbox } from "plainweb";
@@ -111,5 +112,7 @@ import assert from "node:assert";
 
 // ...
 
-assert.equal(outbox[0]!.message.includes("successfully"), true);
+assert.ok(outbox[0]?.message.includes("successfully"));
 ```
+
+This approach allows you to verify email content without trapping sent emails or using a real email service for your tests.

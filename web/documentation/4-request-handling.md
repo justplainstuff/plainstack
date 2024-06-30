@@ -1,6 +1,6 @@
 # Request Handling
 
-In plainweb, a handler is a function that processes an incoming request and returns a response. This document outlines the various ways to handle requests and generate responses.
+In plainweb, a handler is a function that processes an incoming request and returns a response.
 
 ## Response Types
 
@@ -131,7 +131,7 @@ export const GET: Handler = async ({ req }) => {
 
 ### Form Data
 
-Use the `zod-form-data` package to parse form data:
+Use [zod-form-data](https://www.npmjs.com/package/zod-form-data) to parse form data:
 
 ```tsx
 import { zfd } from "zod-form-data";
@@ -223,5 +223,3 @@ export const GET: Handler = async () => {
   );
 };
 ```
-
-This approach provides flexibility and clarity in managing your application's structure.
