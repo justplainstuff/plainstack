@@ -187,7 +187,7 @@ function renderTree(
         return (
           <li>
             <div>
-              <span class="font-bold">
+              <span class="font-normal">
                 {isRoot ? "" : isLastItem ? "└── " : "├── "}
                 {safeKey}/
               </span>
@@ -203,7 +203,7 @@ function renderTree(
                     <button
                       x-on:click={`open = '${prefix}${safeKey}/${file}'`}
                       x-bind:class={`{'text-primary': open === '${prefix}${safeKey}/${file}'}`}
-                      class="hover:text-primary focus:outline-none link"
+                      class="hover:text-primary focus:outline-none font-bold link"
                     >
                       {Html.escapeHtml(file)}
                     </button>

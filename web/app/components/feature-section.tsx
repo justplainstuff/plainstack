@@ -48,7 +48,7 @@ export function FeatureSection() {
   return (
     <div class="mx-auto max-w-4xl pb-24 py-10 sm:pb-32 px-8">
       <h2 class="text-4xl font-bold tracking-tight text-neutral">
-        Key Features
+        Key features
       </h2>
       <div class="my-10 text-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {features.map((feature) => (
