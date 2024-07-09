@@ -80,7 +80,7 @@ export function isInteractive() {
 }
 
 export function log(message: string) {
-  return process.stdout.write(message + "\n");
+  return process.stdout.write(`${message}\n`);
 }
 
 export let stderr = process.stderr;
@@ -90,7 +90,7 @@ export function setStderr(writable: typeof process.stderr) {
 }
 
 export function logError(message: string) {
-  return stderr.write(message + "\n");
+  return stderr.write(`${message}\n`);
 }
 
 function logBullet(
@@ -178,7 +178,9 @@ export function reverse<T>(arr: T[]): T[] {
   return [...arr].reverse();
 }
 
-export function isValidJsonObject(obj: any): obj is Record<string, unknown> {
+export function isValidJsonObject(
+  obj: unknown,
+): obj is Record<string, unknown> {
   return !!(obj && typeof obj === "object" && !Array.isArray(obj));
 }
 

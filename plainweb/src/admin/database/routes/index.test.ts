@@ -12,7 +12,7 @@ import { isolate } from "../../..";
 import { handleResponse } from "../../../handler";
 
 const connection = new BetterSqlite3Database(":memory:");
-export const database = drizzle(connection);
+const database = drizzle(connection);
 
 function app(database: BetterSQLite3Database) {
   const app = express();

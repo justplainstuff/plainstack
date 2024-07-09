@@ -16,7 +16,7 @@ export function SignupSection() {
           class="input input-bordered join-item"
           placeholder="Email"
         />
-        <div class="cf-turnstile" data-sitekey={env.CF_TURNSTILE_SITEKEY}></div>
+        <div class="cf-turnstile" data-sitekey={env.CF_TURNSTILE_SITEKEY} />
         <button type="submit" class="btn btn-primary join-item">
           Sign up
         </button>

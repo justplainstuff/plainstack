@@ -20,16 +20,16 @@ describe("double opt in", () => {
       });
 
       const req = createRequest({
-        url: `/double-opt-in?token=123&email=walter@example.org`,
+        url: "/double-opt-in?token=123&email=walter@example.org",
       });
       const res = await testHandler(GET, req, { database });
       const contact = await database.query.contacts.findFirst({
         where: eq(contacts.email, "walter@example.org"),
       });
-      assert.equal(contact?.doubleOptInConfirmed! > 0, true);
+      assert.equal((contact?.doubleOptInConfirmed as number) > 0, true);
       assert.equal(res._getStatusCode(), 200);
       assert.equal(res._getData().includes("Thanks for signing up"), true);
-      assert.equal(outbox[0]!.message.includes("successfully"), true);
+      assert.equal(outbox[0]?.message.includes("successfully"), true);
     });
   });
 
@@ -41,7 +41,7 @@ describe("double opt in", () => {
         doubleOptInToken: "123",
       });
       const req = createRequest({
-        url: `/double-opt-in?token=abc&email=walter@example.org`,
+        url: "/double-opt-in?token=abc&email=walter@example.org",
       });
       const res = await testHandler(GET, req, { database });
       const contact = await database.query.contacts.findFirst({

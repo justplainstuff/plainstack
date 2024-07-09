@@ -35,11 +35,11 @@ async function broadcastConfettiTrigger(
     id: triggerId,
     totalJoys,
   });
-  wss.clients.forEach((client) => {
+  for (const client of wss.clients) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
     }
-  });
+  }
 }
 
 function isRateLimited(userId: string): boolean {

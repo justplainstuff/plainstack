@@ -6,7 +6,9 @@ import { verbose } from "../../../config";
 
 export const POST: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const db = res.locals.database as BetterSQLite3Database<{}>;
+  const db = res.locals.database as BetterSQLite3Database<
+    Record<string, unknown>
+  >;
   const { __row, ...updatedData } = req.body;
 
   const columns = db.all<ColumnInfo>(
@@ -48,7 +50,7 @@ export const POST: Handler = async ({ req, res }) => {
     <tr>
       {columns.map((column) => {
         const tsType = columnType(column.type);
-        const value = newData![column.name];
+        const value = newData?.[column.name];
         const formattedValue = renderValue(value, tsType);
         return (
           <td safe data-type={tsType}>
@@ -58,6 +60,7 @@ export const POST: Handler = async ({ req, res }) => {
       })}
       <td>
         <button
+          type="submit"
           class="btn btn-danger"
           hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(oldRow))}`}
         >
@@ -90,11 +93,13 @@ export const GET: Handler = async ({ req, res }) => {
       })}
       <td>
         <button
+          type="submit"
           hx-get={`/admin/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
         >
           Cancel
         </button>
         <button
+          type="submit"
           hx-post={`/admin/database/${tableName}/edit`}
           hx-include="closest tr"
         >

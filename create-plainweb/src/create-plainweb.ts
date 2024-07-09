@@ -5,7 +5,6 @@ import process from "node:process";
 import arg from "arg";
 import execa from "execa";
 import fse from "fs-extra";
-import { rimraf } from "rimraf";
 import semver from "semver";
 import sortPackageJSON from "sort-package-json";
 import stripAnsi from "strip-ansi";
@@ -80,7 +79,7 @@ async function getContext(argv: string[]): Promise<Context> {
     "--overwrite": overwrite,
   } = flags;
 
-  const cwd = flags["_"][0];
+  const cwd = flags._[0];
   const interactive = isInteractive();
   const projectName = cwd;
 
@@ -92,7 +91,7 @@ async function getContext(argv: string[]): Promise<Context> {
     if (semver.valid(selectedPlainwebVersion)) {
       // do nothing, we're good
     } else if (semver.coerce(selectedPlainwebVersion)) {
-      selectedPlainwebVersion = semver.coerce(selectedPlainwebVersion)!.version;
+      selectedPlainwebVersion = semver.coerce(selectedPlainwebVersion)?.version;
     } else {
       log(
         `\n${color.warning(
@@ -141,9 +140,9 @@ async function introStep(ctx: Context) {
   if (!ctx.interactive) {
     log("");
     info("Shell is not interactive.", [
-      `Using default options. This is equivalent to running with the `,
+      "Using default options. This is equivalent to running with the ",
       color.reset("--yes"),
-      ` flag.`,
+      " flag.",
     ]);
   }
 }
@@ -169,8 +168,8 @@ async function projectNameStep(ctx: Context) {
       message: "Where should we create your new project?",
       default: "./my-plainweb-project",
     });
-    ctx.cwd = name!;
-    ctx.projectName = toValidProjectName(name!);
+    ctx.cwd = name;
+    ctx.projectName = toValidProjectName(name);
     return;
   }
 
@@ -253,10 +252,10 @@ async function copyTempDirToAppDirStep(ctx: Context) {
     } else if (!ctx.interactive) {
       error(
         "Oh no!",
-        `Destination directory contains files that would be overwritten\n` +
-          `         and no \`--overwrite\` flag was included in a non-interactive\n` +
-          `         environment. The following files would be overwritten:` +
-          getFileList("           "),
+        `Destination directory contains files that would be overwritten
+              and no \`--overwrite\` flag was included in a non-interactive
+              environment. The following files would be overwritten:
+        ${getFileList("           ")}`,
       );
       throw new Error(
         "File collisions detected in a non-interactive environment",
@@ -267,13 +266,11 @@ async function copyTempDirToAppDirStep(ctx: Context) {
       }
 
       const overwrite = await confirm({
-        message:
-          `Your project directory contains files that will be overwritten by\n` +
-          `             this template (you can force with \`--overwrite\`)\n\n` +
-          `             Files that would be overwritten:` +
-          `${getFileList("               ")}\n\n` +
-          `             Do you wish to continue?\n` +
-          `             `,
+        message: `Your project directory contains files that will be overwritten by
+                       this template (you can force with \`--overwrite\`)
+                       Files that would be overwritten:
+          ${getFileList("               ")}
+                       Do you wish to continue?`,
         default: false,
       });
       if (!overwrite) {
@@ -336,7 +333,7 @@ async function installDependenciesStep(ctx: Context) {
 
   if (showInstallOutput) {
     log("");
-    info(`Install`, `Dependencies installing with ${pkgManager}...`);
+    info("Install", `Dependencies installing with ${pkgManager}...`);
     log("");
     await runInstall();
     log("");
@@ -354,14 +351,14 @@ async function installDependenciesStep(ctx: Context) {
 
 async function gitInitQuestionStep(ctx: Context) {
   if (fs.existsSync(path.join(ctx.cwd, ".git"))) {
-    info("Nice!", `Git has already been initialized`);
+    info("Nice!", "Git has already been initialized");
     return;
   }
 
   let git = ctx.git;
   if (ctx.git === undefined) {
     git = await confirm({
-      message: `Initialize a new git repository?`,
+      message: "Initialize a new git repository?",
       default: true,
     });
   }
@@ -376,7 +373,7 @@ async function gitInitStep(ctx: Context) {
 
   if (fs.existsSync(path.join(ctx.cwd, ".git"))) {
     log("");
-    info("Nice!", `Git has already been initialized`);
+    info("Nice!", "Git has already been initialized");
     return;
   }
 
@@ -404,7 +401,7 @@ async function createEnvStep(ctx: Context) {
   const envPath = path.join(ctx.cwd, ".env");
   if (fs.existsSync(envPath)) {
     log("");
-    info("Nice!", `An .env file already exists`);
+    info("Nice!", "An .env file already exists");
     return;
   }
 
@@ -434,7 +431,7 @@ async function doneStep(ctx: Context) {
       color.cyan(`cd .${path.sep}${projectDir}`),
     ];
     const len = enter[0].length + stripAnsi(enter[1]).length;
-    log(enter.join(len > max ? "\n" + prefix : " "));
+    log(enter.join(len > max ? `\n${prefix}` : " "));
   }
   log(
     `${prefix}Check out ${color.bold(
@@ -453,6 +450,7 @@ const packageManagerExecScript: Record<PackageManager, string> = {
 };
 
 function validatePackageManager(pkgManager: string): PackageManager {
+  // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
   return packageManagerExecScript.hasOwnProperty(pkgManager)
     ? (pkgManager as PackageManager)
     : "npm";
@@ -484,14 +482,14 @@ async function updatePackageJSON(ctx: Context) {
     const relativePath = path.relative(process.cwd(), ctx.cwd);
     error(
       "Oh no!",
-      "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file does not exist in ${color.bold(relativePath)}.`,
+      `The provided template must be a Plainweb project with a \`package.json\`
+        file, but that file does not exist in ${color.bold(relativePath)}.`,
     );
     throw new Error(`package.json does not exist in ${ctx.cwd}`);
   }
 
   const contents = await fs.promises.readFile(packageJSONPath, "utf-8");
-  let packageJSON: any;
+  let packageJSON: unknown;
   try {
     packageJSON = JSON.parse(contents);
     if (!isValidJsonObject(packageJSON)) {
@@ -501,7 +499,7 @@ async function updatePackageJSON(ctx: Context) {
     error(
       "Oh no!",
       "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file is invalid.`,
+        "file, but that file is invalid.",
     );
     throw err;
   }
@@ -513,8 +511,8 @@ async function updatePackageJSON(ctx: Context) {
     if (!isValidJsonObject(dependencies)) {
       error(
         "Oh no!",
-        "The provided template must be a Plainweb project with a `package.json` " +
-          `file, but its ${pkgKey} value is invalid.`,
+        `The provided template must be a Plainweb project with a \`package.json\`
+          file, but its ${pkgKey} value is invalid.`,
       );
       throw new Error(`package.json ${pkgKey} are invalid`);
     }
@@ -525,7 +523,7 @@ async function updatePackageJSON(ctx: Context) {
         dependencies[dependency] = semver.prerelease(ctx.plainwebVersion)
           ? // Templates created from prereleases should pin to a specific version
             ctx.plainwebVersion
-          : "^" + ctx.plainwebVersion;
+          : `^${ctx.plainwebVersion}`;
       }
     }
   }
@@ -542,7 +540,7 @@ async function updatePackageJSON(ctx: Context) {
 async function loadingIndicator(args: {
   start: string;
   end: string;
-  while: (...args: any) => Promise<any>;
+  while: (...args: unknown[]) => Promise<unknown>;
   ctx: Context;
 }) {
   const { ctx, ...rest } = args;
@@ -552,7 +550,7 @@ async function loadingIndicator(args: {
 }
 
 function title(text: string) {
-  return align(color.bgWhite(` ${color.black(text)} `), "end", 7) + " ";
+  return `${align(color.bgWhite(` ${color.black(text)} `), "end", 7)} `;
 }
 
 function printHelp(ctx: Context) {
@@ -566,21 +564,21 @@ ${color.dim("$")} ${color.greenBright("create-plainweb")} ${color.arg("<projectD
 
 ${color.heading("Values")}:
 
-${color.arg("projectDir")}          ${color.dim(`The Plainweb project directory`)}
+${color.arg("projectDir")}          ${color.dim("The Plainweb project directory")}
 
 ${color.heading("Options")}:
 
-${color.arg("--help, -h")}          ${color.dim(`Print this help message and exit`)}
-${color.arg("--version, -V")}       ${color.dim(`Print the CLI version and exit`)}
-${color.arg("--no-color")}          ${color.dim(`Disable ANSI colors in console output`)}
+${color.arg("--help, -h")}          ${color.dim("Print this help message and exit")}
+${color.arg("--version, -V")}       ${color.dim("Print the CLI version and exit")}
+${color.arg("--no-color")}          ${color.dim("Disable ANSI colors in console output")}
 
-${color.arg("--template <name>")}   ${color.dim(`The project template to use`)}
-${color.arg("--[no-]install")}      ${color.dim(`Whether or not to install dependencies after creation`)}
-${color.arg("--package-manager")}   ${color.dim(`The package manager to use`)}
-${color.arg("--show-install-output")}   ${color.dim(`Whether to show the output of the install process`)}
-${color.arg("--[no-]git-init")}     ${color.dim(`Whether or not to initialize a Git repository`)}
-${color.arg("--yes, -y")}           ${color.dim(`Skip all option prompts and run setup`)}
-${color.arg("--plainweb-version, -v")}     ${color.dim(`The version of Plainweb to use`)}
+${color.arg("--template <name>")}   ${color.dim("The project template to use")}
+${color.arg("--[no-]install")}      ${color.dim("Whether or not to install dependencies after creation")}
+${color.arg("--package-manager")}   ${color.dim("The package manager to use")}
+${color.arg("--show-install-output")}   ${color.dim("Whether to show the output of the install process")}
+${color.arg("--[no-]git-init")}     ${color.dim("Whether or not to initialize a Git repository")}
+${color.arg("--yes, -y")}           ${color.dim("Skip all option prompts and run setup")}
+${color.arg("--plainweb-version, -v")}     ${color.dim("The version of Plainweb to use")}
 
 ${color.heading("Creating a new project")}:
 

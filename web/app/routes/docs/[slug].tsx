@@ -64,6 +64,7 @@ export const GET: Handler = async ({ req }) => {
                   const safeTitle = Html.escapeHtml(page.title);
                   return page.slug === currentPage.slug ? (
                     <li>
+                      {/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
                       <a>
                         <span>{safeIcon}</span>
                         {safeTitle}
@@ -101,7 +102,7 @@ export const GET: Handler = async ({ req }) => {
             <div class="prose max-w-3xl">{safeContent}</div>
           </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3" />
         <div
           x-init={`
   docsearch({
@@ -111,7 +112,7 @@ export const GET: Handler = async ({ req }) => {
     container: '#docsearch',
     debug: true
   });`}
-        ></div>
+        />
       </div>
       <FooterSection />
     </Layout>

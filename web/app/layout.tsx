@@ -34,22 +34,22 @@ export default function Layout(
           <script
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"
-          ></script>
-          <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
+          />
+          <script defer src="https://unpkg.com/htmx.org@1.9.12" />
           <script
             defer
             src="https://unpkg.com/htmx.org@1.9.12/dist/ext/preload.js"
-          ></script>
+          />
           <script
             async
             defer
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-          ></script>
+          />
           <script
             defer
             data-domain="plainweb.dev"
             src="https://plausible.io/js/script.js"
-          ></script>
+          />
           {props.head ? <>{safeHead}</> : null}
         </head>
         <div class="navbar bg-base-100">
@@ -59,7 +59,7 @@ export default function Layout(
             </a>
           </div>
           <div class="flex-none">
-            <div id="docsearch"></div>
+            <div id="docsearch" />
             <ul class="menu menu-horizontal px-1">
               {props.hideDocs ? null : (
                 <li>

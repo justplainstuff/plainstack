@@ -76,7 +76,7 @@ export async function verifyDoubleOptIn(
     from: "josef@plainweb.dev",
     to: email,
     subject: "plainweb.dev",
-    text: `You have successfully signed up to plainweb.dev!\n\nRegards,\nJosef`,
+    text: "You have successfully signed up to plainweb.dev!\n\nRegards,\nJosef",
   });
   return contact;
 }

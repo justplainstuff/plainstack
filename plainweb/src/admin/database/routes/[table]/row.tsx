@@ -1,4 +1,3 @@
-import { Database } from "better-sqlite3";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type { Handler } from "../../../../handler";
@@ -8,7 +7,9 @@ import { TableRow } from "./components/table-row";
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const db = res.locals.database as BetterSQLite3Database<{}>;
+  const db = res.locals.database as BetterSQLite3Database<
+    Record<string, unknown>
+  >;
   const row = JSON.parse(decodeURIComponent(req.query.row as string));
 
   const columns = db.all<ColumnInfo>(
@@ -31,7 +32,7 @@ export const GET: Handler = async ({ req, res }) => {
     i++;
   }
 
-  const found = db.all<Record<string, any>>(query);
+  const found = db.all<Record<string, unknown>>(query);
 
   if (found.length === 0) {
     throw new Error(`Row not found for ${whereClause}`);

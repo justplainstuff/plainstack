@@ -7,13 +7,15 @@ import { TableRow } from "./components/table-row";
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const db = res.locals.database as BetterSQLite3Database<{}>;
+  const db = res.locals.database as BetterSQLite3Database<
+    Record<string, unknown>
+  >;
 
   const columns = db.all<ColumnInfo>(
     sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`,
   );
 
-  const rows = db.all<Record<string, any>>(
+  const rows = db.all<Record<string, unknown>>(
     sql`SELECT * FROM ${sql.identifier(tableName)} LIMIT 100`,
   );
 

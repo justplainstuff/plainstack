@@ -3,7 +3,7 @@ import { type ColumnInfo, columnType, renderValue } from "../../../../column";
 export interface TableRowProps {
   tableName: string;
   columns: ColumnInfo[];
-  row: Record<string, any>;
+  row: Record<string, unknown>;
 }
 
 export function TableRow({ tableName, columns, row }: TableRowProps) {
@@ -21,6 +21,7 @@ export function TableRow({ tableName, columns, row }: TableRowProps) {
       })}{" "}
       <td>
         <button
+          type="submit"
           hx-target="closest tr"
           hx-swap="outerHTML"
           hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(row))}`}

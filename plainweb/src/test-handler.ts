@@ -9,7 +9,7 @@ export async function testHandler(
   {
     database,
   }: {
-    database?: BetterSQLite3Database<{}>;
+    database?: BetterSQLite3Database<Record<string, unknown>>;
   },
 ) {
   const res = createResponse();

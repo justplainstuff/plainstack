@@ -1,4 +1,4 @@
-import http from "http";
+import http from "node:http";
 import { type Database, migrate, runTasks, useTransporter } from "plainweb";
 import WebSocket from "ws";
 import { database } from "~/app/config/database";

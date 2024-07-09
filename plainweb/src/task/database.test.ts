@@ -45,7 +45,9 @@ async function processUntil(
     await new Promise((resolve) => setTimeout(resolve, 1));
     debug && console.log(await database.query.tasks.findMany());
   }
-  Object.values(timeouts).forEach((timeout) => clearInterval(timeout));
+  for (const timeout of Object.values(timeouts)) {
+    clearInterval(timeout);
+  }
 }
 
 process.env.NODE_ENV = "test";
@@ -108,7 +110,7 @@ describe("database task", () => {
       });
       const tasks = await database.query.tasks.findMany();
       assert.equal(tasks.length, 1);
-      assert.equal(tasks[0]!.failedNr, 2);
+      assert.equal(tasks[0]?.failedNr, 2);
     });
   });
 });

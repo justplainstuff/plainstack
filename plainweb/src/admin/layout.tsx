@@ -28,12 +28,12 @@ export default function RootLayout(
           <script
             defer
             src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-          ></script>
+          />
           <script
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"
-          ></script>
-          <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
+          />
+          <script defer src="https://unpkg.com/htmx.org@1.9.12" />
         </head>
         <body>{props.children}</body>
       </html>

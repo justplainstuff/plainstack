@@ -24,7 +24,7 @@ COPY --link . .
 
 RUN npm install -g pnpm@8.9.1
 RUN pnpm install --prod false 
-RUN pnpm build lint test
+RUN pnpm check
 
 # Final stage for app image
 FROM base
@@ -40,4 +40,5 @@ VOLUME /data
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "pnpm", "start" ]
+CMD pnpm start
+

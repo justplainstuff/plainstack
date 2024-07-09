@@ -80,8 +80,8 @@ export async function copyTemplate(
 interface CopyTemplateOptions {
   debug?: boolean;
   token?: string;
-  onError(error: unknown): any;
-  log?(message: string): any;
+  onError(error: unknown): unknown;
+  log?(message: string): unknown;
 }
 
 function isLocalFilePath(input: string): boolean {
@@ -183,10 +183,7 @@ async function extractLocalTarball(
     );
   } catch (error: unknown) {
     throw new CopyTemplateError(
-      "There was a problem extracting the file from the provided template." +
-        `  Template filepath: \`${tarballPath}\`` +
-        `  Destination directory: \`${destPath}\`` +
-        `  ${error}`,
+      `There was a problem extracting the file from the provided template.  Template filepath: \`${tarballPath}\`  Destination directory: \`${destPath}\`  ${error}`,
     );
   }
 }
@@ -260,8 +257,7 @@ async function downloadAndExtractTarball(
 
     if (response.status !== 200) {
       throw new CopyTemplateError(
-        "There was a problem fetching the file from GitHub. The request " +
-          `responded with a ${response.status} status. Please try again later.`,
+        `There was a problem fetching the file from GitHub. The request responded with a ${response.status} status. Please try again later.`,
       );
     }
 
@@ -303,9 +299,7 @@ async function downloadAndExtractTarball(
       throw new CopyTemplateError(
         `There was a problem fetching the file${
           isGithubUrl ? " from GitHub" : ""
-        }. The request ` +
-          `responded with a ${response.status} status. Perhaps your \`--token\`` +
-          "is expired or invalid.",
+        }. The request responded with a ${response.status} status. Perhaps your \`--token\`is expired or invalid.`,
       );
     }
     throw new CopyTemplateError(
@@ -364,9 +358,7 @@ async function downloadAndExtractTarball(
     );
   } catch (_) {
     throw new CopyTemplateError(
-      "There was a problem extracting the file from the provided template." +
-        `  Template URL: \`${tarballUrl}\`` +
-        `  Destination directory: \`${downloadPath}\``,
+      `There was a problem extracting the file from the provided template.  Template URL: \`${tarballUrl}\`  Destination directory: \`${downloadPath}\``,
     );
   }
 
@@ -385,7 +377,7 @@ async function writeReadableStreamToWritable(
   writable: stream.Writable,
 ) {
   const reader = stream.getReader();
-  const flushable = writable as { flush?: Function };
+  const flushable = writable as { flush?: () => unknown };
 
   try {
     while (true) {
@@ -509,7 +501,7 @@ function getRepoInfo(validatedGithubUrl: string): RepoInfo {
     name,
     // If we've validated the GitHub URL and there is a tree, there will also be
     // a branch
-    branch: branch!,
+    branch: branch,
     filePath: filePath === "" || filePath === "/" ? null : filePath,
   };
 }

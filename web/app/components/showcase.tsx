@@ -198,6 +198,7 @@ function renderTree(tree: Record<string, unknown>, prefix = "", isRoot = true) {
                       {fileIndex === fileArray.length - 1 ? "└── " : "├── "}
                     </span>
                     <button
+                      type="submit"
                       x-on:click={`open = '${prefix}${safeKey}/${file}'`}
                       x-bind:class={`{'text-primary': open === '${prefix}${safeKey}/${file}'}`}
                       class="hover:text-primary focus:outline-none font-bold link"
@@ -223,7 +224,7 @@ function renderTree(tree: Record<string, unknown>, prefix = "", isRoot = true) {
 
 export async function Showcase() {
   return (
-    <div x-data={`{open: '${features[0]!.title}'}`} class="mt-10 md:flex">
+    <div x-data={`{open: '${features[0]?.title}'}`} class="mt-10 md:flex">
       <div class="font-mono overflow-y-auto max-h-[calc(100vh-200px)] pr-4 flex-shrink-0">
         {renderTree(fileTree)}
       </div>

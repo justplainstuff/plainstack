@@ -7,7 +7,7 @@
     "test": "turbo test",
     "cs": "changeset",
     "pub": "turbo run build lint test && changeset version && changeset publish",
-    "check": "biome check --write ."
+    "check": "pnpm build && biome check --write . && pnpm test"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",

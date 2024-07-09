@@ -8,7 +8,7 @@ export const POST: Handler = async () => {
 export const GET: Handler = async () => {
   return (
     <Layout>
-      <button hx-post="/examples/button" hx-swap="outerHTML">
+      <button type="submit" hx-post="/examples/button" hx-swap="outerHTML">
         Click Me
       </button>
     </Layout>

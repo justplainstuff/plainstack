@@ -3,13 +3,20 @@
   "organizeImports": {
     "enabled": true
   },
+  "files": {
+    "ignore": ["**/.git/**", "**/node_modules/**", "**/dist/**", "**/.turbo/**"]
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "correctness": {
+        "useJsxKeyInIterable": "off"
+      }
     }
   },
   "formatter": {
-    "enabled": true
+    "enabled": true,
+    "indentStyle": "space"
   }
 }

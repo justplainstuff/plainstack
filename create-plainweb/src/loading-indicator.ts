@@ -16,7 +16,7 @@ export async function renderLoadingIndicator({
 }: {
   start: string;
   end: string;
-  while: (...args: any) => Promise<any>;
+  while: (...args: unknown[]) => Promise<unknown>;
   noMotion?: boolean;
   stdin?: NodeJS.ReadStream & { fd: 0 };
   stdout?: NodeJS.WriteStream & { fd: 1 };

@@ -24,21 +24,21 @@ export function columnType(sqliteType: ColumnInfo["type"]): string {
   }
 }
 
-export function renderValue(value: any, tsType: string): string {
+export function renderValue(value: unknown, tsType: string): string {
   if (value === null) {
     return "NULL";
   }
 
   switch (tsType) {
     case "number":
-      return value.toString();
+      return String(value);
     case "string":
-      return value;
+      return value as string;
     case "Buffer":
-      return value.toString("hex");
+      return (value as Buffer).toString("hex");
     case "Date":
-      return new Date(value).toISOString();
+      return new Date(value as string).toISOString();
     default:
-      return value.toString();
+      return (value as string).toString();
   }
 }

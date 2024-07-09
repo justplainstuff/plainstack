@@ -5,7 +5,7 @@ export async function renderCode(
   lang: "bash" | "tsx" | "typescript" = "typescript",
 ): Promise<string> {
   if (cache.has(code)) {
-    return cache.get(code)!;
+    return cache.get(code) as string;
   }
   try {
     const { codeToHtml } = await import("shiki");

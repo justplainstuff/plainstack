@@ -1,5 +1,5 @@
-import { join } from "path";
-import { readFile, readdir } from "fs/promises";
+import { readFile, readdir } from "node:fs/promises";
+import { join } from "node:path";
 import MarkdownIt from "markdown-it";
 import { env } from "~/app/config/env";
 
@@ -26,7 +26,7 @@ export async function createMarkdownRenderer() {
 
   const highlighter = await getHighlighter({
     themes: ["dracula-soft"],
-    langs: Object.keys(bundledLanguages) as any[],
+    langs: Object.keys(bundledLanguages) as string[],
   });
 
   const md = new MarkdownIt({
@@ -109,8 +109,8 @@ export async function getDocumentationPages(): Promise<Page[]> {
   const mdFiles = files.filter((file) => file.endsWith(".md"));
 
   const sortedMdFiles = mdFiles.sort((a, b) => {
-    const prefixA = Number.parseInt(a.split("-")[0]!);
-    const prefixB = Number.parseInt(b.split("-")[0]!);
+    const prefixA = Number.parseInt(a.split("-")[0] as string);
+    const prefixB = Number.parseInt(b.split("-")[0] as string);
     return prefixA - prefixB;
   });
   const md = await createMarkdownRenderer();

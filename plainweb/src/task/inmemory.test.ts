@@ -29,7 +29,9 @@ async function processUntil(
     debug && console.log(inmemoryTasks);
     await new Promise((resolve) => setTimeout(resolve, 1));
   }
-  Object.values(timeouts).forEach((timeout) => clearInterval(timeout));
+  for (const timeout of Object.values(timeouts)) {
+    clearInterval(timeout);
+  }
 }
 
 describe("inmemory task", () => {
@@ -124,7 +126,7 @@ describe("inmemory task", () => {
     const task = defineInmemoryTask({
       process: async () => {
         tries = tries + 1;
-        if (tries == 6) return; // finally succeed
+        if (tries === 6) return; // finally succeed
         throw new Error("Task failed");
       },
       batchSize: 1,

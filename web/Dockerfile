@@ -22,11 +22,11 @@ RUN apt-get update -qq && \
 # Install node modules
 COPY --link . .
 
-RUN npm install -g pnpm@8.9.1
+RUN npm install -g pnpm@8.25.8
 
 RUN pnpm install --prod false 
 
-RUN pnpm build lint test
+RUN pnpm check
 # Final stage for app image
 
 FROM base

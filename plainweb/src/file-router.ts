@@ -30,7 +30,7 @@ async function readRoutesFromFs(opts: {
     files = await fs.readdir(currentDir || baseDir);
   } catch (e) {
     console.error(`[router] Error reading directory: ${currentDir || baseDir}`);
-    console.error(`[router] see the error below`);
+    console.error("[router] see the error below");
     throw e;
   }
 
@@ -117,7 +117,7 @@ export function getExpressRoutePath({
   }
   let relativeFilePath = filePath.replace(dir, "");
   if (!dir.startsWith("/")) {
-    relativeFilePath = filePath.replace("/" + dir, "");
+    relativeFilePath = filePath.replace(`/${dir}`, "");
   }
   const expressPath = relativeFilePath
     .replace(/\/index.tsx$/, "")
@@ -152,7 +152,7 @@ export function expressRouter({
 }): Router {
   const router = express.Router();
 
-  loadedFileRoutes.forEach((route) => {
+  for (const route of loadedFileRoutes) {
     const routePath = getExpressRoutePath({
       dir,
       filePath: route.filePath,
@@ -161,7 +161,10 @@ export function expressRouter({
     if (route.GET) {
       router.get(routePath, async (req, res, next) => {
         try {
-          const userResponse = await route.GET!({ req, res });
+          const userResponse = await (route as { GET: Handler }).GET({
+            req,
+            res,
+          });
           await handleResponse(res, userResponse);
         } catch (e) {
           next(e);
@@ -171,14 +174,17 @@ export function expressRouter({
     if (route.POST) {
       router.post(routePath, async (req, res, next) => {
         try {
-          const userResponse = await route.POST!({ req, res });
+          const userResponse = await (route as { POST: Handler }).POST({
+            req,
+            res,
+          });
           await handleResponse(res, userResponse);
         } catch (e) {
           next(e);
         }
       });
     }
-  });
+  }
   return router;
 }
 
@@ -198,20 +204,20 @@ export async function fileRouter(opts: FileRouterOpts): Promise<Router> {
       dir,
       verbose: opts.verbose,
     });
-  } else if (opts.fileRoutes?.length) {
+  }
+  if (opts.fileRoutes?.length) {
     const loadedFileRoutes = await loadFileRoutes(opts.fileRoutes);
     return expressRouter({
       loadedFileRoutes: loadedFileRoutes,
       dir,
       verbose: opts.verbose,
     });
-  } else {
-    const fileRoutes = await readRoutesFromFs({
-      baseDir: dir,
-      ignorePatterns: opts.ignorePatterns,
-      verbose: opts.verbose,
-    });
-    const loadedFileRoutes = await loadFileRoutes(fileRoutes);
-    return expressRouter({ loadedFileRoutes, dir, verbose: opts.verbose });
   }
+  const fileRoutes = await readRoutesFromFs({
+    baseDir: dir,
+    ignorePatterns: opts.ignorePatterns,
+    verbose: opts.verbose,
+  });
+  const loadedFileRoutes = await loadFileRoutes(fileRoutes);
+  return expressRouter({ loadedFileRoutes, dir, verbose: opts.verbose });
 }

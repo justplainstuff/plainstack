@@ -91,9 +91,9 @@ export function _runTasks(
 
   if (debug) {
     console.log("[task] Starting tasks:");
-    runnableTasks.forEach((task) => {
+    for (const task of runnableTasks) {
       console.log(`   * ${task.name}`);
-    });
+    }
   }
 
   try {
@@ -222,7 +222,7 @@ export function defineTaskWithAdapter(
       const startableTask = startableTasks[id];
       if (!startableTask)
         throw new Error(
-          `You tried to call perform() before calling runTasks(). runTasks() must be called before perform() to load the task into memory.`,
+          "You tried to call perform() before calling runTasks(). runTasks() must be called before perform() to load the task into memory.",
         );
       await enqueue({ data, name: startableTask.name });
     },
