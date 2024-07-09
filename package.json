@@ -4,13 +4,13 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "turbo test",
     "cs": "changeset",
-    "pub": "turbo run build lint test && changeset version && changeset publish"
+    "pub": "turbo run build lint test && changeset version && changeset publish",
+    "check": "check --write ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.3",
     "prettier": "^3.2.5",
     "turbo": "1.13.4",

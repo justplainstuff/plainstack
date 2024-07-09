@@ -26,16 +26,17 @@
     "drizzle-orm": "^0.30.10",
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
+    "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",
     "zod": "^3.23.8",
-    "zod-form-data": "^2.0.2",
-    "express-list-endpoints": "^7.1.0"
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@flydotio/dockerfile": "^0.5.7",
     "@kitajs/ts-html-plugin": "^4.0.1",
     "@types/better-sqlite3": "^7.6.10",
