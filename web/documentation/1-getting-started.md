@@ -10,7 +10,7 @@ Make sure you are running Node 22 or higher.
 
 ```bash
 node --version
-> v22.2.0
+> v20.10.0
 ```
 
 And follow the prompts to set up your project.
@@ -32,6 +32,7 @@ These are the most important commands for development:
 - `npm run db:apply` applies the migrations
 - `npm run db:studio` starts drizzle studio, a GUI for managing the database
 - `npm run build` type checks your app and minifies the CSS
+- `npm run routes` prints all express routes to the console
 - `npm run lint` runs the linter, including cross-site scripting scanning
 - `npm run fix` fixes linting errors
 

@@ -1,9 +1,8 @@
-import { before, test, describe } from "node:test";
+import { expect, beforeAll, test, describe } from "vitest";
 
 import BetterSqlite3Database from "better-sqlite3";
 import express from "express";
 import supertest from "supertest";
-import assert from "node:assert/strict";
 import { GET } from ".";
 import { handleResponse } from "../../../handler";
 import { isolate } from "../../..";
@@ -18,6 +17,7 @@ function app(database: BetterSQLite3Database) {
     res.locals.database = database;
     next();
   });
+
   app.route("/").get(async (req, res) => {
     const userResponse = await GET({ req, res });
     await handleResponse(res, userResponse);
@@ -27,7 +27,7 @@ function app(database: BetterSQLite3Database) {
 
 process.env.NODE_ENV = "test";
 describe("admin database index.ts", () => {
-  before(() => {
+  beforeAll(() => {
     const migrations = `
 CREATE TABLE users (
     email text PRIMARY KEY NOT NULL
@@ -44,9 +44,9 @@ CREATE TABLE orders (
     await isolate(database, async (tx) => {
       const response = await supertest(app(tx)).get("/");
 
-      assert.equal(response.status, 200);
-      assert.equal(response.text.includes("users"), true);
-      assert.equal(response.text.includes("orders"), true);
+      expect(response.status).toBe(200);
+      expect(response.text.includes("users")).toBe(true);
+      expect(response.text.includes("orders")).toBe(true);
     });
   });
 });

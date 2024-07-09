@@ -65,13 +65,13 @@ export async function loadStartableTask(
           const absoluteFilePath = path.join(process.cwd(), filePath);
           console.log(`[task] Loading task from ${filePath}`);
           const taskModule = await import(absoluteFilePath);
-          if (!taskModule.default || !taskModule.default.default.start) {
+          if (!taskModule.default) {
             console.error(
               `[task] No default export found in task at ${filePath}`
             );
             return;
           }
-          const task = taskModule.default.default as Task<unknown>;
+          const task = taskModule.default as Task<unknown>;
           const taskName = path.basename(filePath).slice(0, -3);
           return composeStartableTask(task, taskName, { debug, error });
         })

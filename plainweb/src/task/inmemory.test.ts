@@ -1,5 +1,4 @@
-import { beforeEach, describe, test } from "node:test";
-import assert from "node:assert/strict";
+import { beforeEach, describe, it, expect } from "vitest";
 import {
   PersistedTask,
   Task,
@@ -37,7 +36,8 @@ describe("inmemory task", () => {
   beforeEach(() => {
     inmemoryTasks.clear();
   });
-  test("process task", async () => {
+
+  it("process task", async () => {
     let success = false;
     const task = defineInmemoryTask<{ doesItWork: boolean }>({
       process: async ({ data }) => {
@@ -50,10 +50,10 @@ describe("inmemory task", () => {
         await perform(task, { doesItWork: true });
       },
     });
-    assert.equal(success, true);
+    expect(success).toBe(true);
   });
 
-  test("process 2 task instances", async () => {
+  it("process 2 task instances", async () => {
     let total = 0;
     const task = defineInmemoryTask<{ add: number }>({
       process: async ({ data }) => {
@@ -67,10 +67,10 @@ describe("inmemory task", () => {
         await perform(task, { add: 5 });
       },
     });
-    assert.equal(total, 8);
+    expect(total).toBe(8);
   });
 
-  test("process 2 task instances with different tasks", async () => {
+  it("process 2 task instances with different tasks", async () => {
     let total = 0;
     const task1 = defineInmemoryTask<{ add: number }>({
       process: async ({ data }) => {
@@ -90,10 +90,10 @@ describe("inmemory task", () => {
         await perform(task2, { add: 5 });
       },
     });
-    assert.equal(total, 8);
+    expect(total).toBe(8);
   });
 
-  test("process task with failure", async () => {
+  it("process task with failure", async () => {
     let failure = false;
     const task = defineInmemoryTask<{ fail: boolean }>({
       process: async ({ data }) => {
@@ -116,10 +116,10 @@ describe("inmemory task", () => {
         await perform(task, { fail: true });
       },
     });
-    assert.equal(failure, true);
+    expect(failure).toBe(true);
   });
 
-  test("process task with failure and retry", async () => {
+  it("process task with failure and retry", async () => {
     let tries = 0;
     const task = defineInmemoryTask({
       process: async () => {
@@ -137,9 +137,10 @@ describe("inmemory task", () => {
         await perform(task);
       },
     });
+    expect(tries).toBe(6);
   });
 
-  test("process task with batch size 2", async () => {
+  it("process task with batch size 2", async () => {
     let total = 0;
     const task = defineInmemoryTask<{ add: number }>({
       process: async ({ data }) => {
@@ -154,6 +155,6 @@ describe("inmemory task", () => {
         await perform(task, { add: 5 });
       },
     });
-    assert.equal(total, 8);
+    expect(total).toBe(8);
   });
 });

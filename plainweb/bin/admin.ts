@@ -2,7 +2,8 @@
 
 import express from "express";
 import BetterSqlite3Database, { Database } from "better-sqlite3";
-import { unstable_admin } from "../src";
+import { printRoutes, unstable_admin } from "../src";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 
 function migrateAndSeed(connection: Database) {
   const run = `
@@ -74,13 +75,15 @@ INSERT INTO order_items (order_id, product_id, quantity) VALUES
 async function start() {
   console.log("Starting server...");
   const connection = new BetterSqlite3Database(":memory:");
+  const database = drizzle(connection);
   connection.pragma("journal_mode = WAL");
   migrateAndSeed(connection);
   const app = express();
   app.use(express.urlencoded({ extended: true }));
-  app.use("/admin", await unstable_admin(connection));
+  app.use("/admin", await unstable_admin(database));
   app.listen(3000);
-  console.log("Server started on http://localhost:3000");
+  printRoutes(app);
+  console.log("http://localhost:3000/admin/database");
 }
 
 void start();

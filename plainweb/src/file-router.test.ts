@@ -1,5 +1,4 @@
-import { test, describe } from "node:test";
-import assert from "node:assert/strict";
+import { expect, test, describe } from "vitest";
 import {
   LoadedFileRoute,
   expressRouter,
@@ -15,7 +14,7 @@ describe("getExpressRoutePath", () => {
     const filePath = `${dir}/index.tsx`;
     const expectedRoute = "/";
     const convertedRoute = getExpressRoutePath({ dir, filePath });
-    assert.strictEqual(convertedRoute, expectedRoute);
+    expect(convertedRoute).toBe(expectedRoute);
   });
 
   test("index route no root dir", () => {
@@ -25,7 +24,7 @@ describe("getExpressRoutePath", () => {
       dir: "/path/to/routes",
       filePath,
     });
-    assert.strictEqual(convertedRoute, expectedRoute);
+    expect(convertedRoute).toBe(expectedRoute);
   });
 
   test("converts file paths to Express.js routes", () => {
@@ -43,7 +42,7 @@ describe("getExpressRoutePath", () => {
     ];
     filePaths.forEach((filePath, index) => {
       const convertedRoute = getExpressRoutePath({ dir, filePath });
-      assert.strictEqual(convertedRoute, expectedRoutes[index]);
+      expect(convertedRoute).toBe(expectedRoutes[index]);
     });
   });
 
@@ -51,14 +50,14 @@ describe("getExpressRoutePath", () => {
     const filePath = `${dir}/pages/users/[id]/posts/[postId].tsx`;
     const expectedRoute = "/pages/users/:id/posts/:postId";
     const convertedRoute = getExpressRoutePath({ dir, filePath });
-    assert.strictEqual(convertedRoute, expectedRoute);
+    expect(convertedRoute).toBe(expectedRoute);
   });
 
   test("handles index routes in subdirectories", () => {
     const filePath = `${dir}/pages/blog/index.tsx`;
     const expectedRoute = "/pages/blog";
     const convertedRoute = getExpressRoutePath({ dir, filePath });
-    assert.strictEqual(convertedRoute, expectedRoute);
+    expect(convertedRoute).toBe(expectedRoute);
   });
 });
 
@@ -92,13 +91,13 @@ describe("expressRouter", () => {
     app.use(router);
 
     const getResponse = await supertest(app).get("/pages");
-    assert.deepEqual(JSON.parse(getResponse.text), { message: "GET /pages" });
+    expect(JSON.parse(getResponse.text)).toEqual({ message: "GET /pages" });
 
     const postResponse = await supertest(app).post("/pages");
-    assert.deepEqual(JSON.parse(postResponse.text), { message: "POST /pages" });
+    expect(JSON.parse(postResponse.text)).toEqual({ message: "POST /pages" });
 
     const aboutResponse = await supertest(app).get("/pages/about");
-    assert.deepEqual(JSON.parse(aboutResponse.text), {
+    expect(JSON.parse(aboutResponse.text)).toEqual({
       message: "GET /pages/about",
     });
   });

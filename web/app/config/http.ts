@@ -13,6 +13,7 @@ const limiter = rateLimit({
   message: "Too many requests, please try again in a few seconds",
 });
 
+// TODO move to plainweb
 function addDatabase(
   req: express.Request,
   res: express.Response,
@@ -22,9 +23,26 @@ function addDatabase(
   next();
 }
 
-export async function app(
-  redirects: Record<string, string>
-): Promise<express.Application> {
+// TOOD move to plainweb
+function addRedirects(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const target = redirects[req.path];
+  if (target) {
+    res.redirect(target);
+  } else {
+    next();
+  }
+}
+
+const redirects: Record<string, string> = {
+  "/docs/environmet-variables": "/docs/environment-variables",
+  "/docs": "/docs/getting-started",
+};
+
+export async function app(): Promise<express.Express> {
   const app = express();
   if (env.NODE_ENV !== "production") app.use(morgan("dev"));
   if (env.NODE_ENV === "production") app.use(morgan("combined"));
@@ -34,15 +52,7 @@ export async function app(
     app.use("/public", express.static("public"));
   if (env.NODE_ENV === "development") app.use(limiter);
 
-  app.use((req, res, next) => {
-    const target = redirects[req.path];
-    if (target) {
-      res.redirect(target);
-    } else {
-      next();
-    }
-  });
-
+  app.use(addRedirects);
   app.use(flyHeaders);
   app.use(compression());
   app.use(express.json());

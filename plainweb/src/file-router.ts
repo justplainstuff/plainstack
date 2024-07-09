@@ -62,26 +62,26 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
   for (const { filePath } of routes) {
     let loadedFileRoute: LoadedFileRoute | undefined;
     try {
-      const module = (await import(filePath)) as { default: FileRouteHandler };
-      if (module?.default?.GET) {
-        if (typeof module.default.GET !== "function") {
+      const module = (await import(filePath)) as FileRouteHandler;
+      if (module?.GET) {
+        if (typeof module.GET !== "function") {
           throw new Error(
             `[router] GET export in route ${filePath} is not a function`
           );
         }
-        loadedFileRoute = { filePath, GET: module.default.GET };
+        loadedFileRoute = { filePath, GET: module.GET };
       }
 
-      if (module?.default?.POST) {
-        if (typeof module.default.POST !== "function") {
+      if (module?.POST) {
+        if (typeof module.POST !== "function") {
           throw new Error(
             `[router] POST export in route ${filePath} is not a function`
           );
         }
         if (loadedFileRoute) {
-          loadedFileRoute.POST = module.default.POST;
+          loadedFileRoute.POST = module.POST;
         } else {
-          loadedFileRoute = { filePath, POST: module.default.POST };
+          loadedFileRoute = { filePath, POST: module.POST };
         }
       }
 

@@ -12,6 +12,7 @@
     "serve": "tsx app/cli/serve.ts",
     "dev:app": "tsx watch app/cli/serve.ts",
     "dev:tw": "tailwindcss -i ./app/styles.css -o ./public/output.css --watch",
+    "routes": "tsx app/cli/routes.ts",
     "build": "tsc --noEmit && tailwindcss -i ./app/styles.css -o ./public/output.css --minify",
     "start": "pnpm db:apply && pnpm serve",
     "lint": "eslint . --max-warnings 0 && xss-scan",
@@ -31,7 +32,8 @@
     "plainweb": "workspace:*",
     "tsx": "^4.10.3",
     "zod": "^3.23.8",
-    "zod-form-data": "^2.0.2"
+    "zod-form-data": "^2.0.2",
+    "express-list-endpoints": "^7.1.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.7",
@@ -55,6 +57,6 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=22"
+    "node": ">=20.10.0"
   }
 }

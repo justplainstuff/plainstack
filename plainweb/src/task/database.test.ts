@@ -1,5 +1,5 @@
 import BetterSqlite3Database from "better-sqlite3";
-import { before, describe, test } from "node:test";
+import { beforeAll, describe, test } from "vitest";
 import assert from "node:assert/strict";
 import { text, sqliteTable, int } from "drizzle-orm/sqlite-core";
 import { drizzle } from "drizzle-orm/better-sqlite3";
@@ -51,7 +51,7 @@ async function processUntil(
 process.env.NODE_ENV = "test";
 
 describe("database task", () => {
-  before(() => {
+  beforeAll(() => {
     const migrations = `CREATE TABLE \`tasks\` (
 	\`id\` text PRIMARY KEY NOT NULL,
 	\`name\` text NOT NULL,

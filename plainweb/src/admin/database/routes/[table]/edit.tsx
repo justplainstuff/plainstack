@@ -1,15 +1,17 @@
 import { Handler } from "../../../../handler";
 import { ColumnInfo, columnType, renderValue } from "../../../column";
-import { Database } from "better-sqlite3";
+import { sql } from "drizzle-orm";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { verbose } from "../../../config";
 
 export const POST: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const connection = res.locals.connection as Database;
+  const db = res.locals.database as BetterSQLite3Database<{}>;
   const { __row, ...updatedData } = req.body;
-  const columns = connection
-    .prepare<[], ColumnInfo>(`PRAGMA table_info('${tableName}')`)
-    .all();
+
+  const columns = db.all<ColumnInfo>(
+    sql`SELECT * FROM pragma_table_info(${tableName})`
+  );
 
   const newData: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(updatedData)) {
@@ -26,22 +28,19 @@ export const POST: Handler = async ({ req, res }) => {
   }
 
   verbose >= 1 || console.log("[admin] [database]", "saving row", newData);
-
   const oldRow = JSON.parse(__row as string);
 
   const setClause = Object.entries(newData)
-    .map(([column]) => `${column} = ?`)
-    .join(", ");
+    .map(([column, value]) => sql`${sql.identifier(column)} = ${value}`)
+    .reduce((acc, curr) => sql`${acc}, ${curr}`);
 
   const whereClause = Object.entries(oldRow)
-    .map(([column]) => `${column} = ?`)
-    .join(" AND ");
+    .map(([column, value]) => sql`${sql.identifier(column)} = ${value}`)
+    .reduce((acc, curr) => sql`${acc} AND ${curr}`);
 
-  const stmt = connection.prepare(
-    `UPDATE '${tableName}' SET ${setClause} WHERE ${whereClause}`
+  db.run(
+    sql`UPDATE ${sql.identifier(tableName)} SET ${setClause} WHERE ${whereClause}`
   );
-
-  stmt.run(...Object.values(newData), ...Object.values(oldRow));
 
   verbose >= 1 || console.log("[admin] [database]", "row saved");
 
@@ -72,10 +71,11 @@ export const POST: Handler = async ({ req, res }) => {
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
   const rowData = JSON.parse(decodeURIComponent(req.query.row as string));
-  const connection = res.locals.connection as Database;
-  const columns = connection
-    .prepare<[], ColumnInfo>(`PRAGMA table_info('${tableName}')`)
-    .all();
+  const db = res.locals.database as BetterSQLite3Database;
+
+  const columns = db.all<ColumnInfo>(
+    sql`SELECT * FROM pragma_table_info(${tableName})`
+  );
 
   return (
     <tr>

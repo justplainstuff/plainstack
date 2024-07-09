@@ -8,6 +8,7 @@ export {
 } from "./handler";
 export { html, json, redirect, stream, notFound } from "./plain-response";
 export { flyHeaders, redirectWWW } from "./middleware";
+export { printRoutes } from "./print-routes";
 
 // mail
 export { outbox, sendMail, useTransporter } from "./mail";

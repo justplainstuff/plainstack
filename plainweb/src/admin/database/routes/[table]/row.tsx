@@ -3,28 +3,35 @@ import { ColumnInfo, columnType, renderValue } from "../../../column";
 import { verbose } from "../../../config";
 import { Handler } from "../../../../handler";
 import { TableRow } from "./components/table-row";
+import { sql } from "drizzle-orm";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const connection = res.locals.connection as Database;
+  const db = res.locals.database as BetterSQLite3Database<{}>;
   const row = JSON.parse(decodeURIComponent(req.query.row as string));
 
-  const columns = connection
-    .prepare<[], ColumnInfo>(`PRAGMA table_info('${tableName}')`)
-    .all();
+  const columns = db.all<ColumnInfo>(
+    sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`
+  );
 
   verbose > 1 && console.log("[admin] [database]", "fetching row", row);
 
   const whereClause = Object.entries(row)
-    .map(([column]) => `${column} = ?`)
+    .map(([column, value]) => sql`${column} = ${value}`)
     .join(" AND ");
 
-  const found = connection
-    .prepare<
-      unknown[],
-      Record<string, any>
-    >(`SELECT * FROM '${tableName}' WHERE ${whereClause} LIMIT 1`)
-    .all(...Object.values(row));
+  const query = sql`SELECT * FROM ${sql.identifier(tableName)} WHERE`;
+
+  let i = 0;
+  for (const [column, value] of Object.entries(row)) {
+    query.append(sql`${sql.identifier(column)} = ${value}`);
+    if (i === Object.keys(row).length - 1) continue;
+    query.append(sql` AND `);
+    i++;
+  }
+
+  const found = db.all<Record<string, any>>(query);
 
   if (found.length === 0) {
     throw new Error(`Row not found for ${whereClause}`);

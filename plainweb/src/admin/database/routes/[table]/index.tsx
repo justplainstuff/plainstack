@@ -1,20 +1,21 @@
 import { Handler } from "../../../../handler";
 import { ColumnInfo } from "../../../column";
 import Layout from "../../../layout";
-import { Database } from "better-sqlite3";
 import { TableRow } from "./components/table-row";
+import { sql } from "drizzle-orm";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
-  const connection = res.locals.connection as Database;
+  const db = res.locals.database as BetterSQLite3Database<{}>;
 
-  const columns = connection
-    .prepare<[], ColumnInfo>(`PRAGMA table_info('${tableName}')`)
-    .all();
+  const columns = db.all<ColumnInfo>(
+    sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`
+  );
 
-  const rows = connection
-    .prepare<[], Record<string, any>>(`SELECT * FROM '${tableName}' LIMIT 100`)
-    .all();
+  const rows = db.all<Record<string, any>>(
+    sql`SELECT * FROM ${sql.identifier(tableName)} LIMIT 100`
+  );
 
   return (
     <Layout>

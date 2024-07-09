@@ -32,6 +32,5 @@ export async function http(): Promise<express.Application> {
     next();
   });
   app.use(await fileRouter({ dir: "app/routes", verbose: 3 }));
-  app.listen(env.PORT);
   return app;
 }

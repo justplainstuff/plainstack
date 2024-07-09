@@ -1,8 +1,7 @@
 import BetterSqlite3Database from "better-sqlite3";
-import { test, describe } from "node:test";
+import { test, describe, expect } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
-import assert from "node:assert/strict";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { hasPendingMigrations, migrate } from "./migrate";
 
@@ -49,12 +48,12 @@ describe("migrate", () => {
     const tmp = temporaryDirectory();
     console.log("Running tests in", tmp);
     await writeDrizzleConfig(tmp);
-    assert.deepEqual(await hasPendingMigrations(database, { cwd: tmp }), false);
+    expect(await hasPendingMigrations(database, { cwd: tmp })).toBe(false);
     await writeMigration1(tmp);
-    assert.deepEqual(await hasPendingMigrations(database, { cwd: tmp }), true);
+    expect(await hasPendingMigrations(database, { cwd: tmp })).toBe(true);
     await migrate(database, { cwd: tmp });
-    assert.deepEqual(await hasPendingMigrations(database, { cwd: tmp }), false);
+    expect(await hasPendingMigrations(database, { cwd: tmp })).toBe(false);
     await writeMigration2(tmp);
-    assert.deepEqual(await hasPendingMigrations(database, { cwd: tmp }), true);
+    expect(await hasPendingMigrations(database, { cwd: tmp })).toBe(true);
   });
 });

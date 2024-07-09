@@ -9,19 +9,19 @@ import { GET as indexGET } from "./database/routes/index";
 import { GET as sqlGET, POST as sqlPOST } from "./database/routes/sql";
 import { fileRouter } from "..";
 import { LoadedFileRoute } from "../file-router";
-import { Database } from "better-sqlite3";
+import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 const loadedFileRoutes = [
-  { filePath: "[table]/index.tsx", GET: detailGET },
-  { filePath: "[table]/edit.tsx", GET: editGet, POST: editPost },
-  { filePath: "[table]/row.tsx", GET: rowGET },
-  { filePath: "index.tsx", GET: indexGET },
-  { filePath: "sql.tsx", GET: sqlGET, POST: sqlPOST },
+  { filePath: "/[table]/index.tsx", GET: detailGET },
+  { filePath: "/[table]/edit.tsx", GET: editGet, POST: editPost },
+  { filePath: "/[table]/row.tsx", GET: rowGET },
+  { filePath: "/index.tsx", GET: indexGET },
+  { filePath: "/sql.tsx", GET: sqlGET, POST: sqlPOST },
 ] satisfies LoadedFileRoute[];
 
-export async function admin(
-  database: Database,
-  { verbose = 0 } = {}
+export async function admin<T extends Record<string, unknown>>(
+  database: BetterSQLite3Database<T>,
+  { verbose = 3 } = {}
 ): Promise<express.Router> {
   const router = express.Router();
   return router.use(
