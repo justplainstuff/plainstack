@@ -1,5 +1,5 @@
-import { readdir, readFile } from "fs/promises";
 import { join } from "path";
+import { readFile, readdir } from "fs/promises";
 import MarkdownIt from "markdown-it";
 import { env } from "~/app/config/env";
 
@@ -50,7 +50,7 @@ export async function createMarkdownRenderer() {
 export async function renderPage(
   fileName: string,
   fileContent: string,
-  md: MarkdownIt
+  md: MarkdownIt,
 ): Promise<Page> {
   const html = md.render(fileContent);
   const slug = fileName.replace(".md", "").split("-").slice(1).join("-");
@@ -109,8 +109,8 @@ export async function getDocumentationPages(): Promise<Page[]> {
   const mdFiles = files.filter((file) => file.endsWith(".md"));
 
   const sortedMdFiles = mdFiles.sort((a, b) => {
-    const prefixA = parseInt(a.split("-")[0]!);
-    const prefixB = parseInt(b.split("-")[0]!);
+    const prefixA = Number.parseInt(a.split("-")[0]!);
+    const prefixB = Number.parseInt(b.split("-")[0]!);
     return prefixA - prefixB;
   });
   const md = await createMarkdownRenderer();
@@ -120,7 +120,7 @@ export async function getDocumentationPages(): Promise<Page[]> {
       const filePath = join(docsDirectory, file);
       const fileContent = await readFile(filePath, "utf-8");
       return await renderPage(file, fileContent, md);
-    })
+    }),
   );
   cache = pages;
   return pages;

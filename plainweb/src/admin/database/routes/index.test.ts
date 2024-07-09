@@ -1,12 +1,15 @@
-import { expect, beforeAll, test, describe } from "vitest";
+import { beforeAll, describe, expect, test } from "vitest";
 
 import BetterSqlite3Database from "better-sqlite3";
+import {
+  type BetterSQLite3Database,
+  drizzle,
+} from "drizzle-orm/better-sqlite3";
 import express from "express";
 import supertest from "supertest";
 import { GET } from ".";
-import { handleResponse } from "../../../handler";
 import { isolate } from "../../..";
-import { BetterSQLite3Database, drizzle } from "drizzle-orm/better-sqlite3";
+import { handleResponse } from "../../../handler";
 
 const connection = new BetterSqlite3Database(":memory:");
 export const database = drizzle(connection);

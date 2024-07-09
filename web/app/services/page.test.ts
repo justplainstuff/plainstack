@@ -1,5 +1,5 @@
-import { test, describe } from "node:test";
 import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 import { createMarkdownRenderer, renderPage } from "~/app/services/page";
 
 describe("page", async () => {
@@ -21,7 +21,7 @@ This is another subparagraph.
     const page = await renderPage(
       "0-test.md",
       content,
-      await createMarkdownRenderer()
+      await createMarkdownRenderer(),
     );
     assert.equal(page.h1[0], "Main Title");
     assert.equal(page.h2[0], "Subtitle");

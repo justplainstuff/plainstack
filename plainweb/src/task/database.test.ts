@@ -1,12 +1,12 @@
-import BetterSqlite3Database from "better-sqlite3";
-import { beforeAll, describe, test } from "vitest";
 import assert from "node:assert/strict";
-import { text, sqliteTable, int } from "drizzle-orm/sqlite-core";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import { Task, _runTasks, composeStartableTask, perform } from "./task";
-import { defineDatabaseTask } from "./database";
-import { isolate } from "../isolate";
+import BetterSqlite3Database from "better-sqlite3";
 import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { beforeAll, describe, test } from "vitest";
+import { isolate } from "../isolate";
+import { defineDatabaseTask } from "./database";
+import { type Task, _runTasks, composeStartableTask, perform } from "./task";
 
 const tasks = sqliteTable("tasks", {
   id: text("id").primaryKey(),
@@ -34,10 +34,10 @@ async function processUntil(
     f: () => Promise<void>;
     until?: (database: Database) => Promise<boolean>;
     debug?: boolean;
-  }
+  },
 ): Promise<void> {
   const runnableTasks = tasks.map((task, idx) =>
-    composeStartableTask(task, `task-${idx}`, { debug: true })
+    composeStartableTask(task, `task-${idx}`, { debug: true }),
   );
   const timeouts = _runTasks(runnableTasks, { debug: true });
   await f();

@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
-import { Database } from "~/app/config/database";
-import { Contact, contacts } from "~/app/config/schema";
 import { perform, sendMail } from "plainweb";
-import doubleOptIn from "~/app/tasks/double-opt-in";
+import type { Database } from "~/app/config/database";
 import { env } from "~/app/config/env";
+import { type Contact, contacts } from "~/app/config/schema";
+import doubleOptIn from "~/app/tasks/double-opt-in";
 
 function getBaseUrl() {
   return env.NODE_ENV === "production"
@@ -13,10 +13,10 @@ function getBaseUrl() {
 
 export async function sendDoubleOptInEmail(
   database: Database,
-  contact: Contact
+  contact: Contact,
 ) {
   console.log(
-    `Sending double opt-in email to ${contact.email} using base url ${getBaseUrl()}`
+    `Sending double opt-in email to ${contact.email} using base url ${getBaseUrl()}`,
   );
   await sendMail({
     from: "josef@plainweb.dev",
@@ -61,7 +61,7 @@ export async function verifyDoubleOptIn(
   }: {
     email: string;
     token: string;
-  }
+  },
 ) {
   const contact = await database.query.contacts.findFirst({
     where: eq(contacts.email, email),

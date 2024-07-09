@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /// <reference lib="dom" />
-(function () {
+(() => {
   const ws = new WebSocket(
-    `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`
+    `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`,
   );
   let userId = null;
   let currentJoyCount = null;
@@ -25,7 +25,7 @@
         "Received confetti event. Current userId:",
         userId,
         "Event id:",
-        data.id
+        data.id,
       );
       if (userId === null || data.id !== userId) {
         triggerConfetti();
@@ -58,7 +58,7 @@
       "Updating joy counter. New count:",
       count,
       "Current count:",
-      currentJoyCount
+      currentJoyCount,
     );
     const counterElement = document.getElementById("joy-counter");
     if (counterElement && count !== null) {
@@ -80,7 +80,7 @@
 
     const counterElement = document.getElementById("joy-counter");
     if (counterElement) {
-      currentJoyCount = parseInt(counterElement.textContent, 10);
+      currentJoyCount = Number.parseInt(counterElement.textContent, 10);
       console.log("Initial joy count from HTML:", currentJoyCount);
     }
   });

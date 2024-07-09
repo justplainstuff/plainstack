@@ -1,5 +1,5 @@
 import { Suspense } from "@kitajs/html/suspense";
-import { Handler, stream } from "plainweb";
+import { stream, type Handler } from "plainweb";
 
 async function HelloDelayed() {
   await new Promise((res) => {

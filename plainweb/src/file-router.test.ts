@@ -1,11 +1,11 @@
-import { expect, test, describe } from "vitest";
+import express from "express";
+import supertest from "supertest";
+import { describe, expect, test } from "vitest";
 import {
-  LoadedFileRoute,
+  type LoadedFileRoute,
   expressRouter,
   getExpressRoutePath,
 } from "./file-router";
-import express from "express";
-import supertest from "supertest";
 
 describe("getExpressRoutePath", () => {
   const dir = "/path/to/routes";

@@ -1,17 +1,17 @@
 import Html from "@kitajs/html";
-import { Handler, notFound } from "plainweb";
+import { type Handler, notFound } from "plainweb";
 import { FooterSection } from "~/app/components/footer-section";
 import {
   CloudUploadIcon,
-  DatabaseIcon,
   ContainerIcon,
+  DatabaseIcon,
   FolderTreeIcon,
   LeafIcon,
   ListTodoIcon,
-  RouteIcon,
+  PhoneIncomingIcon,
   PizzaIcon,
   PlayIcon,
-  PhoneIncomingIcon,
+  RouteIcon,
   TestTubeDiagonalIcon,
 } from "~/app/components/icons";
 import Layout from "~/app/layout";

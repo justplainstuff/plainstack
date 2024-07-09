@@ -176,11 +176,7 @@ const fileTree = {
   },
 };
 
-function renderTree(
-  tree: Record<string, unknown>,
-  prefix: string = "",
-  isRoot: boolean = true
-) {
+function renderTree(tree: Record<string, unknown>, prefix = "", isRoot = true) {
   return (
     <ul class={`${isRoot ? "" : "ml-3"}`}>
       {Object.entries(tree).map(([safeKey, value], index, array) => {
@@ -215,7 +211,7 @@ function renderTree(
               renderTree(
                 value as Record<string, unknown>,
                 `${prefix}${safeKey}/`,
-                false
+                false,
               )
             )}
           </li>

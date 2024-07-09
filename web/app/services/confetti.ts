@@ -26,7 +26,7 @@ async function initializeTotalJoys() {
 
 async function broadcastConfettiTrigger(
   wss: WebSocket.Server,
-  triggerId: string
+  triggerId: string,
 ) {
   totalJoys++;
   await updateSparks();
@@ -89,7 +89,7 @@ export async function listenWebsocket(wss: WebSocket.Server) {
     // Send recent confetti triggers and total joys to the new connection
     const now = Date.now();
     const recentTriggers = recentConfettiTriggers.filter(
-      (trigger) => now - trigger.timestamp < RECENT_TRIGGER_WINDOW
+      (trigger) => now - trigger.timestamp < RECENT_TRIGGER_WINDOW,
     );
     const initialData = JSON.stringify({
       type: "initialData",
@@ -108,7 +108,7 @@ export async function listenWebsocket(wss: WebSocket.Server) {
               type: "error",
               message:
                 "Rate limit exceeded. Please wait before triggering confetti again.",
-            })
+            }),
           );
           return;
         }

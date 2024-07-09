@@ -1,12 +1,12 @@
-import { beforeEach, describe, it, expect } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { defineInmemoryTask, inmemoryTasks } from "./inmemory";
 import {
-  PersistedTask,
-  Task,
+  type PersistedTask,
+  type Task,
   _runTasks,
   composeStartableTask,
   perform,
 } from "./task";
-import { defineInmemoryTask, inmemoryTasks } from "./inmemory";
 
 async function processUntil(
   tasks: Task<unknown>[],
@@ -18,10 +18,10 @@ async function processUntil(
     f: () => Promise<void>;
     until?: (inmemoryTasks: Map<string, PersistedTask<unknown>>) => boolean;
     debug?: boolean;
-  }
+  },
 ): Promise<void> {
   const runnableTasks = tasks.map((task, idx) =>
-    composeStartableTask(task, `task-${idx}`, { debug: true })
+    composeStartableTask(task, `task-${idx}`, { debug: true }),
   );
   const timeouts = _runTasks(runnableTasks, { debug: true });
   await f();

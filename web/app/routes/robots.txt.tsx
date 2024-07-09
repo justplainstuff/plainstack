@@ -1,4 +1,4 @@
-import { Handler } from "plainweb";
+import type { Handler } from "plainweb";
 
 export const GET: Handler = async ({ res }) => {
   return () => {

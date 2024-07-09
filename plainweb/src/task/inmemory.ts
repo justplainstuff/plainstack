@@ -1,8 +1,8 @@
 import {
-  DefineTaskOpts,
-  PersistedTask,
-  Task,
-  TaskStorage,
+  type DefineTaskOpts,
+  type PersistedTask,
+  type Task,
+  type TaskStorage,
   composePersistedTask,
   defineTaskWithAdapter,
 } from "./task";
@@ -21,7 +21,7 @@ const InmemoryAdapter: TaskStorage<unknown> = {
         ({ name: taskName, failedNr, failedLast }) =>
           taskName === name &&
           (failedNr ?? 0) <= maxRetries &&
-          (failedLast ?? 0) <= Date.now() - retryIntervall
+          (failedLast ?? 0) <= Date.now() - retryIntervall,
       )
       .slice(0, batchSize);
     return result;
@@ -46,6 +46,6 @@ const InmemoryAdapter: TaskStorage<unknown> = {
 export function defineInmemoryTask<T>(opts: DefineTaskOpts<T>): Task<T> {
   return defineTaskWithAdapter(
     InmemoryAdapter,
-    opts as DefineTaskOpts<unknown>
+    opts as DefineTaskOpts<unknown>,
   );
 }

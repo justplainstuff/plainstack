@@ -1,6 +1,6 @@
-import { createId } from "@paralleldrive/cuid2";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { createId } from "@paralleldrive/cuid2";
 
 type ErrorHandler = ({ err }: { err: unknown }) => Promise<void>;
 
@@ -11,7 +11,7 @@ export type Task<T> = {
     opts?: {
       debug?: boolean;
       error?: ErrorHandler;
-    }
+    },
   ): NodeJS.Timeout;
   perform(data: T): Promise<void>;
 };
@@ -28,7 +28,7 @@ const startableTasks: Record<string, StartableTask> = {};
 export function composeStartableTask(
   task: Task<unknown>,
   name: string,
-  opts?: { debug?: boolean; error?: ErrorHandler }
+  opts?: { debug?: boolean; error?: ErrorHandler },
 ): StartableTask {
   const loaded = {
     taskId: task.id,
@@ -41,7 +41,7 @@ export function composeStartableTask(
 
 export async function loadStartableTask(
   tasksDir: string,
-  opts?: { debug?: boolean; error?: ErrorHandler }
+  opts?: { debug?: boolean; error?: ErrorHandler },
 ): Promise<StartableTask[]> {
   const debug = opts?.debug ?? false;
   const error = opts?.error;
@@ -54,7 +54,7 @@ export async function loadStartableTask(
 
     if (files.length !== taskFiles.length) {
       console.warn(
-        "[task] Warning: Found non-task files or folders in the tasks directory"
+        "[task] Warning: Found non-task files or folders in the tasks directory",
       );
     }
 
@@ -67,7 +67,7 @@ export async function loadStartableTask(
           const taskModule = await import(absoluteFilePath);
           if (!taskModule.default) {
             console.error(
-              `[task] No default export found in task at ${filePath}`
+              `[task] No default export found in task at ${filePath}`,
             );
             return;
           }
@@ -75,7 +75,7 @@ export async function loadStartableTask(
           const taskName = path.basename(filePath).slice(0, -3);
           return composeStartableTask(task, taskName, { debug, error });
         })
-        .filter(Boolean) as Promise<StartableTask>[]
+        .filter(Boolean) as Promise<StartableTask>[],
     );
   } catch (error) {
     console.error("[task] Error loading tasks:", error);
@@ -85,7 +85,7 @@ export async function loadStartableTask(
 
 export function _runTasks(
   runnableTasks: StartableTask[],
-  opts?: { debug: boolean }
+  opts?: { debug: boolean },
 ): Record<string, NodeJS.Timeout> {
   const debug = opts?.debug ?? false;
 
@@ -106,7 +106,7 @@ export function _runTasks(
         record[item.name] = item.timeout;
         return record;
       },
-      {} as Record<string, NodeJS.Timeout>
+      {} as Record<string, NodeJS.Timeout>,
     );
   } catch (error) {
     console.error("Error running tasks:", error);
@@ -116,7 +116,7 @@ export function _runTasks(
 
 export async function runTasks(
   tasksDir: string,
-  opts?: { debug?: boolean; error?: ErrorHandler }
+  opts?: { debug?: boolean; error?: ErrorHandler },
 ): Promise<Record<string, NodeJS.Timeout>> {
   const debug = opts?.debug ?? false;
   const error = opts?.error;
@@ -127,7 +127,7 @@ export async function runTasks(
 
 export async function perform<T>(
   task: Task<T>,
-  data?: T extends void ? undefined : T
+  data?: T extends void ? undefined : T,
 ): Promise<void> {
   try {
     await task.perform((data as T) ?? (undefined as unknown as T));
@@ -213,7 +213,7 @@ export function defineTaskWithAdapter(
     batchSize = 1,
     maxRetries = 5,
     retryIntervall = 1000 * 3,
-  }: DefineTaskOpts<unknown>
+  }: DefineTaskOpts<unknown>,
 ): Task<unknown> {
   const id = createId();
   return {
@@ -222,7 +222,7 @@ export function defineTaskWithAdapter(
       const startableTask = startableTasks[id];
       if (!startableTask)
         throw new Error(
-          `You tried to call perform() before calling runTasks(). runTasks() must be called before perform() to load the task into memory.`
+          `You tried to call perform() before calling runTasks(). runTasks() must be called before perform() to load the task into memory.`,
         );
       await enqueue({ data, name: startableTask.name });
     },
@@ -264,7 +264,7 @@ export function defineTaskWithAdapter(
 
               debug &&
                 console.log(
-                  `[task] Fetched ${Array.isArray(tasks) ? tasks.length : 1} job(s) for task ${name}`
+                  `[task] Fetched ${Array.isArray(tasks) ? tasks.length : 1} job(s) for task ${name}`,
                 );
 
               const toProcess = Array.isArray(tasks) ? tasks : [tasks];
@@ -281,7 +281,7 @@ export function defineTaskWithAdapter(
                       debug &&
                         console.log(
                           `[task] Error processing task ${name}:`,
-                          err
+                          err,
                         );
                       try {
                         await adapterFailure?.({ task, err });
@@ -291,13 +291,13 @@ export function defineTaskWithAdapter(
                         console.error(err);
                         await error?.({ err });
                       }
-                    })
-                )
+                    }),
+                ),
               );
 
               debug &&
                 console.log(
-                  `[task] Processed ${toProcess.length} job(s) for task ${name}`
+                  `[task] Processed ${toProcess.length} job(s) for task ${name}`,
                 );
             } catch (err) {
               // TODO make logging configurable
@@ -305,7 +305,7 @@ export function defineTaskWithAdapter(
 
               console.error(
                 `[task] Error occurred while processing task ${name}:`,
-                err
+                err,
               );
             }
           }

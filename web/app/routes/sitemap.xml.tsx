@@ -1,9 +1,9 @@
-import { Handler } from "plainweb";
+import type { Handler } from "plainweb";
 import { getDocumentationPages } from "~/app/services/page";
 
 export const GET: Handler = async ({ res }) => {
   const docPages = (await getDocumentationPages()).map(
-    (page) => `/docs/${page.slug}`
+    (page) => `/docs/${page.slug}`,
   );
   const pages = [...docPages, "/"];
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -5,7 +5,7 @@
 import process from "node:process";
 import ora from "ora";
 
-import { sleep, color } from "./utils";
+import { color, sleep } from "./utils";
 
 export async function renderLoadingIndicator({
   start,
@@ -21,9 +21,9 @@ export async function renderLoadingIndicator({
   stdin?: NodeJS.ReadStream & { fd: 0 };
   stdout?: NodeJS.WriteStream & { fd: 1 };
 }) {
-  let act = update();
-  let tooSlow = Object.create(null);
-  let result = await Promise.race([sleep(500).then(() => tooSlow), act]);
+  const act = update();
+  const tooSlow = Object.create(null);
+  const result = await Promise.race([sleep(500).then(() => tooSlow), act]);
   if (result === tooSlow) {
     const spinner = ora({
       text: start,

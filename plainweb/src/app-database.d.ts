@@ -2,4 +2,4 @@ declare global {
   interface AppDatabase {}
 }
 
-export {};
+export type {};

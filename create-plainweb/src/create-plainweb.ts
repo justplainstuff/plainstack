@@ -1,16 +1,19 @@
-import process from "node:process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import fse from "fs-extra";
-import stripAnsi from "strip-ansi";
-import { rimraf } from "rimraf";
-import execa from "execa";
+import process from "node:process";
 import arg from "arg";
+import execa from "execa";
+import fse from "fs-extra";
+import { rimraf } from "rimraf";
 import semver from "semver";
 import sortPackageJSON from "sort-package-json";
+import stripAnsi from "strip-ansi";
 
+import { confirm, input } from "@inquirer/prompts";
 import { version as thisPlainwebVersion } from "../../plainweb/package.json";
+import { CopyTemplateError, copyTemplate } from "./copy-template";
+import { renderLoadingIndicator } from "./loading-indicator";
 import {
   IGNORED_TEMPLATE_DIRECTORIES,
   color,
@@ -27,12 +30,9 @@ import {
   stripDirectoryFromPath,
   toValidProjectName,
 } from "./utils";
-import { copyTemplate, CopyTemplateError } from "./copy-template";
-import { confirm, input } from "@inquirer/prompts";
-import { renderLoadingIndicator } from "./loading-indicator";
 
 async function getContext(argv: string[]): Promise<Context> {
-  let flags = arg(
+  const flags = arg(
     {
       "--debug": Boolean,
       "--plainweb-version": String,
@@ -57,7 +57,7 @@ async function getContext(argv: string[]): Promise<Context> {
       "--no-motion": Boolean,
       "--overwrite": Boolean,
     },
-    { argv, permissive: true }
+    { argv, permissive: true },
   );
 
   let {
@@ -80,9 +80,9 @@ async function getContext(argv: string[]): Promise<Context> {
     "--overwrite": overwrite,
   } = flags;
 
-  let cwd = flags["_"][0];
-  let interactive = isInteractive();
-  let projectName = cwd;
+  const cwd = flags["_"][0];
+  const interactive = isInteractive();
+  const projectName = cwd;
 
   if (!interactive) {
     yes = true;
@@ -96,17 +96,17 @@ async function getContext(argv: string[]): Promise<Context> {
     } else {
       log(
         `\n${color.warning(
-          `${selectedPlainwebVersion} is an invalid version specifier. Using Plainweb v${thisPlainwebVersion}.`
-        )}`
+          `${selectedPlainwebVersion} is an invalid version specifier. Using Plainweb v${thisPlainwebVersion}.`,
+        )}`,
       );
       selectedPlainwebVersion = undefined;
     }
   }
 
-  let context: Context = {
+  const context: Context = {
     tempDir: path.join(
       await fs.promises.realpath(os.tmpdir()),
-      `create-plainweb--${Math.random().toString(36).substr(2, 8)}`
+      `create-plainweb--${Math.random().toString(36).substr(2, 8)}`,
     ),
     cwd,
     overwrite,
@@ -120,7 +120,7 @@ async function getContext(argv: string[]): Promise<Context> {
       pkgManager ??
         // npm, pnpm, Yarn, and Bun set the user agent environment variable that can be used
         // to determine which package manager ran the command.
-        (process.env.npm_config_user_agent ?? "npm").split("/")[0]
+        (process.env.npm_config_user_agent ?? "npm").split("/")[0],
     ),
     projectName,
     plainwebVersion: selectedPlainwebVersion || thisPlainwebVersion,
@@ -134,8 +134,8 @@ async function getContext(argv: string[]): Promise<Context> {
 async function introStep(ctx: Context) {
   log(
     `\n${color.bgWhite(` ${color.black("plainweb")} `)}  ${color.green(
-      color.bold(`v${ctx.plainwebVersion}`)
-    )} ${color.bold("🪨  Let's build a plainweb app...")}`
+      color.bold(`v${ctx.plainwebVersion}`),
+    )} ${color.bold("🪨  Let's build a plainweb app...")}`,
   );
 
   if (!ctx.interactive) {
@@ -165,7 +165,7 @@ async function projectNameStep(ctx: Context) {
   }
 
   if (!ctx.cwd) {
-    let name = await input({
+    const name = await input({
       message: "Where should we create your new project?",
       default: "./my-plainweb-project",
     });
@@ -176,17 +176,17 @@ async function projectNameStep(ctx: Context) {
 
   let name = ctx.cwd;
   if (name === "." || name === "./") {
-    let parts = process.cwd().split(path.sep);
+    const parts = process.cwd().split(path.sep);
     name = parts[parts.length - 1];
   } else if (name.startsWith("./") || name.startsWith("../")) {
-    let parts = name.split("/");
+    const parts = name.split("/");
     name = parts[parts.length - 1];
   }
   ctx.projectName = toValidProjectName(name);
 }
 
 async function copyTemplateToTempDirStep(ctx: Context) {
-  let template = ctx.template;
+  const template = ctx.template;
 
   await loadingIndicator({
     start: "Template copying...",
@@ -197,7 +197,7 @@ async function copyTemplateToTempDirStep(ctx: Context) {
         debug(`Extracting to: ${ctx.tempDir}`);
       }
 
-      let result = await copyTemplate(template, ctx.tempDir, {
+      const result = await copyTemplate(template, ctx.tempDir, {
         debug: ctx.debug,
         async onError(err) {
           error(
@@ -206,7 +206,7 @@ async function copyTemplateToTempDirStep(ctx: Context) {
               ? err.message
               : "Something went wrong. Run `create-plainweb --debug` to see more info.\n\n" +
                   "Open an issue to report the problem at " +
-                  "https://github.com/joseferben/plainweb/issues/new"
+                  "https://github.com/joseferben/plainweb/issues/new",
           );
           throw err;
         },
@@ -229,16 +229,16 @@ async function copyTemplateToTempDirStep(ctx: Context) {
 async function copyTempDirToAppDirStep(ctx: Context) {
   await ensureDirectory(ctx.cwd);
 
-  let files1 = await getDirectoryFilesRecursive(ctx.tempDir);
-  let files2 = await getDirectoryFilesRecursive(ctx.cwd);
-  let collisions = files1
+  const files1 = await getDirectoryFilesRecursive(ctx.tempDir);
+  const files2 = await getDirectoryFilesRecursive(ctx.cwd);
+  const collisions = files1
     .filter((f) => files2.includes(f))
     .sort((a, b) => a.localeCompare(b));
 
   if (collisions.length > 0) {
-    let getFileList = (prefix: string) => {
-      let moreFiles = collisions.length - 5;
-      let lines = ["", ...collisions.slice(0, 5)];
+    const getFileList = (prefix: string) => {
+      const moreFiles = collisions.length - 5;
+      const lines = ["", ...collisions.slice(0, 5)];
       if (moreFiles > 0) {
         lines.push(`and ${moreFiles} more...`);
       }
@@ -248,7 +248,7 @@ async function copyTempDirToAppDirStep(ctx: Context) {
     if (ctx.overwrite) {
       info(
         "Overwrite:",
-        `overwriting files due to \`--overwrite\`:${getFileList("           ")}`
+        `overwriting files due to \`--overwrite\`:${getFileList("           ")}`,
       );
     } else if (!ctx.interactive) {
       error(
@@ -256,17 +256,17 @@ async function copyTempDirToAppDirStep(ctx: Context) {
         `Destination directory contains files that would be overwritten\n` +
           `         and no \`--overwrite\` flag was included in a non-interactive\n` +
           `         environment. The following files would be overwritten:` +
-          getFileList("           ")
+          getFileList("           "),
       );
       throw new Error(
-        "File collisions detected in a non-interactive environment"
+        "File collisions detected in a non-interactive environment",
       );
     } else {
       if (ctx.debug) {
         debug(`Colliding files:${getFileList("          ")}`);
       }
 
-      let overwrite = await confirm({
+      const overwrite = await confirm({
         message:
           `Your project directory contains files that will be overwritten by\n` +
           `             this template (you can force with \`--overwrite\`)\n\n` +
@@ -288,8 +288,8 @@ async function copyTempDirToAppDirStep(ctx: Context) {
       // unlikely we want them copied - and because templates are primarily
       // being pulled from git tarballs which won't have .git/ and shouldn't
       // have node_modules/
-      let file = stripDirectoryFromPath(ctx.tempDir, src);
-      let isIgnored = IGNORED_TEMPLATE_DIRECTORIES.includes(file);
+      const file = stripDirectoryFromPath(ctx.tempDir, src);
+      const isIgnored = IGNORED_TEMPLATE_DIRECTORIES.includes(file);
       if (isIgnored) {
         if (ctx.debug) {
           debug(`Skipping copy of ${file} directory from template`);
@@ -305,7 +305,7 @@ async function copyTempDirToAppDirStep(ctx: Context) {
 
 async function installDependenciesQuestionStep(ctx: Context) {
   if (ctx.install === undefined) {
-    let deps = await confirm({
+    const deps = await confirm({
       message: `Install dependencies with ${ctx.pkgManager}?`,
       default: true,
     });
@@ -314,7 +314,7 @@ async function installDependenciesQuestionStep(ctx: Context) {
 }
 
 async function installDependenciesStep(ctx: Context) {
-  let { install, pkgManager, showInstallOutput, cwd } = ctx;
+  const { install, pkgManager, showInstallOutput, cwd } = ctx;
 
   if (!install) {
     await sleep(100);
@@ -385,8 +385,8 @@ async function gitInitStep(ctx: Context) {
     start: "Git initializing...",
     end: "Git initialized",
     while: async () => {
-      let options = { cwd: ctx.cwd, stdio: "ignore" } as const;
-      let commitMsg = "Initial commit from create-plainweb";
+      const options = { cwd: ctx.cwd, stdio: "ignore" } as const;
+      const commitMsg = "Initial commit from create-plainweb";
       try {
         await execa("git", ["init"], options);
         await execa("git", ["add", "."], options);
@@ -401,7 +401,7 @@ async function gitInitStep(ctx: Context) {
 }
 
 async function createEnvStep(ctx: Context) {
-  let envPath = path.join(ctx.cwd, ".env");
+  const envPath = path.join(ctx.cwd, ".env");
   if (fs.existsSync(envPath)) {
     log("");
     info("Nice!", `An .env file already exists`);
@@ -420,26 +420,26 @@ async function createEnvStep(ctx: Context) {
 }
 
 async function doneStep(ctx: Context) {
-  let projectDir = path.relative(process.cwd(), ctx.cwd);
+  const projectDir = path.relative(process.cwd(), ctx.cwd);
 
-  let max = process.stdout.columns;
-  let prefix = max < 80 ? " " : " ".repeat(9);
+  const max = process.stdout.columns;
+  const prefix = max < 80 ? " " : " ".repeat(9);
   await sleep(200);
 
   log(`\n ${color.bgWhite(color.black(" done "))}  That's it!`);
   await sleep(100);
   if (projectDir !== "") {
-    let enter = [
+    const enter = [
       `\n${prefix}Enter your project directory using`,
       color.cyan(`cd .${path.sep}${projectDir}`),
     ];
-    let len = enter[0].length + stripAnsi(enter[1]).length;
+    const len = enter[0].length + stripAnsi(enter[1]).length;
     log(enter.join(len > max ? "\n" + prefix : " "));
   }
   log(
     `${prefix}Check out ${color.bold(
-      "README.md"
-    )} for development and deploy instructions.`
+      "README.md",
+    )} for development and deploy instructions.`,
   );
 }
 
@@ -479,18 +479,18 @@ async function installDependencies({
 }
 
 async function updatePackageJSON(ctx: Context) {
-  let packageJSONPath = path.join(ctx.cwd, "package.json");
+  const packageJSONPath = path.join(ctx.cwd, "package.json");
   if (!fs.existsSync(packageJSONPath)) {
-    let relativePath = path.relative(process.cwd(), ctx.cwd);
+    const relativePath = path.relative(process.cwd(), ctx.cwd);
     error(
       "Oh no!",
       "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file does not exist in ${color.bold(relativePath)}.`
+        `file, but that file does not exist in ${color.bold(relativePath)}.`,
     );
     throw new Error(`package.json does not exist in ${ctx.cwd}`);
   }
 
-  let contents = await fs.promises.readFile(packageJSONPath, "utf-8");
+  const contents = await fs.promises.readFile(packageJSONPath, "utf-8");
   let packageJSON: any;
   try {
     packageJSON = JSON.parse(contents);
@@ -501,26 +501,26 @@ async function updatePackageJSON(ctx: Context) {
     error(
       "Oh no!",
       "The provided template must be a Plainweb project with a `package.json` " +
-        `file, but that file is invalid.`
+        `file, but that file is invalid.`,
     );
     throw err;
   }
 
-  for (let pkgKey of ["dependencies", "devDependencies"] as const) {
-    let dependencies = packageJSON[pkgKey];
+  for (const pkgKey of ["dependencies", "devDependencies"] as const) {
+    const dependencies = packageJSON[pkgKey];
     if (!dependencies) continue;
 
     if (!isValidJsonObject(dependencies)) {
       error(
         "Oh no!",
         "The provided template must be a Plainweb project with a `package.json` " +
-          `file, but its ${pkgKey} value is invalid.`
+          `file, but its ${pkgKey} value is invalid.`,
       );
       throw new Error(`package.json ${pkgKey} are invalid`);
     }
 
-    for (let dependency in dependencies) {
-      let version = dependencies[dependency];
+    for (const dependency in dependencies) {
+      const version = dependencies[dependency];
       if (dependency === "plainweb") {
         dependencies[dependency] = semver.prerelease(ctx.plainwebVersion)
           ? // Templates created from prereleases should pin to a specific version
@@ -535,7 +535,7 @@ async function updatePackageJSON(ctx: Context) {
   fs.promises.writeFile(
     packageJSONPath,
     JSON.stringify(sortPackageJSON(packageJSON), null, 2),
-    "utf-8"
+    "utf-8",
   );
 }
 
@@ -545,7 +545,7 @@ async function loadingIndicator(args: {
   while: (...args: any) => Promise<any>;
   ctx: Context;
 }) {
-  let { ctx, ...rest } = args;
+  const { ctx, ...rest } = args;
   await renderLoadingIndicator({
     ...rest,
   });
@@ -557,7 +557,7 @@ function title(text: string) {
 
 function printHelp(ctx: Context) {
   // prettier-ignore
-  let output = `
+  const output = `
 ${title("create-plainweb")}
 
 ${color.heading("Usage")}:
@@ -591,7 +591,7 @@ Plainweb projects are created from the template.
 }
 
 function align(text: string, dir: "start" | "end" | "center", len: number) {
-  let pad = Math.max(len - strip(text).length, 0);
+  const pad = Math.max(len - strip(text).length, 0);
   switch (dir) {
     case "start":
       return text + " ".repeat(pad);
@@ -607,7 +607,7 @@ function align(text: string, dir: "start" | "end" | "center", len: number) {
 }
 
 export async function createPlainweb(argv: string[]) {
-  let ctx = await getContext(argv);
+  const ctx = await getContext(argv);
   if (ctx.help) {
     printHelp(ctx);
     return;
@@ -617,7 +617,7 @@ export async function createPlainweb(argv: string[]) {
     return;
   }
 
-  let steps = [
+  const steps = [
     introStep,
     projectNameStep,
     copyTemplateToTempDirStep,
@@ -631,7 +631,7 @@ export async function createPlainweb(argv: string[]) {
   ];
 
   try {
-    for (let step of steps) {
+    for (const step of steps) {
       await step(ctx);
     }
   } catch (err) {

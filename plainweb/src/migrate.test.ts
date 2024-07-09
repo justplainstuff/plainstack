@@ -1,8 +1,8 @@
-import BetterSqlite3Database from "better-sqlite3";
-import { test, describe, expect } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
+import BetterSqlite3Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import { describe, expect, test } from "vitest";
 import { hasPendingMigrations, migrate } from "./migrate";
 
 async function writeDrizzleConfig(dir: string) {
@@ -29,7 +29,7 @@ async function writeMigration1(dir: string) {
   await writeMigration(
     dir,
     "0000_foo_bar.ts",
-    "CREATE TABLE `users` (`email` text PRIMARY KEY NOT NULL)"
+    "CREATE TABLE `users` (`email` text PRIMARY KEY NOT NULL)",
   );
 }
 
@@ -37,7 +37,7 @@ async function writeMigration2(dir: string) {
   await writeMigration(
     dir,
     "0001_other_bar.ts",
-    "CREATE TABLE `orders` (`id` text PRIMARY KEY NOT NULL)"
+    "CREATE TABLE `orders` (`id` text PRIMARY KEY NOT NULL)",
   );
 }
 

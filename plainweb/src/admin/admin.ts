@@ -1,15 +1,15 @@
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import express from "express";
-import { GET as detailGET } from "./database/routes/[table]/index";
+import { fileRouter } from "..";
+import type { LoadedFileRoute } from "../file-router";
 import {
   GET as editGet,
   POST as editPost,
 } from "./database/routes/[table]/edit";
+import { GET as detailGET } from "./database/routes/[table]/index";
 import { GET as rowGET } from "./database/routes/[table]/row";
 import { GET as indexGET } from "./database/routes/index";
 import { GET as sqlGET, POST as sqlPOST } from "./database/routes/sql";
-import { fileRouter } from "..";
-import { LoadedFileRoute } from "../file-router";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 const loadedFileRoutes = [
   { filePath: "/[table]/index.tsx", GET: detailGET },
@@ -21,7 +21,7 @@ const loadedFileRoutes = [
 
 export async function admin<T extends Record<string, unknown>>(
   database: BetterSQLite3Database<T>,
-  { verbose = 3 } = {}
+  { verbose = 3 } = {},
 ): Promise<express.Router> {
   const router = express.Router();
   return router.use(
@@ -30,6 +30,6 @@ export async function admin<T extends Record<string, unknown>>(
       res.locals.database = database;
       next();
     },
-    await fileRouter({ dir: "", loadedFileRoutes, verbose })
+    await fileRouter({ dir: "", loadedFileRoutes, verbose }),
   );
 }

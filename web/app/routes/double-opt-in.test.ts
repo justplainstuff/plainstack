@@ -1,11 +1,11 @@
-import { before, test, describe } from "node:test";
 import assert from "node:assert/strict";
+import { before, describe, test } from "node:test";
+import { eq } from "drizzle-orm";
+import { createRequest } from "node-mocks-http";
 import { isolate, migrate, outbox, testHandler } from "plainweb";
 import { database } from "~/app/config/database";
-import { GET } from "~/app/routes/double-opt-in";
-import { createRequest } from "node-mocks-http";
 import { contacts } from "~/app/config/schema";
-import { eq } from "drizzle-orm";
+import { GET } from "~/app/routes/double-opt-in";
 
 describe("double opt in", () => {
   before(async () => await migrate(database));

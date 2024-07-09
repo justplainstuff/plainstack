@@ -1,13 +1,13 @@
+import fs from "node:fs";
+import os from "node:os";
 // Adapted from https://github.com/remix-run/remix/blob/main/packages/create-remix/copy-template.ts
 // MIT License Copyright (c) Remix Software Inc. 2020-2021 Copyright (c) Shopify Inc. 2022-2024
 import path from "node:path";
 import process from "node:process";
-import os from "node:os";
-import fs from "node:fs";
-import { type Key as ActionKey } from "node:readline";
-import { erase, cursor } from "sisteransi";
+import type { Key as ActionKey } from "node:readline";
 import chalk from "chalk";
 import recursiveReaddir from "recursive-readdir";
+import { cursor, erase } from "sisteransi";
 
 // https://no-color.org/
 const SUPPORTS_COLOR = chalk.supportsColor && !process.env.NO_COLOR;
@@ -60,7 +60,7 @@ function safeColor(style: chalk.Chalk) {
   return SUPPORTS_COLOR ? style : identity;
 }
 
-export { type ActionKey };
+export type { ActionKey };
 
 const unicode = { enabled: os.platform() !== "win32" };
 export const shouldUseAscii = () => !unicode.enabled;
@@ -75,7 +75,7 @@ export function isInteractive() {
   return Boolean(
     process.stdout.isTTY &&
       process.env.TERM !== "dumb" &&
-      !("CI" in process.env)
+      !("CI" in process.env),
   );
 }
 
@@ -99,23 +99,23 @@ function logBullet(
   colorizeText: <V>(v: V) => V,
   symbol: string,
   prefix: string,
-  text?: string | string[]
+  text?: string | string[],
 ) {
-  let textParts = Array.isArray(text) ? text : [text || ""].filter(Boolean);
-  let formattedText = textParts
+  const textParts = Array.isArray(text) ? text : [text || ""].filter(Boolean);
+  const formattedText = textParts
     .map((textPart) => colorizeText(textPart))
     .join("");
 
   if (process.stdout.columns < 80) {
     logger(
-      `${" ".repeat(5)} ${colorizePrefix(symbol)}  ${colorizePrefix(prefix)}`
+      `${" ".repeat(5)} ${colorizePrefix(symbol)}  ${colorizePrefix(prefix)}`,
     );
     logger(`${" ".repeat(9)}${formattedText}`);
   } else {
     logger(
       `${" ".repeat(5)} ${colorizePrefix(symbol)}  ${colorizePrefix(
-        prefix
-      )} ${formattedText}`
+        prefix,
+      )} ${formattedText}`,
     );
   }
 }
@@ -157,7 +157,7 @@ export function toValidProjectName(projectName: string) {
 
 function isValidProjectName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName
+    projectName,
   );
 }
 
@@ -166,11 +166,11 @@ export function identity<V>(v: V) {
 }
 
 export function strip(str: string) {
-  let pattern = [
+  const pattern = [
     "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
     "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))",
   ].join("|");
-  let RGX = new RegExp(pattern, "g");
+  const RGX = new RegExp(pattern, "g");
   return typeof str === "string" ? str.replace(RGX, "") : str;
 }
 
@@ -184,7 +184,7 @@ export function isValidJsonObject(obj: any): obj is Record<string, unknown> {
 
 export async function directoryExists(p: string) {
   try {
-    let stat = await fs.promises.stat(p);
+    const stat = await fs.promises.stat(p);
     return stat.isDirectory();
   } catch {
     return false;
@@ -193,7 +193,7 @@ export async function directoryExists(p: string) {
 
 export async function fileExists(p: string) {
   try {
-    let stat = await fs.promises.stat(p);
+    const stat = await fs.promises.stat(p);
     return stat.isFile();
   } catch {
     return false;
@@ -207,7 +207,7 @@ export async function ensureDirectory(dir: string) {
 }
 
 export function pathContains(path: string, dir: string) {
-  let relative = path.replace(dir, "");
+  const relative = path.replace(dir, "");
   return relative.length < path.length && !relative.startsWith("..");
 }
 
@@ -223,8 +223,8 @@ export function isUrl(value: string | URL) {
 export function clear(prompt: string, perLine: number) {
   if (!perLine) return erase.line + cursor.to(0);
   let rows = 0;
-  let lines = prompt.split(/\r?\n/);
-  for (let line of lines) {
+  const lines = prompt.split(/\r?\n/);
+  for (const line of lines) {
     rows += 1 + Math.floor(Math.max(strip(line).length - 1, 0) / perLine);
   }
 
@@ -232,7 +232,7 @@ export function clear(prompt: string, perLine: number) {
 }
 
 export function lines(msg: string, perLine: number) {
-  let lines = String(strip(msg) || "").split(/\r?\n/);
+  const lines = String(strip(msg) || "").split(/\r?\n/);
   if (!perLine) return lines.length;
   return lines
     .map((l) => Math.ceil(l.length / perLine))
@@ -294,10 +294,10 @@ export function stripDirectoryFromPath(dir: string, filePath: string) {
 export const IGNORED_TEMPLATE_DIRECTORIES = [".git", "node_modules"];
 
 export async function getDirectoryFilesRecursive(dir: string) {
-  let files = await recursiveReaddir(dir, [
+  const files = await recursiveReaddir(dir, [
     (file) => {
-      let strippedFile = stripDirectoryFromPath(dir, file);
-      let parts = strippedFile.split(path.sep);
+      const strippedFile = stripDirectoryFromPath(dir, file);
+      const parts = strippedFile.split(path.sep);
       return (
         parts.length > 1 && IGNORED_TEMPLATE_DIRECTORIES.includes(parts[0])
       );

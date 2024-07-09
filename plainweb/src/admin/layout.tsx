@@ -1,10 +1,10 @@
-import Html from "@kitajs/html";
+import type Html from "@kitajs/html";
 
 export default function RootLayout(
   props: Html.PropsWithChildren<{
     description?: string;
     title?: string;
-  }>
+  }>,
 ) {
   return (
     <>

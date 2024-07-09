@@ -1,4 +1,4 @@
-import Html from "@kitajs/html";
+import type Html from "@kitajs/html";
 import { GithubIcon, XIcon } from "~/app/components/icons";
 
 export default function Layout(
@@ -7,7 +7,7 @@ export default function Layout(
     description?: string;
     title?: string;
     hideDocs?: boolean;
-  }>
+  }>,
 ) {
   const safeHead = props.head;
   return (

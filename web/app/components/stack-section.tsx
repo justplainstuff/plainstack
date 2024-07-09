@@ -32,7 +32,12 @@ export function StackSection() {
       <div class="mt-10 flex flex-col md:flex-row items-center justify-around flex-wrap space-y-4">
         {tech.map(({ name, width, height, alt, href }) =>
           href ? (
-            <a href={href} aria-label={alt} target="_blank" rel="noopener">
+            <a
+              href={href}
+              aria-label={alt}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               <img
                 loading="lazy"
                 width={width}
@@ -51,7 +56,7 @@ export function StackSection() {
               src={`/public/images/tech-logos/${name}.webp`}
               class="h-14 w-auto object-contain"
             />
-          )
+          ),
         )}
       </div>
     </div>

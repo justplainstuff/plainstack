@@ -1,14 +1,14 @@
-import { Handler } from "plainweb";
-import Layout from "~/app/layout";
+import type express from "express";
+import type { Handler } from "plainweb";
 import { zfd } from "zod-form-data";
+import { FeatureSection } from "~/app/components/feature-section";
 import { FooterSection } from "~/app/components/footer-section";
 import { HeroSection } from "~/app/components/hero-section";
 import { SignupSection } from "~/app/components/signup-section";
+import type { Database } from "~/app/config/database";
 import { env } from "~/app/config/env";
-import express from "express";
+import Layout from "~/app/layout";
 import { createContact } from "~/app/services/contacts";
-import { Database } from "~/app/config/database";
-import { FeatureSection } from "~/app/components/feature-section";
 
 async function validateTurnstile(req: express.Request, token: string) {
   const ip = req.header("CF-Connecting-IP");
@@ -47,7 +47,7 @@ export const POST: Handler = async ({ req, res }) => {
   }
   const isHuman = await validateTurnstile(
     req,
-    parsed.data["cf-turnstile-response"]
+    parsed.data["cf-turnstile-response"],
   );
   if (!isHuman) {
     return (

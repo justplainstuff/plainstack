@@ -1,10 +1,10 @@
-import express from "express";
+import type express from "express";
 import {
-  PlainResponse,
+  type PlainResponse,
   html,
   isPlainResponse,
-  sendPlainResponse,
   json,
+  sendPlainResponse,
 } from "./plain-response";
 
 export interface HandlerArgs {
@@ -21,7 +21,7 @@ export type JSONSerializable =
   | { [key: string]: JSONSerializable };
 
 export type Handler = (
-  args: HandlerArgs
+  args: HandlerArgs,
 ) => Promise<ExpressResponse | PlainResponse | JSX.Element | JSONSerializable>;
 
 // escape hatch so users can use the express.Response API directly
@@ -29,7 +29,11 @@ export type ExpressResponse = () => void;
 
 export async function handleResponse(
   res: express.Response,
-  userResponse: PlainResponse | JSX.Element | JSONSerializable | ExpressResponse
+  userResponse:
+    | PlainResponse
+    | JSX.Element
+    | JSONSerializable
+    | ExpressResponse,
 ) {
   if (isPlainResponse(userResponse)) {
     await sendPlainResponse(res, userResponse);

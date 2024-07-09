@@ -1,22 +1,22 @@
-import {
-  DefineTaskOpts,
-  PersistedTask,
-  Task,
-  TaskStorage,
-  composePersistedTask,
-  defineTaskWithAdapter,
-} from "./task";
-import {
-  text,
-  sqliteTable,
-  int,
-  BaseSQLiteDatabase,
-} from "drizzle-orm/sqlite-core";
-import BetterSqlite3Database from "better-sqlite3";
-import { ExtractTablesWithRelations, and, lte, or } from "drizzle-orm";
+import type BetterSqlite3Database from "better-sqlite3";
+import { type ExtractTablesWithRelations, and, lte, or } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { asc } from "drizzle-orm";
 import { isNull } from "drizzle-orm";
+import {
+  type BaseSQLiteDatabase,
+  int,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
+import {
+  type DefineTaskOpts,
+  type PersistedTask,
+  type Task,
+  type TaskStorage,
+  composePersistedTask,
+  defineTaskWithAdapter,
+} from "./task";
 
 export const tasks = sqliteTable("tasks", {
   id: text("id").primaryKey(),
@@ -55,9 +55,9 @@ function composeDatabaseAdapter(database: Database): TaskStorage<unknown> {
             or(lte(failedNr, maxRetries), isNull(failedNr)),
             or(
               lte(failedLast, Date.now() - retryIntervall),
-              isNull(failedLast)
+              isNull(failedLast),
             ),
-            eq(name, taskName)
+            eq(name, taskName),
           ),
       });
       return tasks;
@@ -84,10 +84,10 @@ function composeDatabaseAdapter(database: Database): TaskStorage<unknown> {
 
 export function defineDatabaseTask<T>(
   database: Database,
-  opts: DefineTaskOpts<T>
+  opts: DefineTaskOpts<T>,
 ): Task<T> {
   return defineTaskWithAdapter(
     composeDatabaseAdapter(database),
-    opts as DefineTaskOpts<unknown>
+    opts as DefineTaskOpts<unknown>,
   );
 }

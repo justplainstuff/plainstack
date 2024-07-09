@@ -1,4 +1,4 @@
-import { Handler } from "plainweb";
+import type { Handler } from "plainweb";
 import Layout from "~/app/layout";
 
 export const POST: Handler = async () => {

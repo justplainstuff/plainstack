@@ -1,10 +1,10 @@
 import { Database } from "better-sqlite3";
-import { ColumnInfo, columnType, renderValue } from "../../../column";
-import { verbose } from "../../../config";
-import { Handler } from "../../../../handler";
-import { TableRow } from "./components/table-row";
 import { sql } from "drizzle-orm";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { Handler } from "../../../../handler";
+import { type ColumnInfo, columnType, renderValue } from "../../../column";
+import { verbose } from "../../../config";
+import { TableRow } from "./components/table-row";
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
@@ -12,7 +12,7 @@ export const GET: Handler = async ({ req, res }) => {
   const row = JSON.parse(decodeURIComponent(req.query.row as string));
 
   const columns = db.all<ColumnInfo>(
-    sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`
+    sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`,
   );
 
   verbose > 1 && console.log("[admin] [database]", "fetching row", row);

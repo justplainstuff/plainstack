@@ -1,15 +1,15 @@
+import fs from "node:fs";
+import path from "node:path";
 // Adapted from https://github.com/remix-run/remix/blob/main/packages/create-remix/copy-template.ts
 // MIT License Copyright (c) Remix Software Inc. 2020-2021 Copyright (c) Shopify Inc. 2022-2024
 import process from "node:process";
-import url from "node:url";
-import fs from "node:fs";
-import path from "node:path";
 import stream from "node:stream";
+import url from "node:url";
 import { promisify } from "node:util";
 import { type ReadableStream, fetch } from "@remix-run/web-fetch";
 import gunzip from "gunzip-maybe";
-import tar from "tar-fs";
 import { ProxyAgent } from "proxy-agent";
+import tar from "tar-fs";
 
 import { color, isUrl } from "./utils";
 
@@ -23,9 +23,9 @@ function agent(url: string) {
 export async function copyTemplate(
   template: string,
   destPath: string,
-  options: CopyTemplateOptions
+  options: CopyTemplateOptions,
 ): Promise<{ localTemplateDirectory: string } | undefined> {
-  let { log = () => {} } = options;
+  const { log = () => {} } = options;
 
   /**
    * Valid templates are:
@@ -39,10 +39,13 @@ export async function copyTemplate(
   try {
     if (isLocalFilePath(template)) {
       log(`Using the template from local file at "${template}"`);
-      let filepath = template.startsWith("file://")
+      const filepath = template.startsWith("file://")
         ? url.fileURLToPath(template)
         : template;
-      let isLocalDir = await copyTemplateFromLocalFilePath(filepath, destPath);
+      const isLocalDir = await copyTemplateFromLocalFilePath(
+        filepath,
+        destPath,
+      );
       return isLocalDir ? { localTemplateDirectory: filepath } : undefined;
     }
 
@@ -66,8 +69,8 @@ export async function copyTemplate(
 
     throw new CopyTemplateError(
       `"${color.bold(template)}" is an invalid template. Run ${color.bold(
-        "create-remix --help"
-      )} to see supported template formats.`
+        "create-remix --help",
+      )} to see supported template formats.`,
     );
   } catch (error) {
     await options.onError(error);
@@ -86,7 +89,7 @@ function isLocalFilePath(input: string): boolean {
     return (
       input.startsWith("file://") ||
       fs.existsSync(
-        path.isAbsolute(input) ? input : path.resolve(process.cwd(), input)
+        path.isAbsolute(input) ? input : path.resolve(process.cwd(), input),
       )
     );
   } catch (_) {
@@ -97,7 +100,7 @@ function isLocalFilePath(input: string): boolean {
 async function copyTemplateFromRemoteTarball(
   url: string,
   destPath: string,
-  options: CopyTemplateOptions
+  options: CopyTemplateOptions,
 ) {
   return await downloadAndExtractTarball(destPath, url, options);
 }
@@ -105,36 +108,36 @@ async function copyTemplateFromRemoteTarball(
 async function copyTemplateFromGithubRepoShorthand(
   repoShorthand: string,
   destPath: string,
-  options: CopyTemplateOptions
+  options: CopyTemplateOptions,
 ) {
-  let [owner, name, ...path] = repoShorthand.split("/");
-  let filePath = path.length ? path.join("/") : null;
+  const [owner, name, ...path] = repoShorthand.split("/");
+  const filePath = path.length ? path.join("/") : null;
 
   if (!owner) {
     throw new CopyTemplateError(
       `The provided GitHub repo shorthand "${color.bold(
-        repoShorthand
-      )}" is invalid.`
+        repoShorthand,
+      )}" is invalid.`,
     );
   }
   if (!name) {
     throw new CopyTemplateError(
       `The provided GitHub repo shorthand "${color.bold(
-        repoShorthand
-      )}" is invalid.`
+        repoShorthand,
+      )}" is invalid.`,
     );
   }
   await downloadAndExtractRepoTarball(
     { owner, name, filePath },
     destPath,
-    options
+    options,
   );
 }
 
 async function copyTemplateFromGithubRepoUrl(
   repoUrl: string,
   destPath: string,
-  options: CopyTemplateOptions
+  options: CopyTemplateOptions,
 ) {
   await downloadAndExtractRepoTarball(getRepoInfo(repoUrl), destPath, options);
 }
@@ -142,14 +145,14 @@ async function copyTemplateFromGithubRepoUrl(
 async function copyTemplateFromGenericUrl(
   url: string,
   destPath: string,
-  options: CopyTemplateOptions
+  options: CopyTemplateOptions,
 ) {
   await copyTemplateFromRemoteTarball(url, destPath, options);
 }
 
 async function copyTemplateFromLocalFilePath(
   filePath: string,
-  destPath: string
+  destPath: string,
 ): Promise<boolean> {
   if (filePath.endsWith(".tar.gz") || filePath.endsWith(".tgz")) {
     await extractLocalTarball(filePath, destPath);
@@ -162,7 +165,7 @@ async function copyTemplateFromLocalFilePath(
     return true;
   }
   throw new CopyTemplateError(
-    "The provided template is not a valid local directory or tarball."
+    "The provided template is not a valid local directory or tarball.",
   );
 }
 
@@ -170,20 +173,20 @@ const pipeline = promisify(stream.pipeline);
 
 async function extractLocalTarball(
   tarballPath: string,
-  destPath: string
+  destPath: string,
 ): Promise<void> {
   try {
     await pipeline(
       fs.createReadStream(tarballPath),
       gunzip(),
-      tar.extract(destPath, { strip: 1 })
+      tar.extract(destPath, { strip: 1 }),
     );
   } catch (error: unknown) {
     throw new CopyTemplateError(
       "There was a problem extracting the file from the provided template." +
         `  Template filepath: \`${tarballPath}\`` +
         `  Destination directory: \`${destPath}\`` +
-        `  ${error}`
+        `  ${error}`,
     );
   }
 }
@@ -197,12 +200,12 @@ interface TarballDownloadOptions {
 async function downloadAndExtractRepoTarball(
   repo: RepoInfo,
   destPath: string,
-  options: TarballDownloadOptions
+  options: TarballDownloadOptions,
 ) {
   // If we have a direct file path we will also have the branch. We can skip the
   // redirect and get the tarball URL directly.
   if (repo.branch && repo.filePath) {
-    let tarballURL = `https://codeload.github.com/${repo.owner}/${repo.name}/tar.gz/${repo.branch}`;
+    const tarballURL = `https://codeload.github.com/${repo.owner}/${repo.name}/tar.gz/${repo.branch}`;
     return await downloadAndExtractTarball(destPath, tarballURL, {
       ...options,
       filePath: repo.filePath,
@@ -231,26 +234,26 @@ interface DownloadAndExtractTarballOptions {
 async function downloadAndExtractTarball(
   downloadPath: string,
   tarballUrl: string,
-  { token, filePath }: DownloadAndExtractTarballOptions
+  { token, filePath }: DownloadAndExtractTarballOptions,
 ): Promise<void> {
   let resourceUrl = tarballUrl;
-  let headers: { Authorization?: string; Accept?: string } = {};
-  let isGithubUrl = new URL(tarballUrl).host.endsWith("github.com");
+  const headers: { Authorization?: string; Accept?: string } = {};
+  const isGithubUrl = new URL(tarballUrl).host.endsWith("github.com");
   if (token && isGithubUrl) {
     headers.Authorization = `token ${token}`;
   }
   if (isGithubReleaseAssetUrl(tarballUrl)) {
     // We can download the asset via the GitHub api, but first we need to look
     // up the asset id
-    let info = getGithubReleaseAssetInfo(tarballUrl);
+    const info = getGithubReleaseAssetInfo(tarballUrl);
     headers.Accept = "application/vnd.github.v3+json";
 
-    let releaseUrl =
+    const releaseUrl =
       info.tag === "latest"
         ? `https://api.github.com/repos/${info.owner}/${info.name}/releases/latest`
         : `https://api.github.com/repos/${info.owner}/${info.name}/releases/tags/${info.tag}`;
 
-    let response = await fetch(releaseUrl, {
+    const response = await fetch(releaseUrl, {
       agent: agent("https://api.github.com"),
       headers,
     });
@@ -258,11 +261,11 @@ async function downloadAndExtractTarball(
     if (response.status !== 200) {
       throw new CopyTemplateError(
         "There was a problem fetching the file from GitHub. The request " +
-          `responded with a ${response.status} status. Please try again later.`
+          `responded with a ${response.status} status. Please try again later.`,
       );
     }
 
-    let body = (await response.json()) as { assets: GitHubApiReleaseAsset[] };
+    const body = (await response.json()) as { assets: GitHubApiReleaseAsset[] };
     if (
       !body ||
       typeof body !== "object" ||
@@ -271,11 +274,11 @@ async function downloadAndExtractTarball(
     ) {
       throw new CopyTemplateError(
         "There was a problem fetching the file from GitHub. No asset was " +
-          "found at that url. Please try again later."
+          "found at that url. Please try again later.",
       );
     }
 
-    let assetId = body.assets.find((asset) => {
+    const assetId = body.assets.find((asset) => {
       // If the release is "latest", the url won't match the download url
       return info.tag === "latest"
         ? asset?.browser_download_url?.includes(info.asset)
@@ -284,13 +287,13 @@ async function downloadAndExtractTarball(
     if (assetId == null) {
       throw new CopyTemplateError(
         "There was a problem fetching the file from GitHub. No asset was " +
-          "found at that url. Please try again later."
+          "found at that url. Please try again later.",
       );
     }
     resourceUrl = `https://api.github.com/repos/${info.owner}/${info.name}/releases/assets/${assetId}`;
     headers.Accept = "application/octet-stream";
   }
-  let response = await fetch(resourceUrl, {
+  const response = await fetch(resourceUrl, {
     agent: agent(resourceUrl),
     headers,
   });
@@ -302,14 +305,14 @@ async function downloadAndExtractTarball(
           isGithubUrl ? " from GitHub" : ""
         }. The request ` +
           `responded with a ${response.status} status. Perhaps your \`--token\`` +
-          "is expired or invalid."
+          "is expired or invalid.",
       );
     }
     throw new CopyTemplateError(
       `There was a problem fetching the file${
         isGithubUrl ? " from GitHub" : ""
       }. The request ` +
-        `responded with a ${response.status} status. Please try again later.`
+        `responded with a ${response.status} status. Please try again later.`,
     );
   }
 
@@ -321,7 +324,7 @@ async function downloadAndExtractTarball(
   let filePathHasFiles = false;
 
   try {
-    let input = new stream.PassThrough();
+    const input = new stream.PassThrough();
     // Start reading stream into passthrough, don't await to avoid buffering
     writeReadableStreamToWritable(response.body, input);
     await pipeline(
@@ -329,7 +332,7 @@ async function downloadAndExtractTarball(
       gunzip(),
       tar.extract(downloadPath, {
         map(header) {
-          let originalDirName = header.name.split("/")[0];
+          const originalDirName = header.name.split("/")[0];
           header.name = header.name.replace(`${originalDirName}/`, "");
 
           if (filePath) {
@@ -357,13 +360,13 @@ async function downloadAndExtractTarball(
           }
           return header.name === "__IGNORE__";
         },
-      })
+      }),
     );
   } catch (_) {
     throw new CopyTemplateError(
       "There was a problem extracting the file from the provided template." +
         `  Template URL: \`${tarballUrl}\`` +
-        `  Destination directory: \`${downloadPath}\``
+        `  Destination directory: \`${downloadPath}\``,
     );
   }
 
@@ -371,7 +374,7 @@ async function downloadAndExtractTarball(
     throw new CopyTemplateError(
       `The path "${filePath}" was not found in this ${
         isGithubUrl ? "GitHub repo." : "tarball."
-      }`
+      }`,
     );
   }
 }
@@ -379,14 +382,14 @@ async function downloadAndExtractTarball(
 // Copied from remix-node/stream.ts
 async function writeReadableStreamToWritable(
   stream: typeof ReadableStream,
-  writable: stream.Writable
+  writable: stream.Writable,
 ) {
   const reader = stream.getReader();
-  let flushable = writable as { flush?: Function };
+  const flushable = writable as { flush?: Function };
 
   try {
     while (true) {
-      let { done, value } = await reader.read();
+      const { done, value } = await reader.read();
 
       if (done) {
         writable.end();
@@ -405,14 +408,14 @@ async function writeReadableStreamToWritable(
 }
 
 function isValidGithubRepoUrl(
-  input: string | URL
+  input: string | URL,
 ): input is URL | GithubUrlString {
   if (!isUrl(input)) {
     return false;
   }
   try {
-    let url = new URL(input);
-    let pathSegments = url.pathname.slice(1).split("/");
+    const url = new URL(input);
+    const pathSegments = url.pathname.slice(1).split("/");
 
     return (
       url.protocol === "https:" &&
@@ -463,7 +466,7 @@ function getGithubReleaseAssetInfo(browserUrl: string): ReleaseAssetInfo {
    * https://github.com/owner/repository/releases/latest/download/stack.tar.gz
    */
 
-  let url = new URL(browserUrl);
+  const url = new URL(browserUrl);
   let [, owner, name, , downloadOrLatest, tag, asset] = url.pathname.split("/");
 
   if (downloadOrLatest === "latest" && tag === "download") {
@@ -481,8 +484,8 @@ function getGithubReleaseAssetInfo(browserUrl: string): ReleaseAssetInfo {
 }
 
 function getRepoInfo(validatedGithubUrl: string): RepoInfo {
-  let url = new URL(validatedGithubUrl);
-  let [, owner, name, tree, branch, ...file] = url.pathname.split("/") as [
+  const url = new URL(validatedGithubUrl);
+  const [, owner, name, tree, branch, ...file] = url.pathname.split("/") as [
     _: string,
     Owner: string,
     Name: string,
@@ -490,7 +493,7 @@ function getRepoInfo(validatedGithubUrl: string): RepoInfo {
     Branch: string | undefined,
     FileInfo: string | undefined,
   ];
-  let filePath = file.join("/");
+  const filePath = file.join("/");
 
   if (tree === undefined) {
     return {

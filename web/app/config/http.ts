@@ -1,11 +1,11 @@
-import express from "express";
-import { fileRouter, flyHeaders, redirectWWW } from "plainweb";
 import compression from "compression";
 import errorHandler from "errorhandler";
-import morgan from "morgan";
-import { env } from "~/app/config/env";
-import { database } from "~/app/config/database";
+import express from "express";
 import rateLimit from "express-rate-limit";
+import morgan from "morgan";
+import { fileRouter, flyHeaders, redirectWWW } from "plainweb";
+import { database } from "~/app/config/database";
+import { env } from "~/app/config/env";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
@@ -17,7 +17,7 @@ const limiter = rateLimit({
 function addDatabase(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) {
   res.locals.database = database;
   next();
@@ -27,7 +27,7 @@ function addDatabase(
 function addRedirects(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) {
   const target = redirects[req.path];
   if (target) {

@@ -1,9 +1,9 @@
-import path from "node:path";
 import fs from "node:fs/promises";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { migrate as migrateSql } from "drizzle-orm/better-sqlite3/migrator";
-import { MigrationConfig } from "drizzle-orm/migrator";
+import path from "node:path";
 import { eq, sql } from "drizzle-orm";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { migrate as migrateSql } from "drizzle-orm/better-sqlite3/migrator";
+import type { MigrationConfig } from "drizzle-orm/migrator";
 
 type Config = {
   dialect: "sqlite";
@@ -19,14 +19,14 @@ async function getConfig(opts?: { cwd?: string }) {
   const stat = await fs.stat(configPath);
   if (!stat.isFile()) {
     console.log(
-      "No drizzle.config.ts in project root, can not migrate database"
+      "No drizzle.config.ts in project root, can not migrate database",
     );
     return;
   }
   const configModule = await import(configPath);
   if (!configModule.default) {
     console.log(
-      "No default export in drizzle.config.ts, can not migrate database"
+      "No default export in drizzle.config.ts, can not migrate database",
     );
     return;
   }
@@ -37,7 +37,7 @@ async function getConfig(opts?: { cwd?: string }) {
 
 export async function migrate<T extends Record<string, unknown>>(
   db: BetterSQLite3Database<T>,
-  opts?: { cwd?: string }
+  opts?: { cwd?: string },
 ) {
   const config = await getConfig(opts);
   if (!config) return;
@@ -58,7 +58,7 @@ const DEFAULT_TABLE = "__drizzle_migrations";
 // WIP
 export async function getLatestMigrationTimestamp(
   config: Config,
-  opts?: { cwd?: string }
+  opts?: { cwd?: string },
 ) {
   const journalPath = path.join(config.out ?? "migrations", "_journal.json");
   const fullJournalPath = path.join(opts?.cwd ?? process.cwd(), journalPath);
@@ -66,7 +66,7 @@ export async function getLatestMigrationTimestamp(
     const stat = await fs.stat(fullJournalPath);
     if (!stat.isFile()) {
       console.warn(
-        "No _journal.json file found in migrations folder, something seems to be wrong"
+        "No _journal.json file found in migrations folder, something seems to be wrong",
       );
       return;
     }
@@ -76,7 +76,7 @@ export async function getLatestMigrationTimestamp(
     const latestEntry = entries[entries.length - 1];
     if (!latestEntry.when) {
       console.warn(
-        "No 'when' field found in latest migration entry, something seems to be wrong"
+        "No 'when' field found in latest migration entry, something seems to be wrong",
       );
       return;
     }
@@ -90,7 +90,7 @@ export async function getLatestMigrationTimestamp(
 // WIP
 export async function hasPendingMigrations<T extends Record<string, unknown>>(
   database: BetterSQLite3Database<T>,
-  opts?: { cwd?: string }
+  opts?: { cwd?: string },
 ): Promise<boolean> {
   const config = await getConfig(opts);
   if (!config) return false;

@@ -1,5 +1,5 @@
+import type express from "express";
 import expressListEndpoints from "express-list-endpoints";
-import express from "express";
 
 export async function printRoutes(app: express.Express) {
   const endpoints = expressListEndpoints(app);

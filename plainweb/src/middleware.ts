@@ -1,11 +1,12 @@
-import express, { NextFunction } from "express";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type express from "express";
+import { NextFunction } from "express";
 import { hasPendingMigrations } from "./migrate";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
 function preferHeader(
   request: express.Request,
   from: string,
-  to: string
+  to: string,
 ): void {
   const preferredValue = request.get(from.toLowerCase());
   if (preferredValue == null) return;
@@ -17,7 +18,7 @@ function preferHeader(
 export const flyHeaders: express.RequestHandler = function flyHeaders(
   req,
   res,
-  next
+  next,
 ) {
   if (process.env.FLY_APP_NAME == null) return next();
 
@@ -52,7 +53,7 @@ export function pendingMigrations<T extends Record<string, unknown>>({
 export function redirectWWW(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ): void {
   const host = req.header("host");
 

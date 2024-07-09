@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import express, { type Router } from "express";
-import { Handler, handleResponse } from "./handler";
+import { type Handler, handleResponse } from "./handler";
 
 interface FileRouteHandler {
   GET?: Handler;
@@ -66,7 +66,7 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
       if (module?.GET) {
         if (typeof module.GET !== "function") {
           throw new Error(
-            `[router] GET export in route ${filePath} is not a function`
+            `[router] GET export in route ${filePath} is not a function`,
           );
         }
         loadedFileRoute = { filePath, GET: module.GET };
@@ -75,7 +75,7 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
       if (module?.POST) {
         if (typeof module.POST !== "function") {
           throw new Error(
-            `[router] POST export in route ${filePath} is not a function`
+            `[router] POST export in route ${filePath} is not a function`,
           );
         }
         if (loadedFileRoute) {
@@ -87,7 +87,7 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
 
       if (!loadedFileRoute) {
         console.error(
-          `[router] No exported GET or POST functions found in ${filePath}`
+          `[router] No exported GET or POST functions found in ${filePath}`,
         );
       } else {
         loadedRoutes.push(loadedFileRoute);
@@ -95,7 +95,7 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
     } catch (e) {
       console.error(e);
       throw new Error(
-        `[router] Double check the route at ${filePath}. Make sure to export a GET or POST function.`
+        `[router] Double check the route at ${filePath}. Make sure to export a GET or POST function.`,
       );
     }
   }
@@ -136,7 +136,7 @@ export function getExpressRoutePath({
     .join("/");
   verbose > 2 &&
     console.log(
-      `[router] with dir ${dir} mapping ${relativeFilePath} -> ${expressPath}`
+      `[router] with dir ${dir} mapping ${relativeFilePath} -> ${expressPath}`,
     );
   return expressPath;
 }

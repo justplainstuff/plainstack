@@ -1,7 +1,7 @@
-import { Request } from "express";
-import { Handler, handleResponse } from "./handler";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { Request } from "express";
 import { createResponse } from "node-mocks-http";
+import { type Handler, handleResponse } from "./handler";
 
 export async function testHandler(
   handler: Handler,
@@ -10,7 +10,7 @@ export async function testHandler(
     database,
   }: {
     database?: BetterSQLite3Database<{}>;
-  }
+  },
 ) {
   const res = createResponse();
   res.locals.database = database;

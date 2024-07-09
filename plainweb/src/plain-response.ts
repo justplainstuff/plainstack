@@ -1,8 +1,8 @@
 import "@kitajs/html";
-import express from "express";
-import { FlashMessage } from "./flash-message";
 import { renderToStream } from "@kitajs/html/suspense";
-import { JSONSerializable } from ".";
+import type express from "express";
+import type { JSONSerializable } from ".";
+import type { FlashMessage } from "./flash-message";
 
 export interface PlainResponse {
   _tag: "PlainResponse";
@@ -18,7 +18,7 @@ export function isPlainResponse(r: unknown): r is PlainResponse {
 
 export async function sendPlainResponse(
   res: express.Response,
-  plainResponse: PlainResponse
+  plainResponse: PlainResponse,
 ) {
   if (res.headersSent) {
     console.warn("Headers already sent, cannot send response");
@@ -55,7 +55,7 @@ export async function sendPlainResponse(
 
 export function html(
   html: Promise<string> | string,
-  opts?: { status?: number }
+  opts?: { status?: number },
 ): PlainResponse {
   return {
     _tag: "PlainResponse",
@@ -68,7 +68,7 @@ export function html(
 }
 
 export function stream(
-  htmlStream: (rid: number | string) => JSX.Element
+  htmlStream: (rid: number | string) => JSX.Element,
 ): PlainResponse {
   return {
     _tag: "PlainResponse",
@@ -82,7 +82,7 @@ export function stream(
 
 export function redirect(
   path: string,
-  opts?: { message?: FlashMessage }
+  opts?: { message?: FlashMessage },
 ): PlainResponse {
   // TODO store flash message
   return {
@@ -96,7 +96,7 @@ export function redirect(
 
 export function json(
   json: JSONSerializable,
-  opts?: { status?: number }
+  opts?: { status?: number },
 ): PlainResponse {
   return {
     _tag: "PlainResponse",

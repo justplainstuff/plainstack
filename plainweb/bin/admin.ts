@@ -1,9 +1,9 @@
 #!/usr/bin/env -S pnpm dlx tsx
 
-import express from "express";
-import BetterSqlite3Database, { Database } from "better-sqlite3";
-import { printRoutes, unstable_admin } from "../src";
+import BetterSqlite3Database, { type Database } from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import express from "express";
+import { printRoutes, unstable_admin } from "../src";
 
 function migrateAndSeed(connection: Database) {
   const run = `

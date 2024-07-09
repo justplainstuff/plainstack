@@ -1,7 +1,7 @@
-import { Handler } from "../../../../handler";
-import { ColumnInfo, columnType, renderValue } from "../../../column";
 import { sql } from "drizzle-orm";
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { Handler } from "../../../../handler";
+import { type ColumnInfo, columnType, renderValue } from "../../../column";
 import { verbose } from "../../../config";
 
 export const POST: Handler = async ({ req, res }) => {
@@ -10,7 +10,7 @@ export const POST: Handler = async ({ req, res }) => {
   const { __row, ...updatedData } = req.body;
 
   const columns = db.all<ColumnInfo>(
-    sql`SELECT * FROM pragma_table_info(${tableName})`
+    sql`SELECT * FROM pragma_table_info(${tableName})`,
   );
 
   const newData: Record<string, unknown> = {};
@@ -21,9 +21,9 @@ export const POST: Handler = async ({ req, res }) => {
     }
     newData[key] = value;
     if (column.type === "INTEGER") {
-      newData[key] = parseInt(value as string);
+      newData[key] = Number.parseInt(value as string);
     } else if (column.type === "REAL") {
-      newData[key] = parseFloat(value as string);
+      newData[key] = Number.parseFloat(value as string);
     }
   }
 
@@ -39,7 +39,7 @@ export const POST: Handler = async ({ req, res }) => {
     .reduce((acc, curr) => sql`${acc} AND ${curr}`);
 
   db.run(
-    sql`UPDATE ${sql.identifier(tableName)} SET ${setClause} WHERE ${whereClause}`
+    sql`UPDATE ${sql.identifier(tableName)} SET ${setClause} WHERE ${whereClause}`,
   );
 
   verbose >= 1 || console.log("[admin] [database]", "row saved");
@@ -74,7 +74,7 @@ export const GET: Handler = async ({ req, res }) => {
   const db = res.locals.database as BetterSQLite3Database;
 
   const columns = db.all<ColumnInfo>(
-    sql`SELECT * FROM pragma_table_info(${tableName})`
+    sql`SELECT * FROM pragma_table_info(${tableName})`,
   );
 
   return (

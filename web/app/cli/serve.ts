@@ -1,13 +1,13 @@
-import { Database, migrate, runTasks, useTransporter } from "plainweb";
+import http from "http";
+import { type Database, migrate, runTasks, useTransporter } from "plainweb";
+import WebSocket from "ws";
+import { database } from "~/app/config/database";
 import { debug, env } from "~/app/config/env";
 import { app } from "~/app/config/http";
 import { mail } from "~/app/config/mail";
-import { listenWebsocket } from "~/app/services/confetti";
-import http from "http";
-import { getDocumentationPages } from "~/app/services/page";
-import WebSocket from "ws";
-import { database } from "~/app/config/database";
 import { contacts, sparks } from "~/app/config/schema";
+import { listenWebsocket } from "~/app/services/confetti";
+import { getDocumentationPages } from "~/app/services/page";
 
 // TODO move somewhere else
 async function seed(db: Database) {

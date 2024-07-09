@@ -2,9 +2,7 @@
   "name": "plainweb",
   "version": "0.0.7",
   "description": "",
-  "files": [
-    "dist/"
-  ],
+  "files": ["dist/"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

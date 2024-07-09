@@ -1,4 +1,4 @@
-import { Handler, json } from "plainweb";
+import { type Handler, json } from "plainweb";
 import { database } from "~/app/config/database";
 
 export const GET: Handler = async () => {

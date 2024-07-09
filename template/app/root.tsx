@@ -5,7 +5,7 @@ export default function RootLayout(
     head?: string | Promise<string>;
     description?: string;
     title?: string;
-  }>
+  }>,
 ) {
   return (
     <>

@@ -1,1 +1,1 @@
-export let verbose = 3;
+export const verbose = 3;

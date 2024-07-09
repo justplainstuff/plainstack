@@ -1,6 +1,6 @@
-import Mail from "nodemailer/lib/mailer";
 import nodemailer, { type SentMessageInfo } from "nodemailer";
-import JSONTransport from "nodemailer/lib/json-transport";
+import type JSONTransport from "nodemailer/lib/json-transport";
+import type Mail from "nodemailer/lib/mailer";
 
 const devTransporter = nodemailer.createTransport({
   jsonTransport: true,

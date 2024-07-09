@@ -1,4 +1,4 @@
-import { ColumnInfo, columnType, renderValue } from "../../../../column";
+import { type ColumnInfo, columnType, renderValue } from "../../../../column";
 
 export interface TableRowProps {
   tableName: string;

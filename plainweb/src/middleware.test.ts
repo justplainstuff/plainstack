@@ -1,8 +1,8 @@
-import { test, describe } from "vitest";
 import express from "express";
 import supertest from "supertest";
-import { redirectWWW } from "./middleware";
+import { describe, test } from "vitest";
 import { expect } from "vitest";
+import { redirectWWW } from "./middleware";
 
 function app() {
   const app = express();
@@ -47,7 +47,7 @@ describe("middleware", () => {
 
     expect(response.status).toBe(301);
     expect(response.headers.location).toBe(
-      "https://www.example.com/path?query=value"
+      "https://www.example.com/path?query=value",
     );
   });
 

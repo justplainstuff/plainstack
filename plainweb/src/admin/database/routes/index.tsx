@@ -1,7 +1,7 @@
-import { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { Handler } from "../../../handler";
-import Layout from "../../layout";
 import { sql } from "drizzle-orm";
+import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import type { Handler } from "../../../handler";
+import Layout from "../../layout";
 
 export const GET: Handler = async ({ req, res }) => {
   const db = res.locals.database as BetterSQLite3Database;
