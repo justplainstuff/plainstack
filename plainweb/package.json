@@ -23,7 +23,7 @@
   "peerDependencies": {
     "@kitajs/html": "^4.1.0",
     "@kitajs/ts-html-plugin": "^4.0.1",
-    "drizzle-orm": "^0.30.10",
+    "drizzle-orm": "^0.30.10 || ^0.32.0",
     "express": "^4.19.2",
     "nodemailer": "^6.9.13"
   },
