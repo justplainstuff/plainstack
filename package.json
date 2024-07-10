@@ -6,7 +6,7 @@
     "dev": "turbo dev",
     "test": "turbo test",
     "cs": "changeset",
-    "pub": "turbo run build lint test && changeset version && changeset publish",
+    "pub": "pnpm check && changeset version && changeset publish",
     "knip": "knip",
     "check": "turbo build test && biome check --write . && pnpm knip"
   },

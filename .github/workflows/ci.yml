@@ -1,0 +1,34 @@
+name: ci 🚀
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout code 📥
+      - name: install pnpm 📦
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+      - name: setup node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+          cache: "pnpm"
+      - name: install dependencies 🔧
+        run: pnpm install
+      - name: run check ✅
+        run: pnpm check
+        env:
+          NODE_ENV: test
+          SMTP_HOST: example.com
+          SMTP_USER: example
+          SMTP_PASS: example
+          CF_TURNSTILE_SECRET: example
+          CF_TURNSTILE_SITEKEY: example
