@@ -106,8 +106,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+        specifier: ^0.30.10 || ^0.32.0
+        version: 0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -170,8 +170,8 @@ importers:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+        specifier: ^0.32.0
+        version: 0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -255,8 +255,8 @@ importers:
         specifier: ^0.23.0
         version: 0.23.0
       drizzle-orm:
-        specifier: ^0.30.10
-        version: 0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+        specifier: ^0.32.0
+        version: 0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -1917,8 +1917,8 @@ packages:
     resolution: {integrity: sha512-w9jE97z193dd4jzAyj4Uv2SOh8Ydue70Ki6W0awy4bGM1aPXan6zD6Yv+nNTA6oGgNTDl2MJFxutjHG4fden5g==}
     hasBin: true
 
-  drizzle-orm@0.30.10:
-    resolution: {integrity: sha512-IRy/QmMWw9lAQHpwbUh1b8fcn27S/a9zMIzqea1WNOxK9/4EB8gIo+FZWLiPXzl2n9ixGSv8BhsLZiOppWEwBw==}
+  drizzle-orm@0.32.0:
+    resolution: {integrity: sha512-99IlfVGPNHzOFEXo9Phyu5At5TALLsY2t6WxFFy68rYd9Ej4cHX/7WjdPOn7JNRW69MNeNtP8XrDQg43SppuAA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -1928,6 +1928,8 @@ packages:
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1'
+      '@prisma/client': '*'
+      '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/react': '>=18'
@@ -1942,6 +1944,7 @@ packages:
       mysql2: '>=2'
       pg: '>=8'
       postgres: '>=3'
+      prisma: '*'
       react: '>=18'
       sql.js: '>=1'
       sqlite3: '>=5'
@@ -1961,6 +1964,10 @@ packages:
       '@opentelemetry/api':
         optional: true
       '@planetscale/database':
+        optional: true
+      '@prisma/client':
+        optional: true
+      '@tidbcloud/serverless':
         optional: true
       '@types/better-sqlite3':
         optional: true
@@ -1989,6 +1996,8 @@ packages:
       pg:
         optional: true
       postgres:
+        optional: true
+      prisma:
         optional: true
       react:
         optional: true
@@ -5466,7 +5475,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0):
+  drizzle-orm@0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0):
     optionalDependencies:
       '@types/better-sqlite3': 7.6.10
       better-sqlite3: 10.0.0
