@@ -60,13 +60,13 @@ Drizzle provides a straightforward way to manage database migrations:
 
 1. Generate new migration files:
 
-   ```
-   npm run db:gen
+   ```bash
+   pnpm db:gen
    ```
 
 2. Apply pending migrations:
-   ```
-   npm run db:apply
+   ```bash
+   pnpm db:apply
    ```
 
 Make sure to run these commands whenever you make changes to your schema.
@@ -128,8 +128,8 @@ async function confirmDoubleOptIn(email: string) {
 
 Drizzle provides a GUI for managing your database. You can start it with:
 
-```
-npm run db:studio
+```bash
+pnpm db:studio
 ```
 
 This tool is helpful for inspecting your database, running ad-hoc queries, and managing your data during development.

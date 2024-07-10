@@ -10,13 +10,13 @@
     "db:apply": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "serve": "tsx app/cli/serve.ts",
+    "routes": "tsx app/cli/routes.ts",
     "dev:app": "tsx watch app/cli/serve.ts",
     "dev:tw": "tailwindcss -i ./app/styles.css -o ./public/output.css --watch",
-    "routes": "tsx app/cli/routes.ts",
     "build": "tsc --noEmit && tailwindcss -i ./app/styles.css -o ./public/output.css --minify",
     "start": "pnpm db:apply && pnpm serve",
-    "lint": "eslint . --max-warnings 0 && xss-scan",
-    "fix": "eslint . --fix && prettier --write ."
+    "check": "biome check . && xss-scan",
+    "fix": "biome check --fix ."
   },
   "dependencies": {
     "@kitajs/html": "^4.1.0",
@@ -26,7 +26,6 @@
     "drizzle-orm": "^0.30.10",
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
-    "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
@@ -56,6 +55,7 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.3.3"
   },
+  "packageManager": "pnpm@9.5.0",
   "engineStrict": true,
   "engines": {
     "node": ">=20.10.0"

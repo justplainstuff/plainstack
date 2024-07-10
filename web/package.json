@@ -15,8 +15,8 @@
     "routes": "tsx app/cli/routes.ts",
     "build": "tsc --noEmit && tailwindcss -i ./app/styles.css -o ./public/output.css --minify",
     "start": "pnpm db:apply && pnpm serve",
-    "lint": "eslint . --max-warnings 0 && xss-scan",
-    "fix": "eslint . --fix && prettier --write .",
+    "check": "biome check . && xss-scan",
+    "fix": "biome check --fix .",
     "fly": "fly deploy .. --config web/fly.toml --dockerfile web/Dockerfile"
   },
   "dependencies": {
@@ -53,7 +53,6 @@
     "@types/better-sqlite3": "^7.6.10",
     "@types/compression": "^1.7.5",
     "@types/errorhandler": "^1.5.3",
-    "@types/eslint": "^8.56.5",
     "@types/express": "^4.17.21",
     "@types/markdown-it": "^14.1.1",
     "@types/morgan": "^1.9.9",
@@ -61,19 +60,15 @@
     "@types/nodemailer": "^6.4.15",
     "@types/supertest": "^6.0.2",
     "@types/ws": "^8.5.10",
-    "@typescript-eslint/parser": "^7.9.0",
     "concurrently": "^8.2.2",
     "daisyui": "^4.11.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^1.13.3",
-    "eslint-plugin-only-warn": "^1.1.0",
     "node-mocks-http": "^1.14.1",
     "supertest": "^7.0.0",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@biomejs/biome": "^1.8.3"
   },
-  "packageManager": "pnpm@8.25.8",
+  "packageManager": "pnpm@9.5.0",
   "engineStrict": true,
   "engines": {
     "node": ">=20.10.0"

@@ -22,7 +22,7 @@ RUN apt-get update -qq && \
 # Install node modules
 COPY --link . .
 
-RUN npm install -g pnpm@8.25.8
+RUN npm install -g pnpm@9.5.0
 
 RUN pnpm install --prod false 
 
@@ -31,7 +31,7 @@ RUN pnpm check
 
 FROM base
 
-RUN npm install -g pnpm@8.9.1
+RUN npm install -g pnpm@9.5.0
 # Copy built application
 
 COPY --from=build /app /app

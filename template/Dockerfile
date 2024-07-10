@@ -22,14 +22,14 @@ RUN apt-get update -qq && \
 # Install node modules
 COPY --link . .
 
-RUN npm install -g pnpm@8.9.1
+RUN npm install -g pnpm@9.5.0
 RUN pnpm install --prod false 
 RUN pnpm check
 
 # Final stage for app image
 FROM base
 
-RUN npm install -g pnpm@8.9.1
+RUN npm install -g pnpm@9.5.0
 
 # Copy built application
 COPY --from=build /app /app

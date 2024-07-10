@@ -1,7 +1,7 @@
 {
   "name": "plainweb",
   "version": "0.0.7",
-  "description": "",
+  "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
   "files": ["dist/"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,8 +10,15 @@
     "admin": "tsx --watch bin/admin.ts",
     "build": "tsc --noEmit && tsup"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "plainweb",
+    "sqlite",
+    "typescript",
+    "htmx",
+    "express",
+    "typescript"
+  ],
+  "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "peerDependencies": {
     "@kitajs/html": "^4.1.0",
@@ -25,7 +32,6 @@
     "node-mocks-http": "^1.14.1"
   },
   "devDependencies": {
-    "@commander-js/extra-typings": "^12.1.0",
     "@types/better-sqlite3": "^7.6.10",
     "@types/express": "^4.17.21",
     "@types/nodemailer": "^6.4.15",

@@ -29,7 +29,7 @@ export type Task = typeof tasks.$inferSelect;
 
 ### 2. Initialize the Task Worker
 
-To start the task worker when running `npm start` and `npm run dev`, call `runTasks` in your `app/cli/serve.ts` file:
+To start the task worker when running `pnpm start` and `pnpm dev`, call `runTasks` in your `app/cli/serve.ts` file:
 
 ```typescript
 // app/cli/serve.ts

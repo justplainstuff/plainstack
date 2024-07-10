@@ -1,7 +1,7 @@
 {
   "name": "create-plainweb",
   "version": "0.0.16",
-  "description": "Create a new plainweb project",
+  "description": "Create a new plainweb.dev project",
   "files": ["dist/"],
   "bin": {
     "create-plainweb": "dist/cli.js"
@@ -10,8 +10,15 @@
   "scripts": {
     "build": "tsc --noEmit && tsup"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "plainweb",
+    "sqlite",
+    "typescript",
+    "htmx",
+    "express",
+    "typescript"
+  ],
+  "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "dependencies": {
     "@inquirer/prompts": "^5.0.4",
