@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { env } from "app/config/env";
 import MarkdownIt from "markdown-it";
 
-export type Page = {
+type Page = {
   title: string;
   slug: string;
   content: string;
@@ -16,9 +16,8 @@ const idPrefix = "page-";
 let cache: Page[] = [];
 
 export async function getHeadingId(heading: string) {
-  // @ts-ignore
   const GithubSlugger = await import("github-slugger");
-  const slugger = new GithubSlugger();
+  const slugger = new GithubSlugger.default();
   return idPrefix + slugger.slug(heading);
 }
 

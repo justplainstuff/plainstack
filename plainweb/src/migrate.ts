@@ -56,7 +56,7 @@ export async function migrate<T extends Record<string, unknown>>(
 const DEFAULT_TABLE = "__drizzle_migrations";
 
 // WIP
-export async function getLatestMigrationTimestamp(
+async function getLatestMigrationTimestamp(
   config: Config,
   opts?: { cwd?: string },
 ) {

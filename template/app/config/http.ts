@@ -4,6 +4,7 @@ import compression from "compression";
 import errorHandler from "errorhandler";
 import express from "express";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 import morgan from "morgan";
 import { fileRouter, flyHeaders, redirectWWW } from "plainweb";
 
@@ -23,6 +24,7 @@ export async function app(): Promise<express.Express> {
     app.use("/public", express.static("public"));
   if (env.NODE_ENV === "development") app.use(limiter);
 
+  app.use(helmet());
   app.use(flyHeaders);
   app.use(compression());
   app.use(express.json());

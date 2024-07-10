@@ -20,7 +20,6 @@
     "jsxImportSource": "@kitajs/html",
     "baseUrl": ".",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"],
-    
+    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"]
   }
 }

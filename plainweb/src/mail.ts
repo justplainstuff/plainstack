@@ -6,7 +6,7 @@ const devTransporter = nodemailer.createTransport({
   jsonTransport: true,
 });
 
-export const transporter: {
+const transporter: {
   transporter: nodemailer.Transporter;
 } = {
   transporter: devTransporter,

@@ -18,7 +18,7 @@ import {
   defineTaskWithAdapter,
 } from "./task";
 
-export const tasks = sqliteTable("tasks", {
+const tasks = sqliteTable("tasks", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   data: text("data", { mode: "json" }),

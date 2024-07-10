@@ -33,7 +33,7 @@ export const flyHeaders: express.RequestHandler = function flyHeaders(
 };
 
 // TODO implement
-export function pendingMigrations<T extends Record<string, unknown>>({
+function pendingMigrations<T extends Record<string, unknown>>({
   database,
 }: {
   database: BetterSQLite3Database<T>;

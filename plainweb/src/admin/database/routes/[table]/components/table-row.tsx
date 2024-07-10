@@ -1,6 +1,6 @@
 import { type ColumnInfo, columnType, renderValue } from "../../../../column";
 
-export interface TableRowProps {
+interface TableRowProps {
   tableName: string;
   columns: ColumnInfo[];
   row: Record<string, unknown>;

@@ -639,7 +639,7 @@ export async function createPlainweb(argv: string[]) {
   }
 }
 
-export interface Context {
+interface Context {
   tempDir: string;
   cwd: string;
   interactive: boolean;

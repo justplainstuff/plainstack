@@ -188,7 +188,7 @@ export function expressRouter({
   return router;
 }
 
-export type FileRouterOpts = {
+type FileRouterOpts = {
   dir: string;
   ignorePatterns?: string[];
   fileRoutes?: FileRoute[];

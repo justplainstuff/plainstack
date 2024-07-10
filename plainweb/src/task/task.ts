@@ -39,7 +39,7 @@ export function composeStartableTask(
   return loaded;
 }
 
-export async function loadStartableTask(
+async function loadStartableTask(
   tasksDir: string,
   opts?: { debug?: boolean; error?: ErrorHandler },
 ): Promise<StartableTask[]> {

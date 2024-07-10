@@ -1,8 +1,8 @@
-import { env } from "app/config/env";
 import { defineConfig } from "drizzle-kit";
+import { env } from "./app/config/env";
 
 export default defineConfig({
-  schema: "app/config/schema.ts",
+  schema: "./app/config/schema.ts",
   out: "migrations",
   dialect: "sqlite",
   dbCredentials: {
