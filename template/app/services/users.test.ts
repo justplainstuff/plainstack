@@ -1,25 +1,24 @@
-import assert from "node:assert";
-import { before, describe, test } from "node:test";
+import { database } from "app/config/database";
+import { createUser } from "app/services/users";
 import { isolate, migrate } from "plainweb";
-import { database } from "~/app/config/database";
-import { createUser } from "~/app/services/users";
+import { beforeAll, describe, expect, test } from "vitest";
 
 describe("users", async () => {
-  before(() => migrate(database));
+  beforeAll(() => migrate(database));
 
   test("createUser", async () => {
     await isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
+      expect(database.query.users.findFirst()).resolves.toBeDefined();
     });
-    // TOOD add assertion
   });
 
   test("createUser already exists", async () =>
     isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
 
-      await assert.rejects(async () => {
+      expect(async () => {
         await createUser(tx, "aang@example.org");
-      });
+      }).rejects.toThrowError("User already exists");
     }));
 });

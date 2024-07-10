@@ -1,7 +1,7 @@
+import { DocumentLogo } from "app/components/document-logo";
+import { GithubLogo } from "app/components/github-logo";
+import RootLayout from "app/root";
 import type { Handler } from "plainweb";
-import { DocumentLogo } from "~/app/components/document-logo";
-import { GithubLogo } from "~/app/components/github-logo";
-import RootLayout from "~/app/root";
 
 export const GET: Handler = async () => {
   return (

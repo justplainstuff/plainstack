@@ -554,7 +554,6 @@ function title(text: string) {
 }
 
 function printHelp(ctx: Context) {
-  // prettier-ignore
   const output = `
 ${title("create-plainweb")}
 

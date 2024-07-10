@@ -34,7 +34,7 @@ To start the task worker when running `pnpm start` and `pnpm dev`, call `runTask
 ```typescript
 // app/cli/serve.ts
 import { runTasks } from "plainweb";
-import { http } from "~/app/config/http";
+import { http } from "app/config/http";
 
 async function serve() {
   await runTasks("app/tasks"); // Initialize task worker
@@ -54,9 +54,9 @@ Here's an example of a task definition:
 // app/tasks/double-opt-in.ts
 import { eq } from "drizzle-orm";
 import { defineDatabaseTask } from "plainweb";
-import { database } from "~/app/config/database";
-import { Contact, contacts } from "~/app/config/schema";
-import { sendDoubleOptInEmail } from "~/app/services/contacts";
+import { database } from "app/config/database";
+import { Contact, contacts } from "app/config/schema";
+import { sendDoubleOptInEmail } from "app/services/contacts";
 
 export default defineDatabaseTask<Contact>(database, {
   batchSize: 5,
@@ -85,7 +85,7 @@ To enqueue a task, use the `perform` function:
 ```typescript
 // app/services/contacts.ts
 import { perform } from "plainweb";
-import doubleOptIn from "~/app/tasks/double-opt-in";
+import doubleOptIn from "app/tasks/double-opt-in";
 
 export async function enqueueDoubleOptIn(contact: Contact) {
   const contact = await database.query.contacts.findFirst({

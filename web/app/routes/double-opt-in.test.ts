@@ -1,14 +1,13 @@
-import assert from "node:assert/strict";
-import { before, describe, test } from "node:test";
+import { database } from "app/config/database";
+import { contacts } from "app/config/schema";
+import { GET } from "app/routes/double-opt-in";
 import { eq } from "drizzle-orm";
 import { createRequest } from "node-mocks-http";
 import { isolate, migrate, outbox, testHandler } from "plainweb";
-import { database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
-import { GET } from "~/app/routes/double-opt-in";
+import { beforeAll, describe, expect, test } from "vitest";
 
 describe("double opt in", () => {
-  before(async () => await migrate(database));
+  beforeAll(async () => await migrate(database));
 
   test("send email with correct token and email", async () => {
     await isolate(database, async (tx) => {
@@ -26,10 +25,10 @@ describe("double opt in", () => {
       const contact = await database.query.contacts.findFirst({
         where: eq(contacts.email, "walter@example.org"),
       });
-      assert.equal((contact?.doubleOptInConfirmed as number) > 0, true);
-      assert.equal(res._getStatusCode(), 200);
-      assert.equal(res._getData().includes("Thanks for signing up"), true);
-      assert.equal(outbox[0]?.message.includes("successfully"), true);
+      expect((contact?.doubleOptInConfirmed as number) > 0).toBe(true);
+      expect(res._getStatusCode()).toBe(200);
+      expect(res._getData().includes("Thanks for signing up")).toBe(true);
+      expect(outbox[0]?.message.includes("successfully")).toBe(true);
     });
   });
 
@@ -47,10 +46,9 @@ describe("double opt in", () => {
       const contact = await database.query.contacts.findFirst({
         where: eq(contacts.email, "walter@example.org"),
       });
-      console.log(contact);
-      assert.equal(contact?.doubleOptInConfirmed === null, true);
-      assert.equal(res._getStatusCode(), 200);
-      assert.equal(res._getData().includes("Invalid"), true);
+      expect(contact?.doubleOptInConfirmed).toBe(null);
+      expect(res._getStatusCode()).toBe(200);
+      expect(res._getData().includes("Invalid")).toBe(true);
     });
   });
 });

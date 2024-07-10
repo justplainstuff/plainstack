@@ -1,5 +1,5 @@
+import { env } from "app/config/env";
 import { createTransport } from "nodemailer";
-import { env } from "~/app/config/env";
 
 export const mail = createTransport({
   host: env.SMTP_HOST,

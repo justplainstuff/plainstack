@@ -1,6 +1,5 @@
-import assert from "node:assert/strict";
-import { describe, test } from "node:test";
-import { createMarkdownRenderer, renderPage } from "~/app/services/page";
+import { createMarkdownRenderer, renderPage } from "app/services/page";
+import { describe, expect, test } from "vitest";
 
 describe("page", async () => {
   test("render page", async () => {
@@ -23,9 +22,9 @@ This is another subparagraph.
       content,
       await createMarkdownRenderer(),
     );
-    assert.equal(page.h1[0], "Main Title");
-    assert.equal(page.h2[0], "Subtitle");
-    assert.equal(page.h3[0], "Subsubtitle");
-    assert.equal(page.h3[1], "Subsubtitle 2");
+    expect(page.h1[0]).toBe("Main Title");
+    expect(page.h2[0]).toBe("Subtitle");
+    expect(page.h3[0]).toBe("Subsubtitle");
+    expect(page.h3[1]).toBe("Subsubtitle 2");
   });
 });

@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "NODE_ENV=test vitest",
+    "test": "NODE_ENV=testing vitest",
     "admin": "tsx --watch bin/admin.ts",
     "build": "tsc --noEmit && tsup"
   },

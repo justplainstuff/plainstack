@@ -1,9 +1,8 @@
-import assert from "node:assert/strict";
 import BetterSqlite3Database from "better-sqlite3";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { beforeAll, describe, test } from "vitest";
+import { beforeAll, describe, expect, test } from "vitest";
 import { isolate } from "../isolate";
 import { defineDatabaseTask } from "./database";
 import { type Task, _runTasks, composeStartableTask, perform } from "./task";
@@ -83,7 +82,7 @@ describe("database task", () => {
         },
       });
     });
-    assert.equal(total, 8);
+    expect(total).toBe(8);
   });
 
   test("process task with failure", async () => {
@@ -109,8 +108,8 @@ describe("database task", () => {
         },
       });
       const tasks = await database.query.tasks.findMany();
-      assert.equal(tasks.length, 1);
-      assert.equal(tasks[0]?.failedNr, 2);
+      expect(tasks).toHaveLength(1);
+      expect(tasks[0]?.failedNr).toBe(2);
     });
   });
 });

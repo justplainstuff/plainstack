@@ -1,11 +1,11 @@
+import { database } from "app/config/database";
+import { env } from "app/config/env";
 import compression from "compression";
 import errorHandler from "errorhandler";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import { fileRouter, flyHeaders, redirectWWW } from "plainweb";
-import { database } from "~/app/config/database";
-import { env } from "~/app/config/env";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,

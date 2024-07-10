@@ -1,5 +1,5 @@
+import { getDocumentationPages } from "app/services/page";
 import type { Handler } from "plainweb";
-import { getDocumentationPages } from "~/app/services/page";
 
 export const GET: Handler = async ({ res }) => {
   const docPages = (await getDocumentationPages()).map(

@@ -25,7 +25,7 @@ export const env: Env = envSchema.parse(process.env);
 ## Usage
 
 ```typescript
-import { env } from "~/app/config/env";
+import { env } from "app/config/env";
 
 console.log(env.NODE_ENV); // either "development", "production" or "test"
 ```

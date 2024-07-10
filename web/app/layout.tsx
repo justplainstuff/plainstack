@@ -1,5 +1,5 @@
 import type Html from "@kitajs/html";
-import { GithubIcon, XIcon } from "~/app/components/icons";
+import { GithubIcon, XIcon } from "app/components/icons";
 
 export default function Layout(
   props: Html.PropsWithChildren<{

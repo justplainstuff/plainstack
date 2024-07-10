@@ -1,11 +1,11 @@
+import { database } from "app/config/database";
+import { env } from "app/config/env";
 import compression from "compression";
 import errorHandler from "errorhandler";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import { fileRouter, flyHeaders, redirectWWW } from "plainweb";
-import { database } from "~/app/config/database";
-import { env } from "~/app/config/env";
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
@@ -13,7 +13,7 @@ const limiter = rateLimit({
   message: "Too many requests, please try again in a few seconds",
 });
 
-export async function http(): Promise<express.Application> {
+export async function app(): Promise<express.Express> {
   const app = express();
   if (env.NODE_ENV !== "production") app.use(morgan("dev"));
   if (env.NODE_ENV === "production") app.use(morgan("combined"));

@@ -1,5 +1,5 @@
+import Layout from "app/layout";
 import type { Handler } from "plainweb";
-import Layout from "~/app/layout";
 
 export const POST: Handler = async () => {
   return <div>Clicked!</div>;

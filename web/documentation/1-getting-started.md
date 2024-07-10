@@ -6,20 +6,23 @@ Run the following command to create a new plainweb starter project:
 npx create-plainweb
 ```
 
-Make sure you are running Node 20.10.0 or higher and you have [pnpm](https://pnpm.io/) installed.
+You need Node and [pnpm](https://pnpm.io/) installed. plainweb uses Node 20.10.0 or higher and pnpm 9.5.0 or higher.
 
 ```bash
 node --version
 > v20.10.0
 ```
 
-And follow the prompts to set up your project.
+```bash
+pnpm --version
+> 9.5.0
+```
+
+Start the development server at `http://localhost:3000`.
 
 ```bash
 pnpm run dev
 ```
-
-This will start the development server at `http://localhost:3000`.
 
 ## Commands
 
@@ -33,8 +36,8 @@ These are the most important commands for development:
 - `pnpm run db:studio` starts drizzle studio, a GUI for managing the database
 - `pnpm run build` type checks your app and minifies the CSS
 - `pnpm run routes` prints all express routes to the console
-- `pnpm run lint` runs the linter, including cross-site scripting scanning
-- `pnpm run fix` fixes linting errors
+- `pnpm run check` runs the linter, formatter and scans .tsx files for cross-site scripting
+- `pnpm run fix` fixes linting and formatting errors best-effort
 
 ## VSCode Extensions
 

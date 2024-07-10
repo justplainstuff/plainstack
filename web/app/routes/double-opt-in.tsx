@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from "@kitajs/html";
+import type { Database } from "app/config/database";
+import Layout from "app/layout";
+import { verifyDoubleOptIn } from "app/services/contacts";
 import type { Handler } from "plainweb";
 import z from "zod";
-import type { Database } from "~/app/config/database";
-import Layout from "~/app/layout";
-import { verifyDoubleOptIn } from "~/app/services/contacts";
 
 function Message(props: PropsWithChildren) {
   return (

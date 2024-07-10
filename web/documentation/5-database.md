@@ -77,8 +77,8 @@ Here's an example of how to perform a query using drizzle:
 
 ```typescript
 import { eq } from "drizzle-orm";
-import { database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
+import { database } from "app/config/database";
+import { contacts } from "app/config/schema";
 
 async function getContact(email: string) {
   const contact = await database.query.contacts.findFirst({
@@ -95,8 +95,8 @@ This query is type-safe, and your IDE will provide autocomplete suggestions for 
 Here's how you can insert data into the database:
 
 ```typescript
-import { database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
+import { database } from "app/config/database";
+import { contacts } from "app/config/schema";
 
 async function createContact(email: string) {
   await database.insert(contacts).values({
@@ -113,8 +113,8 @@ Updating data is similarly straightforward:
 
 ```typescript
 import { eq } from "drizzle-orm";
-import { database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
+import { database } from "app/config/database";
+import { contacts } from "app/config/schema";
 
 async function confirmDoubleOptIn(email: string) {
   await database

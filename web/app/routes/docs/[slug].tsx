@@ -1,6 +1,5 @@
 import Html from "@kitajs/html";
-import { type Handler, notFound } from "plainweb";
-import { FooterSection } from "~/app/components/footer-section";
+import { FooterSection } from "app/components/footer-section";
 import {
   CloudUploadIcon,
   ContainerIcon,
@@ -13,9 +12,10 @@ import {
   PlayIcon,
   RouteIcon,
   TestTubeDiagonalIcon,
-} from "~/app/components/icons";
-import Layout from "~/app/layout";
-import { getDocumentationPages, getHeadingId } from "~/app/services/page";
+} from "app/components/icons";
+import Layout from "app/layout";
+import { getDocumentationPages, getHeadingId } from "app/services/page";
+import { type Handler, notFound } from "plainweb";
 
 const pageIcons: Record<string, JSX.Element> = {
   motivation: LeafIcon(),

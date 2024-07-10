@@ -1,9 +1,9 @@
+import type { Database } from "app/config/database";
+import { env } from "app/config/env";
+import { type Contact, contacts } from "app/config/schema";
+import doubleOptIn from "app/tasks/double-opt-in";
 import { eq } from "drizzle-orm";
 import { perform, sendMail } from "plainweb";
-import type { Database } from "~/app/config/database";
-import { env } from "~/app/config/env";
-import { type Contact, contacts } from "~/app/config/schema";
-import doubleOptIn from "~/app/tasks/double-opt-in";
 
 function getBaseUrl() {
   return env.NODE_ENV === "production"

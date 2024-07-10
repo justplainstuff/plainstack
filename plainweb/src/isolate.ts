@@ -5,8 +5,8 @@ export async function isolate<Schema extends Record<string, unknown>>(
   db: BetterSQLite3Database<Schema>,
   fn: (db: BetterSQLite3Database<Schema>) => Promise<void>,
 ) {
-  if (process.env.NODE_ENV !== "test") {
-    throw new Error("Make sure NODE_ENV=test is set when running tests");
+  if (process.env.NODE_ENV !== "testing") {
+    throw new Error("Make sure NODE_ENV=testing is set when running tests");
   }
   // TODO check if pending migrations, and print warning if so
   let err: Error | null = null;

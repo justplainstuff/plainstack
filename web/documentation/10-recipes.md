@@ -67,8 +67,8 @@ Create a JSON API endpoint with proper error handling:
 // routes/api/users/[id].tsx
 import { Handler, json } from "plainweb";
 import { z } from "zod";
-import { database } from "~/app/config/database";
-import { users } from "~/app/config/schema";
+import { database } from "app/config/database";
+import { users } from "app/config/schema";
 import { eq } from "drizzle-orm";
 
 const userSchema = z.object({

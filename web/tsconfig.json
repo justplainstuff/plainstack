@@ -18,10 +18,9 @@
     "target": "ES2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
+    "baseUrl": ".",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"],
-    "paths": {
-      "~/*": ["./*"]
-    }
+    
   }
 }

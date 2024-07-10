@@ -1,6 +1,6 @@
 # Testing
 
-One of the key advantages of using SQLite in plainweb is simplified testing. There's no need to spin up a separate database for running tests. plainweb uses Node.js's built-in test runner and assertion library to keep things straightforward.
+One of the key advantages of using SQLite in plainweb is simplified testing. There's no need to spin up a separate database for running tests. plainweb uses Vitest, a fast and feature-rich testing framework, to keep things straightforward.
 
 ## Testing Services
 
@@ -8,8 +8,8 @@ Let's start by testing a `createUser` function in `app/services/users.ts`:
 
 ```typescript
 import { eq } from "drizzle-orm";
-import { Database } from "~/app/config/database";
-import { users } from "~/app/config/schema";
+import { Database } from "app/config/database";
+import { users } from "app/config/schema";
 
 export async function createUser(db: Database, email: string) {
   if (
@@ -28,22 +28,21 @@ In plainweb, functions in `app/services` are called "services" because they enca
 Here's how to test the `createUser` service:
 
 ```typescript
-import { test, describe, before } from "node:test";
-import assert from "node:assert";
-import { createUser } from "~/app/services/users";
-import { database } from "~/app/config/database";
+import { describe, test, beforeAll } from 'vitest';
+import { expect } from 'vitest';
+import { createUser } from "app/services/users";
+import { database } from "app/config/database";
 import { isolate, migrate } from "plainweb";
 
-describe("users", async () => {
-  before(() => migrate(database));
+describe("users", () => {
+  beforeAll(async () => await migrate(database));
 
-  test("createUser throws error when user already exists", async () =>
-    isolate(database, async (tx) => {
+  test("createUser throws error when user already exists", async () => {
+    await isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
-      await assert.rejects(() => createUser(tx, "aang@example.org"), {
-        message: "User already exists",
-      });
-    }));
+      await expect(createUser(tx, "aang@example.org")).rejects.toThrow("User already exists");
+    });
+  });
 });
 ```
 
@@ -57,17 +56,17 @@ Key points:
 plainweb provides a `testHandler` helper to test `GET` and `POST` handlers. Here's an example:
 
 ```typescript
-import { before, test, describe } from "node:test";
-import assert from "node:assert/strict";
+import { describe, test, beforeAll } from 'vitest';
+import { expect } from 'vitest';
 import { isolate, migrate, outbox, testHandler } from "plainweb";
-import { database } from "~/app/config/database";
-import { GET } from "~/app/routes/double-opt-in";
+import { database } from "app/config/database";
+import { GET } from "app/routes/double-opt-in";
 import { createRequest } from "node-mocks-http";
-import { contacts } from "~/app/config/schema";
+import { contacts } from "app/config/schema";
 import { eq } from "drizzle-orm";
 
 describe("double opt-in", () => {
-  before(async () => await migrate(database));
+  beforeAll(async () => await migrate(database));
 
   test("confirms opt-in with correct token and email", async () => {
     await isolate(database, async (tx) => {
@@ -88,10 +87,10 @@ describe("double opt-in", () => {
         where: eq(contacts.email, "walter@example.org"),
       });
 
-      assert.ok(contact?.doubleOptInConfirmed! > 0);
-      assert.equal(res._getStatusCode(), 200);
-      assert.ok(res._getData().includes("Thanks for signing up"));
-      assert.ok(outbox[0]?.message.includes("successfully"));
+      expect(contact?.doubleOptInConfirmed).toBeGreaterThan(0);
+      expect(res._getStatusCode()).toBe(200);
+      expect(res._getData()).toContain("Thanks for signing up");
+      expect(outbox[0]?.message).toContain("successfully");
     });
   });
 });
@@ -108,11 +107,11 @@ During testing, `NODE_ENV` is set to `testing`, and emails are sent to an `outbo
 
 ```typescript
 import { outbox } from "plainweb";
-import assert from "node:assert";
+import { expect } from 'vitest';
 
 // ...
 
-assert.ok(outbox[0]?.message.includes("successfully"));
+expect(outbox[0]?.message).toContain("successfully");
 ```
 
 This approach allows you to verify email content without trapping sent emails or using a real email service for your tests.

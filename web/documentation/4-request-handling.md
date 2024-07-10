@@ -210,8 +210,8 @@ export default function Layout({ children }: Html.PropsWithChildren<{}>) {
 You can create a root layout for global styles and scripts, and nest more specific layouts within it:
 
 ```tsx
-import RootLayout from "~/app/components/root-layout";
-import AppLayout from "~/app/components/app-layout";
+import RootLayout from "app/components/root-layout";
+import AppLayout from "app/components/app-layout";
 
 export const GET: Handler = async () => {
   return (

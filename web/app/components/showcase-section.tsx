@@ -1,4 +1,4 @@
-import { Showcase } from "~/app/components/showcase";
+import { Showcase } from "app/components/showcase";
 
 export function ShowcaseSection() {
   return (

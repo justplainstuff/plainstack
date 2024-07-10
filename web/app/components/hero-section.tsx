@@ -1,5 +1,5 @@
-import { Showcase } from "~/app/components/showcase";
-import { getNrOfSparks } from "~/app/services/confetti";
+import { Showcase } from "app/components/showcase";
+import { getNrOfSparks } from "app/services/confetti";
 
 export async function HeroSection() {
   const nrOfSparks = await getNrOfSparks();

@@ -1,14 +1,11 @@
-import expressListEndpoints from "express-list-endpoints";
-import { http } from "~/app/config/http";
+import { app } from "app/config/http";
+import { printRoutes } from "plainweb";
 
 /**
  * Print all express routes to the console.
  */
 async function routes() {
-  const endpoints = expressListEndpoints(await http());
-  for (const endpoint of endpoints) {
-    console.log(endpoint.methods.join(" "), endpoint.path);
-  }
+  printRoutes(await app());
 }
 
 void routes();

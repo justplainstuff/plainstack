@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"pnpm dev:app\" \"pnpm dev:tw\" \"pnpm db:studio\"",
-    "test": "NODE_ENV=test node --import tsx --test \"app/**/*.test.ts\"",
+    "test": "NODE_ENV=testing vitest",
     "db:push": "drizzle-kit push",
     "db:gen": "drizzle-kit generate ",
     "db:apply": "drizzle-kit migrate",
@@ -29,6 +29,7 @@
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
     "express-basic-auth": "^1.2.1",
+    "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
     "http-proxy-middleware": "^3.0.0",
     "markdown-it": "^14.1.0",
@@ -43,10 +44,10 @@
     "tsx": "^4.10.3",
     "ws": "^8.17.1",
     "zod": "^3.23.8",
-    "zod-form-data": "^2.0.2",
-    "express-list-endpoints": "^7.1.0"
+    "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@flydotio/dockerfile": "^0.5.7",
     "@kitajs/ts-html-plugin": "^4.0.1",
     "@tailwindcss/typography": "^0.5.13",
@@ -66,7 +67,8 @@
     "supertest": "^7.0.0",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.3.3",
-    "@biomejs/biome": "^1.8.3"
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^2.0.1"
   },
   "packageManager": "pnpm@9.5.0",
   "engineStrict": true,

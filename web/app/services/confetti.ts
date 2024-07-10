@@ -1,6 +1,6 @@
+import { database } from "app/config/database";
+import { sparks } from "app/config/schema";
 import WebSocket from "ws";
-import { database } from "~/app/config/database";
-import { sparks } from "~/app/config/schema";
 
 interface ConfettiTrigger {
   id: string;

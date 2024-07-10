@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
+import { env } from "app/config/env";
 import MarkdownIt from "markdown-it";
-import { env } from "~/app/config/env";
 
 export type Page = {
   title: string;
@@ -15,8 +15,9 @@ export type Page = {
 const idPrefix = "page-";
 let cache: Page[] = [];
 
-export function getHeadingId(heading: string) {
-  const GithubSlugger = require("github-slugger").default;
+export async function getHeadingId(heading: string) {
+  // @ts-ignore
+  const GithubSlugger = await import("github-slugger");
   const slugger = new GithubSlugger();
   return idPrefix + slugger.slug(heading);
 }

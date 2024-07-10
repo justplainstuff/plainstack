@@ -2,26 +2,24 @@
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "incremental": false,
-    "isolatedModules": true,
+    "target": "ES2022",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
-    "moduleDetection": "force",
     "moduleResolution": "NodeNext",
-    "noUncheckedIndexedAccess": true,
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022",
+    "isolatedModules": true,
+    "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "baseUrl": ".",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"],
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"]
   }
 }

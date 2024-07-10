@@ -1,5 +1,5 @@
 import Html from "@kitajs/html";
-import { renderCode } from "~/app/services/render-code";
+import { renderCode } from "app/services/render-code";
 
 const features: { title: string; content: () => JSX.Element }[] = [
   {
@@ -8,10 +8,10 @@ const features: { title: string; content: () => JSX.Element }[] = [
       const code = `
 import { zfd } from "zod-form-data";
 import { type Handler } from "plainweb";
-import { database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
-import { createContact } from "~/app/services/contacts";
-import { Form } from "~/app/components/form";
+import { database } from "app/config/database";
+import { contacts } from "app/config/schema";
+import { createContact } from "app/services/contacts";
+import { Form } from "app/components/form";
 
 export const POST: Handler = async ({ req }) => {
   const parsed = zfd 
@@ -64,8 +64,8 @@ export function Form(props: FormProps) {
     content: async () => {
       const code = `
 import { sendMail } from "plainweb";
-import { type Database } from "~/app/config/database";
-import { contacts } from "~/app/config/schema";
+import { type Database } from "app/config/database";
+import { contacts } from "app/config/schema";
 
 export async function createContact(database: Database, email: string) {
    await sendMail({
@@ -107,7 +107,7 @@ export type Contact = typeof contacts.$inferSelect;
       const code = `
 import BetterSqlite3Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
-import { env } from "~/app/config/env";
+import { env } from "app/config/env";
 import * as schema from "./schema";
 
 const connection = new BetterSqlite3Database(env.DB_URL);
@@ -149,8 +149,8 @@ export const env: Env = envSchema.parse(process.env);
     title: "app/cli/serve.ts",
     content: async () => {
       const code = `
-import { debug, env } from "~/app/config/env";
-import { http } from "~/app/config/http";
+import { debug, env } from "app/config/env";
+import { http } from "app/config/http";
 
 async function serve() {
   await http();
