@@ -4,10 +4,10 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "test": "turbo test",
+    "test": "NODE_ENV=test turbo test",
     "cs": "changeset",
     "pub": "pnpm check && changeset version && changeset publish",
-    "knip": "knip",
+    "knip": "NODE_ENV=test knip",
     "check": "turbo build test && biome check --write . && pnpm knip"
   },
   "devDependencies": {

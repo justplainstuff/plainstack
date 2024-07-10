@@ -25,10 +25,3 @@ jobs:
         run: pnpm install
       - name: run check ✅
         run: pnpm check
-        env:
-          NODE_ENV: test
-          SMTP_HOST: example.com
-          SMTP_USER: example
-          SMTP_PASS: example
-          CF_TURNSTILE_SECRET: example
-          CF_TURNSTILE_SITEKEY: example
