@@ -280,7 +280,7 @@ importers:
         version: 1.10.0
       nodemailer:
         specifier: ^6.9.13
-        version: 6.9.13
+        version: 6.9.14
       plainweb:
         specifier: workspace:*
         version: link:../plainweb
@@ -2908,6 +2908,10 @@ packages:
 
   nodemailer@6.9.13:
     resolution: {integrity: sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==}
+    engines: {node: '>=6.0.0'}
+
+  nodemailer@6.9.14:
+    resolution: {integrity: sha512-Dobp/ebDKBvz91sbtRKhcznLThrKxKt97GI2FAlAyy+fk19j73Uz3sBXolVtmcXjaorivqsbbbjDY+Jkt4/bQA==}
     engines: {node: '>=6.0.0'}
 
   normalize-package-data@2.5.0:
@@ -6543,6 +6547,8 @@ snapshots:
       type-is: 1.6.18
 
   nodemailer@6.9.13: {}
+
+  nodemailer@6.9.14: {}
 
   normalize-package-data@2.5.0:
     dependencies:
