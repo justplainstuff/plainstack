@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.20
+
+### Patch Changes
+
+- b408ede: fix: default formatting of package.json
+
 ## 0.0.19
 
 ### Patch Changes
