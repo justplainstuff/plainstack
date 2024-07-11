@@ -63,17 +63,12 @@ async function getContext(argv: string[]): Promise<Context> {
     "--debug": debug = false,
     "--help": help = false,
     "--plainweb-version": selectedPlainwebVersion,
-    "--template": template,
-    "--token": token,
     "--install": install,
     "--no-install": noInstall,
     "--package-manager": pkgManager,
     "--show-install-output": showInstallOutput = false,
     "--git-init": git,
-    "--no-init-script": noInitScript,
-    "--init-script": initScript,
     "--no-git-init": noGit,
-    "--no-motion": noMotion,
     "--yes": yes,
     "--version": versionRequested,
     "--overwrite": overwrite,
@@ -101,6 +96,9 @@ async function getContext(argv: string[]): Promise<Context> {
       selectedPlainwebVersion = undefined;
     }
   }
+
+  if (debug) console.log("Selected plainweb version", selectedPlainwebVersion);
+  if (debug) console.log("This plainweb version", thisPlainwebVersion);
 
   const context: Context = {
     tempDir: path.join(
@@ -518,7 +516,6 @@ async function updatePackageJSON(ctx: Context) {
     }
 
     for (const dependency in dependencies) {
-      const version = dependencies[dependency];
       if (dependency === "plainweb") {
         dependencies[dependency] = semver.prerelease(ctx.plainwebVersion)
           ? // Templates created from prereleases should pin to a specific version

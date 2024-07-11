@@ -39,7 +39,7 @@ jobs:
           node-version: "20.10.0"
       - name: create plainweb project 🪨
         run: |
-          pnpm dlx create-plainweb@latest my-plainweb-project --yes --no-git-init
+          pnpm dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
         env:
           npm_config_user_agent: ${{ github.actor }}
       - name: run build, test, and check 🚀
