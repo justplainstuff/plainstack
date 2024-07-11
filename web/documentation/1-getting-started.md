@@ -37,7 +37,6 @@ These are the most important commands for development:
 - `pnpm run build` type checks your app and minifies the CSS
 - `pnpm run routes` prints all express routes to the console
 - `pnpm run check` runs the linter, formatter and scans .tsx files for cross-site scripting
-- `pnpm run fix` fixes linting and formatting errors best-effort
 
 ## VSCode Extensions
 
