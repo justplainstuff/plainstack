@@ -62,26 +62,31 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
   for (const { filePath } of routes) {
     let loadedFileRoute: LoadedFileRoute | undefined;
     try {
-      const module = (await import(filePath)) as FileRouteHandler;
-      if (module?.GET) {
-        if (typeof module.GET !== "function") {
+      const module = (await import(filePath)) as
+        | FileRouteHandler
+        | { default: FileRouteHandler };
+      const handler = (module as { default: FileRouteHandler })?.default
+        ? (module as { default: FileRouteHandler }).default
+        : (module as FileRouteHandler);
+      if (handler?.GET) {
+        if (typeof handler.GET !== "function") {
           throw new Error(
             `[router] GET export in route ${filePath} is not a function`,
           );
         }
-        loadedFileRoute = { filePath, GET: module.GET };
+        loadedFileRoute = { filePath, GET: handler.GET };
       }
 
-      if (module?.POST) {
-        if (typeof module.POST !== "function") {
+      if (handler?.POST) {
+        if (typeof handler.POST !== "function") {
           throw new Error(
             `[router] POST export in route ${filePath} is not a function`,
           );
         }
         if (loadedFileRoute) {
-          loadedFileRoute.POST = module.POST;
+          loadedFileRoute.POST = handler.POST;
         } else {
-          loadedFileRoute = { filePath, POST: module.POST };
+          loadedFileRoute = { filePath, POST: handler.POST };
         }
       }
 
@@ -112,9 +117,7 @@ export function getExpressRoutePath({
   filePath: string;
   verbose?: number;
 }): string {
-  if (filePath === `${dir}/index.tsx`) {
-    return "/";
-  }
+  if (filePath === `${dir}/index.tsx`) return "/";
   let relativeFilePath = filePath.replace(dir, "");
   if (!dir.startsWith("/")) {
     relativeFilePath = filePath.replace(`/${dir}`, "");

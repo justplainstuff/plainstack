@@ -1,5 +1,17 @@
 # create-plainweb
 
+## 0.0.19
+
+### Patch Changes
+
+- fix: issue where drizzle.config.ts would fail to load
+
+## 0.0.18
+
+### Patch Changes
+
+- 364ff59: fix: better debugging for used plainweb version
+
 ## 0.0.17
 
 ### Patch Changes

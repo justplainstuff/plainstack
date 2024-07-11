@@ -1,8 +1,10 @@
 {
   "name": "plainweb",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -25,7 +27,8 @@
     "@kitajs/ts-html-plugin": "^4.0.1",
     "drizzle-orm": "^0.30.10 || ^0.32.0",
     "express": "^4.19.2",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "tsx": "^4.10.3"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",

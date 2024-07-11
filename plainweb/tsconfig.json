@@ -15,10 +15,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "target": "ES2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
+    "baseUrl": ".",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
-    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"],
-    "target": "ES2022"
+    "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"]
   }
 }

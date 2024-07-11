@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.9
+
+### Patch Changes
+
+- fix: issue where drizzle.config.ts would fail to load
+
 ## 0.0.8
 
 ### Patch Changes

@@ -23,7 +23,8 @@ async function getConfig(opts?: { cwd?: string }) {
     );
     return;
   }
-  const configModule = await import(configPath);
+  const tsx = require("tsx/cjs/api");
+  const configModule = tsx.require(configPath, __filename);
   if (!configModule.default) {
     console.log(
       "No default export in drizzle.config.ts, can not migrate database",
