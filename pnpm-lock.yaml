@@ -338,7 +338,7 @@ importers:
         version: 8.5.10
       daisyui:
         specifier: ^4.11.1
-        version: 4.11.1(postcss@8.4.39)
+        version: 4.12.10(postcss@8.4.39)
       node-mocks-http:
         specifier: ^1.14.1
         version: 1.14.1
@@ -1775,8 +1775,8 @@ packages:
     resolution: {integrity: sha512-pHJg+jbuFsCjz9iclQBqyL3B2HLCBF71BwVNujUYEvCeQMvV97R59MNK3R2+jgJ3a1fcZgI9B3vYgz8lzr/BFQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  daisyui@4.11.1:
-    resolution: {integrity: sha512-obT9CUbQdW6eoHwSeT5VwaRrWlwrM4OT5qlfdJ0oQlSIEYhwnEl2+L2fwu5PioLbitwuMdYC2X8I1cyy8Pf6LQ==}
+  daisyui@4.12.10:
+    resolution: {integrity: sha512-jp1RAuzbHhGdXmn957Z2XsTZStXGHzFfF0FgIOZj3Wv9sH7OZgLfXTRZNfKVYxltGUOBsG1kbWAdF5SrqjebvA==}
     engines: {node: '>=16.9.0'}
 
   data-uri-to-buffer@3.0.1:
@@ -5350,7 +5350,7 @@ snapshots:
 
   culori@3.3.0: {}
 
-  daisyui@4.11.1(postcss@8.4.39):
+  daisyui@4.12.10(postcss@8.4.39):
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0
