@@ -1,5 +1,17 @@
 # create-plainweb
 
+## 0.0.17
+
+### Patch Changes
+
+- - docs: add recipes for sitemap.xml and robots.txt
+  - docs: add icons
+  - docs: improve motivation bit
+  - chore: switch to pnpm
+  - feat: switch from prettier and eslint to biome
+  - chore: add knip
+  - feat: swtich from node test runner to vitest
+
 ## 0.0.16
 
 ### Patch Changes

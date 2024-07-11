@@ -1,8 +1,10 @@
 {
   "name": "plainweb",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
