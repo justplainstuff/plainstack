@@ -48,3 +48,15 @@ jobs:
           pnpm build
           pnpm test
           pnpm check
+      - name: start server and check response 🌐
+        run: |
+          cd my-plainweb-project
+          pnpm start &
+          sleep 5  # Wait for the server to start
+          if curl -s http://localhost:3000 | grep -q "Let's go"; then
+            echo "Server started successfully and contains 'Let's go'"
+          else
+            echo "Server check failed"
+            exit 1
+          fi
+          kill $!  # Stop the server
