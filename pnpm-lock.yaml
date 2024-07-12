@@ -123,7 +123,7 @@ importers:
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^7.6.10
-        version: 7.6.10
+        version: 7.6.11
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -171,7 +171,7 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -205,7 +205,7 @@ importers:
         version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.3.3)
       '@types/better-sqlite3':
         specifier: ^7.6.10
-        version: 7.6.10
+        version: 7.6.11
       '@types/compression':
         specifier: ^1.7.5
         version: 1.7.5
@@ -256,7 +256,7 @@ importers:
         version: 0.23.0
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0)
+        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -311,7 +311,7 @@ importers:
         version: 0.5.13(tailwindcss@3.4.4)
       '@types/better-sqlite3':
         specifier: ^7.6.10
-        version: 7.6.10
+        version: 7.6.11
       '@types/compression':
         specifier: ^1.7.5
         version: 1.7.5
@@ -1344,6 +1344,9 @@ packages:
 
   '@types/better-sqlite3@7.6.10':
     resolution: {integrity: sha512-TZBjD+yOsyrUJGmcUj6OS3JADk3+UZcNv3NOBqGkM09bZdi28fNZw8ODqbMOLfKCu7RYCO62/ldq1iHbzxqoPw==}
+
+  '@types/better-sqlite3@7.6.11':
+    resolution: {integrity: sha512-i8KcD3PgGtGBLl3+mMYA8PdKkButvPyARxA7IQAd6qeslht13qxb1zzO8dRCtE7U3IoJS782zDBAeoKiM695kg==}
 
   '@types/body-parser@1.19.5':
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
@@ -4761,6 +4764,11 @@ snapshots:
   '@types/better-sqlite3@7.6.10':
     dependencies:
       '@types/node': 20.12.12
+    optional: true
+
+  '@types/better-sqlite3@7.6.11':
+    dependencies:
+      '@types/node': 20.14.10
 
   '@types/body-parser@1.19.5':
     dependencies:
@@ -5403,6 +5411,11 @@ snapshots:
   drizzle-orm@0.32.0(@types/better-sqlite3@7.6.10)(better-sqlite3@10.0.0):
     optionalDependencies:
       '@types/better-sqlite3': 7.6.10
+      better-sqlite3: 10.0.0
+
+  drizzle-orm@0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0):
+    optionalDependencies:
+      '@types/better-sqlite3': 7.6.11
       better-sqlite3: 10.0.0
 
   duplexify@3.7.1:
