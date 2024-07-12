@@ -8,6 +8,7 @@
     "cs": "changeset",
     "pub": "pnpm check && changeset version && changeset publish",
     "knip": "NODE_ENV=test knip",
+    "lint": "biome check .",
     "check": "turbo build test && biome check --write . && pnpm knip"
   },
   "devDependencies": {

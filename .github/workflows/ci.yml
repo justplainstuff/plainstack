@@ -47,3 +47,4 @@ jobs:
           cd my-plainweb-project
           pnpm build
           pnpm test
+          pnpm check
