@@ -220,7 +220,7 @@ importers:
         version: 1.9.9
       '@types/node':
         specifier: ^20.11.24
-        version: 20.12.12
+        version: 20.14.10
       drizzle-kit:
         specifier: ^0.23.0
         version: 0.23.0
@@ -235,7 +235,7 @@ importers:
         version: 5.3.3
       vitest:
         specifier: ^2.0.1
-        version: 2.0.2(@types/node@20.12.12)
+        version: 2.0.2(@types/node@20.14.10)
 
   web:
     dependencies:
@@ -329,7 +329,7 @@ importers:
         version: 1.9.9
       '@types/node':
         specifier: ^20.11.24
-        version: 20.12.12
+        version: 20.14.10
       '@types/nodemailer':
         specifier: ^6.4.15
         version: 6.4.15
@@ -353,7 +353,7 @@ importers:
         version: 5.3.3
       vitest:
         specifier: ^2.0.1
-        version: 2.0.2(@types/node@20.12.12)
+        version: 2.0.2(@types/node@20.14.10)
 
 packages:
 
@@ -4460,7 +4460,7 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/compression@1.7.5':
     dependencies:
@@ -4468,7 +4468,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/cookiejar@2.1.5': {}
 
@@ -4480,7 +4480,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.0':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -4500,7 +4500,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/gunzip-maybe@1.4.2':
     dependencies:
@@ -4533,7 +4533,7 @@ snapshots:
 
   '@types/morgan@1.9.9':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/mute-stream@0.0.4':
     dependencies:
@@ -4568,19 +4568,19 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
       '@types/send': 0.17.4
 
   '@types/superagent@8.1.7':
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@types/supertest@6.0.2':
     dependencies:
@@ -4602,7 +4602,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.12.12
+      '@types/node': 20.14.10
 
   '@vitest/expect@2.0.2':
     dependencies:
@@ -6816,23 +6816,6 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite-node@2.0.2(@types/node@20.12.12):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.5
-      pathe: 1.1.2
-      tinyrainbow: 1.2.0
-      vite: 5.3.3(@types/node@20.12.12)
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
   vite-node@2.0.2(@types/node@20.14.10):
     dependencies:
       cac: 6.7.14
@@ -6850,15 +6833,6 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.3.3(@types/node@20.12.12):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.39
-      rollup: 4.18.1
-    optionalDependencies:
-      '@types/node': 20.12.12
-      fsevents: 2.3.3
-
   vite@5.3.3(@types/node@20.14.10):
     dependencies:
       esbuild: 0.21.5
@@ -6867,38 +6841,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.14.10
       fsevents: 2.3.3
-
-  vitest@2.0.2(@types/node@20.12.12):
-    dependencies:
-      '@ampproject/remapping': 2.3.0
-      '@vitest/expect': 2.0.2
-      '@vitest/pretty-format': 2.0.2
-      '@vitest/runner': 2.0.2
-      '@vitest/snapshot': 2.0.2
-      '@vitest/spy': 2.0.2
-      '@vitest/utils': 2.0.2
-      chai: 5.1.1
-      debug: 4.3.5
-      execa: 8.0.1
-      magic-string: 0.30.10
-      pathe: 1.1.2
-      std-env: 3.7.0
-      tinybench: 2.8.0
-      tinypool: 1.0.0
-      tinyrainbow: 1.2.0
-      vite: 5.3.3(@types/node@20.12.12)
-      vite-node: 2.0.2(@types/node@20.12.12)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.12.12
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
 
   vitest@2.0.2(@types/node@20.14.10):
     dependencies:
