@@ -1,5 +1,3 @@
-import type { Html } from "@kitajs/html";
-
 export default function RootLayout(
   props: Html.PropsWithChildren<{
     description?: string;
@@ -24,11 +22,11 @@ export default function RootLayout(
               "Build web app with less complexity and more joy."
             }
           />
-          <link rel="stylesheet" href="/output.css" />
-          <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-          />
+          {process.env.BIN_ADMIN_TESTING ? (
+            <link rel="stylesheet" href="/public/output.css" />
+          ) : (
+            <style>{process.env.ADMIN_STYLES}</style>
+          )}
           <script
             defer
             src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.0/dist/cdn.min.js"

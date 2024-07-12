@@ -73,6 +73,7 @@ INSERT INTO order_items (order_id, product_id, quantity) VALUES
 }
 
 async function start() {
+  process.env.BIN_ADMIN_TESTING = "1";
   console.log("Starting server...");
   const connection = new BetterSqlite3Database(":memory:");
   const database = drizzle(connection);
@@ -81,6 +82,7 @@ async function start() {
   const app = express();
   app.use(express.urlencoded({ extended: true }));
   app.use("/admin", await unstable_admin(database));
+  app.use("/public", express.static(`${process.cwd()}`));
   app.listen(3000);
   printRoutes(app);
   console.log("http://localhost:3000/admin/database");
