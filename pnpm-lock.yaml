@@ -135,7 +135,7 @@ importers:
         version: 6.0.2
       better-sqlite3:
         specifier: ^10.0.0
-        version: 10.0.0
+        version: 10.1.0
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
@@ -162,7 +162,7 @@ importers:
         version: 4.1.0
       better-sqlite3:
         specifier: ^10.0.0
-        version: 10.0.0
+        version: 10.1.0
       compression:
         specifier: ^1.7.4
         version: 1.7.4
@@ -171,7 +171,7 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0)
+        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.1.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -244,7 +244,7 @@ importers:
         version: 4.1.0
       better-sqlite3:
         specifier: ^10.0.0
-        version: 10.0.0
+        version: 10.1.0
       compression:
         specifier: ^1.7.4
         version: 1.7.4
@@ -256,7 +256,7 @@ importers:
         version: 0.23.0
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0)
+        version: 0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.1.0)
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1
@@ -1527,6 +1527,9 @@ packages:
   better-sqlite3@10.0.0:
     resolution: {integrity: sha512-rOz0JY8bt9oMgrFssP7GnvA5R3yln73y/NizzWqy3WlFth8Ux8+g4r/N9fjX97nn4X1YX6MTER2doNpTu5pqiA==}
 
+  better-sqlite3@10.1.0:
+    resolution: {integrity: sha512-hqpHJaCfKEZFaAWdMh6crdzRWyzQzfP6Ih8TYI0vFn01a6ZTDSbJIMXN+6AMBaBOh99DzUy8l3PsV9R3qnJDng==}
+
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
@@ -2687,8 +2690,8 @@ packages:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
 
-  node-abi@3.62.0:
-    resolution: {integrity: sha512-CPMcGa+y33xuL1E0TcNIu4YyaZCxnnvkVaEXrsosR3FxN+fV8xvb7Mzpb7IgKler10qeMkE6+Dp8qJhpzdq35g==}
+  node-abi@3.65.0:
+    resolution: {integrity: sha512-ThjYBfoDNr08AWx6hGaRbfPwxKV9kVzAzOzlLKbk2CuqXE2xnCh+cbAGnwM3t8Lq4v9rUB7VfondlkBckcJrVA==}
     engines: {node: '>=10'}
 
   node-mocks-http@1.14.1:
@@ -4735,6 +4738,12 @@ snapshots:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.2
+    optional: true
+
+  better-sqlite3@10.1.0:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.2
 
   binary-extensions@2.3.0: {}
 
@@ -5057,10 +5066,10 @@ snapshots:
       '@types/better-sqlite3': 7.6.10
       better-sqlite3: 10.0.0
 
-  drizzle-orm@0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.0.0):
+  drizzle-orm@0.32.0(@types/better-sqlite3@7.6.11)(better-sqlite3@10.1.0):
     optionalDependencies:
       '@types/better-sqlite3': 7.6.11
-      better-sqlite3: 10.0.0
+      better-sqlite3: 10.1.0
 
   duplexify@3.7.1:
     dependencies:
@@ -5916,7 +5925,7 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  node-abi@3.62.0:
+  node-abi@3.65.0:
     dependencies:
       semver: 7.6.2
 
@@ -6170,7 +6179,7 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 1.0.2
-      node-abi: 3.62.0
+      node-abi: 3.65.0
       pump: 3.0.0
       rc: 1.2.8
       simple-get: 4.0.1
