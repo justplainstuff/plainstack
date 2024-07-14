@@ -34,7 +34,7 @@
     "semver": "^7.6.2",
     "sisteransi": "^1.0.5",
     "sort-package-json": "^2.0.0",
-    "strip-ansi": "^6.0.1",
+    "strip-ansi": "^7.0.0",
     "tar-fs": "^3.0.0"
   },
   "devDependencies": {
