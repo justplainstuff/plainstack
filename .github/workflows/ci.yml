@@ -69,4 +69,4 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: check fly deployment ⬆️
-        run: curl -s http://plainweb-template.fly.dev | grep -q "Let's go"
+        run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
