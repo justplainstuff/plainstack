@@ -4,7 +4,13 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["**/.git/**", "**/node_modules/**", "**/dist/**", "**/.turbo/**"]
+    "ignore": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.turbo/**",
+      "**/tsup.config.bundled*"
+    ]
   },
   "linter": {
     "enabled": true,
