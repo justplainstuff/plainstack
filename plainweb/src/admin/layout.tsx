@@ -83,7 +83,7 @@ export function AdminLayout(
   return (
     <>
       {"<!doctype html>"}
-      <html lang="en" data-theme="light">
+      <html lang="en" data-theme="auto">
         <head>
           <meta charset="UTF-8" />
           <meta

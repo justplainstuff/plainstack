@@ -36,12 +36,16 @@ export const GET: Handler = async ({ req, res }) => {
       active="database"
       path={req.path}
     >
-      <div class="overflow-x-auto w-full whitespace-nowrap text-sm">
-        <table class="font-mono w-full">
+      <div class="overflow-x-auto w-full whitespace-nowrap text-sm max-w-full">
+        <table class="font-mono">
           <thead>
             <tr>
+              <th />
               {columns.map((column) => (
-                <th safe class="border border-gray-300 px-2 py-1 text-left">
+                <th
+                  safe
+                  class="border border-neutral px-2 py-1 text-left max-w-64 min-w-32 truncate"
+                >
                   {column.name}
                 </th>
               ))}

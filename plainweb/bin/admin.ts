@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import express from "express";
 import { printRoutes, unstable_admin } from "../src";
 
-function migrateAndSeed(connection: Database) {
+function migrate(connection: Database) {
   const run = `
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS orders;
@@ -44,8 +44,12 @@ CREATE TABLE order_items (
     tax DECIMAL(10, 2) DEFAULT 0,
     total DECIMAL(10, 2) NOT NULL,
     notes TEXT
-);
+);`;
+  connection.exec(run);
+}
 
+function seed(connection: Database) {
+  const run = `
 INSERT INTO users (email, name) VALUES
     ${Array(30)
       .fill(0)
@@ -57,7 +61,7 @@ INSERT INTO products (name, price, description) VALUES
       .fill(0)
       .map(
         (_, i) =>
-          `('Product ${i + 1}', ${(Math.random() * 100).toFixed(2)}, 'Description for Product ${i + 1}')`,
+          `('Product ${i + 1}', ${(Math.random() * 100).toFixed(2)}, 'Description for Product ${i + 1} with a very long description that should be truncated')`,
       )
       .join(",\n    ")};
 
@@ -93,13 +97,17 @@ async function start() {
   const connection = new BetterSqlite3Database(":memory:");
   const database = drizzle(connection);
   connection.pragma("journal_mode = WAL");
-  migrateAndSeed(connection);
+  migrate(connection);
+  seed(connection);
   const app = express();
   app.use(express.urlencoded({ extended: true }));
   app.use("/admin", await unstable_admin({ database, path: "/admin" }));
   app.use("/public", express.static(`${process.cwd()}`));
   app.listen(3000);
   printRoutes(app);
+  app.use("/", (req, res) => {
+    res.redirect("/admin/database");
+  });
   console.log("http://localhost:3000/admin/database");
 }
 

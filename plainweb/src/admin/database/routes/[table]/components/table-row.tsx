@@ -9,24 +9,10 @@ interface TableRowProps {
 
 export function TableRow({ tableName, columns, row }: TableRowProps) {
   return (
-    <tr class="w-full">
-      {columns.map((column) => {
-        const tsType = columnType(column.type);
-        const value = row[column.name];
-        const formattedValue = renderValue(value, tsType);
-        return (
-          <td
-            safe
-            data-type={tsType}
-            class="border border-gray-300 px-2 py-1 max-w-20"
-          >
-            {formattedValue}
-          </td>
-        );
-      })}{" "}
+    <tr>
       <td class="px-1 py-0 text-sm">
         <button
-          class="btn btn-xs"
+          class="btn btn-xs mr-2"
           type="submit"
           hx-target="closest tr"
           hx-swap="outerHTML"
@@ -36,6 +22,20 @@ export function TableRow({ tableName, columns, row }: TableRowProps) {
           <PencilIcon />
         </button>
       </td>
+      {columns.map((column) => {
+        const tsType = columnType(column.type);
+        const value = row[column.name];
+        const formattedValue = renderValue(value, tsType);
+        return (
+          <td
+            safe
+            data-type={tsType}
+            class="border border-neutral px-2 py-1 max-w-64 min-w-32 truncate"
+          >
+            {formattedValue}
+          </td>
+        );
+      })}{" "}
     </tr>
   );
 }

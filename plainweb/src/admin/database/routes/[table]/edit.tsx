@@ -50,25 +50,29 @@ export const POST: Handler = async ({ req, res }) => {
 
   return (
     <tr>
-      {columns.map((column) => {
-        const tsType = columnType(column.type);
-        const value = newData?.[column.name];
-        const formattedValue = renderValue(value, tsType);
-        return (
-          <td safe data-type={tsType} class="border border-gray-300 px-2 py-1">
-            {formattedValue}
-          </td>
-        );
-      })}
       <td>
         <button
-          class="btn btn-xs"
+          class="btn btn-xs mr-2"
           type="submit"
           hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(oldRow))}`}
         >
           <PencilIcon />
         </button>
       </td>
+      {columns.map((column) => {
+        const tsType = columnType(column.type);
+        const value = newData?.[column.name];
+        const formattedValue = renderValue(value, tsType);
+        return (
+          <td
+            safe
+            data-type={tsType}
+            class="border border-neutral px-2 py-1 max-w-64 min-w-32 truncate"
+          >
+            {formattedValue}
+          </td>
+        );
+      })}
     </tr>
   );
 };
@@ -84,27 +88,7 @@ export const GET: Handler = async ({ req, res }) => {
 
   return (
     <tr>
-      {columns.map((column) => {
-        const tsType = columnType(column.type);
-        const value = rowData[column.name];
-        // TODO consider content editable
-        return (
-          <td
-            data-type={tsType}
-            class="border border-gray-300 px-2 py-0 max-w-20"
-          >
-            <input class="w-full" name={column.name} value={value} />
-          </td>
-        );
-      })}
-      <td class="py-1">
-        <button
-          class="btn btn-xs mr-1"
-          type="submit"
-          hx-get={`${config.adminBasePath}/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
-        >
-          Cancel
-        </button>
+      <td>
         <button
           class="btn btn-xs btn-primary"
           type="reset"
@@ -114,6 +98,32 @@ export const GET: Handler = async ({ req, res }) => {
           Save
         </button>
         <input type="hidden" name="__row" value={JSON.stringify(rowData)} />
+      </td>
+      {columns.map((column) => {
+        const tsType = columnType(column.type);
+        const value = rowData[column.name];
+        // TODO consider content editable
+        return (
+          <td
+            data-type={tsType}
+            class="border border-neutral px-2 py-1 max-w-32"
+          >
+            <input
+              class="w-full h-full p-0 m-0 bg-neutral"
+              name={column.name}
+              value={value}
+            />
+          </td>
+        );
+      })}
+      <td>
+        <button
+          class="btn btn-xs mr-1"
+          type="submit"
+          hx-get={`${config.adminBasePath}/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
+        >
+          Cancel
+        </button>
       </td>
     </tr>
   );
