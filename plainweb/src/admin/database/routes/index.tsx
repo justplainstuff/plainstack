@@ -1,7 +1,8 @@
+import { config } from "admin/config";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import type { Handler } from "../../../handler";
-import Layout from "../../layout";
+import type { Handler } from "handler";
+import { redirect } from "plain-response";
 
 export const GET: Handler = async ({ req, res }) => {
   const db = res.locals.database as BetterSQLite3Database;
@@ -11,18 +12,9 @@ export const GET: Handler = async ({ req, res }) => {
     .from(sql`sqlite_master`)
     .where(sql`type=${"table"} AND name NOT LIKE ${"sqlite_%"}`);
 
-  return (
-    <Layout>
-      <h1>Available Tables</h1>
-      <ul>
-        {tables.map((table) => (
-          <li>
-            <a safe href={`/admin/database/${table.name}`}>
-              {table.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </Layout>
-  );
+  if (!tables[0]) {
+    return <div>No tables found</div>;
+  }
+
+  return redirect(`${config.adminBasePath}/database/${tables[0].name}`);
 };

@@ -23,8 +23,7 @@ CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     status TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE products (
@@ -39,36 +38,52 @@ CREATE TABLE order_items (
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders (id),
-    FOREIGN KEY (product_id) REFERENCES products (id)
+    unit_price DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(10, 2) DEFAULT 0,
+    tax DECIMAL(10, 2) DEFAULT 0,
+    total DECIMAL(10, 2) NOT NULL,
+    notes TEXT
 );
 
 INSERT INTO users (email, name) VALUES
-    ('john@example.com', 'John Doe'),
-    ('jane@example.com', 'Jane Smith'),
-    ('alice@example.com', 'Alice Johnson');
+    ${Array(30)
+      .fill(0)
+      .map((_, i) => `('user${i + 1}@example.com', 'User ${i + 1}')`)
+      .join(",\n    ")};
 
 INSERT INTO products (name, price, description) VALUES
-    ('Product 1', 9.99, 'Description for Product 1'),
-    ('Product 2', 19.99, 'Description for Product 2'),
-    ('Product 3', 14.99, 'Description for Product 3'),
-    ('Product 4', 24.99, 'Description for Product 4');
+    ${Array(25)
+      .fill(0)
+      .map(
+        (_, i) =>
+          `('Product ${i + 1}', ${(Math.random() * 100).toFixed(2)}, 'Description for Product ${i + 1}')`,
+      )
+      .join(",\n    ")};
 
 INSERT INTO orders (user_id, status) VALUES
-    (1, 'pending'),
-    (1, 'completed'),
-    (2, 'pending'),
-    (3, 'completed');
+    ${Array(35)
+      .fill(0)
+      .map(
+        () =>
+          `(${Math.floor(Math.random() * 30) + 1}, '${["pending", "completed", "shipped", "cancelled"][Math.floor(Math.random() * 4)]}')`,
+      )
+      .join(",\n    ")};
 
-INSERT INTO order_items (order_id, product_id, quantity) VALUES
-    (1, 1, 2),
-    (1, 2, 1),
-    (2, 3, 3),
-    (3, 2, 1),
-    (3, 4, 2),
-    (4, 1, 1),
-    (4, 3, 2);
-    `;
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, discount, tax, total, notes) VALUES
+    ${Array(40)
+      .fill(0)
+      .map(() => {
+        const quantity = Math.floor(Math.random() * 5) + 1;
+        const unitPrice = Number.parseFloat((Math.random() * 100).toFixed(2));
+        const subtotal = quantity * unitPrice;
+        const discount = Number.parseFloat((Math.random() * 10).toFixed(2));
+        const tax = Number.parseFloat((subtotal * 0.1).toFixed(2));
+        const total = subtotal - discount + tax;
+        return `(${Math.floor(Math.random() * 35) + 1}, ${Math.floor(Math.random() * 25) + 1}, ${quantity}, ${unitPrice}, ${subtotal}, ${discount}, ${tax}, ${total}, 'Note for item ${Math.floor(Math.random() * 1000)}')`;
+      })
+      .join(",\n    ")};
+  `;
   connection.exec(run);
 }
 
@@ -81,7 +96,7 @@ async function start() {
   migrateAndSeed(connection);
   const app = express();
   app.use(express.urlencoded({ extended: true }));
-  app.use("/admin", await unstable_admin(database));
+  app.use("/admin", await unstable_admin({ database, path: "/admin" }));
   app.use("/public", express.static(`${process.cwd()}`));
   app.listen(3000);
   printRoutes(app);

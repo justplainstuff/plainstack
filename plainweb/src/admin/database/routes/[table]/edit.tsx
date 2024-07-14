@@ -1,8 +1,9 @@
+import { type ColumnInfo, columnType, renderValue } from "admin/column";
+import { PencilIcon } from "admin/components";
+import { config } from "admin/config";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import type { Handler } from "../../../../handler";
-import { type ColumnInfo, columnType, renderValue } from "../../../column";
-import { verbose } from "../../../config";
+import type { Handler } from "handler";
 
 export const POST: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
@@ -29,7 +30,8 @@ export const POST: Handler = async ({ req, res }) => {
     }
   }
 
-  verbose >= 1 || console.log("[admin] [database]", "saving row", newData);
+  config.verbose >= 1 ||
+    console.log("[admin] [database]", "saving row", newData);
   const oldRow = JSON.parse(__row as string);
 
   const setClause = Object.entries(newData)
@@ -44,7 +46,7 @@ export const POST: Handler = async ({ req, res }) => {
     sql`UPDATE ${sql.identifier(tableName)} SET ${setClause} WHERE ${whereClause}`,
   );
 
-  verbose >= 1 || console.log("[admin] [database]", "row saved");
+  config.verbose >= 1 || console.log("[admin] [database]", "row saved");
 
   return (
     <tr>
@@ -53,18 +55,18 @@ export const POST: Handler = async ({ req, res }) => {
         const value = newData?.[column.name];
         const formattedValue = renderValue(value, tsType);
         return (
-          <td safe data-type={tsType}>
+          <td safe data-type={tsType} class="border border-gray-300 px-2 py-1">
             {formattedValue}
           </td>
         );
       })}
       <td>
         <button
+          class="btn btn-xs"
           type="submit"
-          class="btn btn-danger"
           hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(oldRow))}`}
         >
-          Edit
+          <PencilIcon />
         </button>
       </td>
     </tr>
@@ -85,22 +87,28 @@ export const GET: Handler = async ({ req, res }) => {
       {columns.map((column) => {
         const tsType = columnType(column.type);
         const value = rowData[column.name];
+        // TODO consider content editable
         return (
-          <td>
-            <input name={column.name} value={value} />
+          <td
+            data-type={tsType}
+            class="border border-gray-300 px-2 py-0 max-w-20"
+          >
+            <input class="w-full" name={column.name} value={value} />
           </td>
         );
       })}
-      <td>
+      <td class="py-1">
         <button
+          class="btn btn-xs mr-1"
           type="submit"
-          hx-get={`/admin/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
+          hx-get={`${config.adminBasePath}/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
         >
           Cancel
         </button>
         <button
-          type="submit"
-          hx-post={`/admin/database/${tableName}/edit`}
+          class="btn btn-xs btn-primary"
+          type="reset"
+          hx-post={`${config.adminBasePath}/database/${tableName}/edit`}
           hx-include="closest tr"
         >
           Save

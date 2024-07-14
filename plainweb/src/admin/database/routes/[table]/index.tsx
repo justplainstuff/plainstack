@@ -1,8 +1,9 @@
+import type { ColumnInfo } from "admin/column";
+import { config } from "admin/config";
+import { AdminLayout, type NavigationItem } from "admin/layout";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import type { Handler } from "../../../../handler";
-import type { ColumnInfo } from "../../../column";
-import Layout from "../../../layout";
+import type { Handler } from "handler";
 import { TableRow } from "./components/table-row";
 
 export const GET: Handler = async ({ req, res }) => {
@@ -19,23 +20,40 @@ export const GET: Handler = async ({ req, res }) => {
     sql`SELECT * FROM ${sql.identifier(tableName)} LIMIT 100`,
   );
 
+  const tables = await db
+    .select({ name: sql<string>`name` })
+    .from(sql`sqlite_master`)
+    .where(sql`type=${"table"} AND name NOT LIKE ${"sqlite_%"}`);
+
+  const suNavigatinoItems: NavigationItem[] = tables.map((table) => ({
+    href: `${config.adminBasePath}/database/${table.name}`,
+    label: table.name,
+  }));
+
   return (
-    <Layout>
-      <h1 safe>{tableName}</h1>
-      <table>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th safe>{column.name}</th>
+    <AdminLayout
+      subNavigation={suNavigatinoItems}
+      active="database"
+      path={req.path}
+    >
+      <div class="overflow-x-auto w-full whitespace-nowrap text-sm">
+        <table class="font-mono w-full">
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th safe class="border border-gray-300 px-2 py-1 text-left">
+                  {column.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody hx-target="closest tr" hx-swap="outerHTML">
+            {rows.map((row) => (
+              <TableRow tableName={tableName} columns={columns} row={row} />
             ))}
-          </tr>
-        </thead>
-        <tbody hx-target="closest tr" hx-swap="outerHTML">
-          {rows.map((row) => (
-            <TableRow tableName={tableName} columns={columns} row={row} />
-          ))}
-        </tbody>
-      </table>
-    </Layout>
+          </tbody>
+        </table>
+      </div>
+    </AdminLayout>
   );
 };

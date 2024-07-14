@@ -1,1 +1,4 @@
-export const verbose = 3;
+export const config = {
+  verbose: 3,
+  adminBasePath: "/_",
+};

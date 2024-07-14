@@ -1,8 +1,8 @@
+import type { ColumnInfo } from "admin/column";
+import { config } from "admin/config";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import type { Handler } from "../../../../handler";
-import { type ColumnInfo, columnType, renderValue } from "../../../column";
-import { verbose } from "../../../config";
+import type { Handler } from "handler";
 import { TableRow } from "./components/table-row";
 
 export const GET: Handler = async ({ req, res }) => {
@@ -16,7 +16,7 @@ export const GET: Handler = async ({ req, res }) => {
     sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`,
   );
 
-  verbose > 1 && console.log("[admin] [database]", "fetching row", row);
+  config.verbose > 1 && console.log("[admin] [database]", "fetching row", row);
 
   const whereClause = Object.entries(row)
     .map(([column, value]) => sql`${column} = ${value}`)

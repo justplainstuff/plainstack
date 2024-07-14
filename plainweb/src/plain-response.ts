@@ -49,7 +49,8 @@ export async function sendPlainResponse(
       console.error("Error streaming response", err);
     });
   } else {
-    throw new Error("No body or htmlStream provided");
+    console.error("No body or htmlStream provided");
+    res.end();
   }
 }
 

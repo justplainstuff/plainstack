@@ -1,6 +1,6 @@
 {
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["node_modules", "dist", "vitest.config.ts"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
@@ -18,7 +18,7 @@
     "target": "ES2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"]
   }

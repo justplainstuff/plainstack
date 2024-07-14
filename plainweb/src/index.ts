@@ -24,5 +24,5 @@ export { type Database, defineDatabaseTask } from "./task/database";
 export { defineInmemoryTask } from "./task/inmemory";
 
 // unstable
-import { admin } from "./admin/admin";
-export const unstable_admin = admin;
+import { adminRouter } from "./admin/admin";
+export const unstable_admin = adminRouter;

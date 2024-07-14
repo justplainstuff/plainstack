@@ -1,35 +1,32 @@
+import { config } from "admin/config";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import express from "express";
-import { fileRouter } from "..";
-import type { LoadedFileRoute } from "../file-router";
-import {
-  GET as editGet,
-  POST as editPost,
-} from "./database/routes/[table]/edit";
-import { GET as detailGET } from "./database/routes/[table]/index";
-import { GET as rowGET } from "./database/routes/[table]/row";
-import { GET as indexGET } from "./database/routes/index";
-import { GET as sqlGET, POST as sqlPOST } from "./database/routes/sql";
+import { fileRouter } from "file-router";
+import { databaseRoutes } from "./database/loaded-file-routes";
 
-const loadedFileRoutes = [
-  { filePath: "/[table]/index.tsx", GET: detailGET },
-  { filePath: "/[table]/edit.tsx", GET: editGet, POST: editPost },
-  { filePath: "/[table]/row.tsx", GET: rowGET },
-  { filePath: "/index.tsx", GET: indexGET },
-  { filePath: "/sql.tsx", GET: sqlGET, POST: sqlPOST },
-] satisfies LoadedFileRoute[];
-
-export async function admin<T extends Record<string, unknown>>(
-  database: BetterSQLite3Database<T>,
-  { verbose = 3 } = {},
-): Promise<express.Router> {
+export async function adminRouter<T extends Record<string, unknown>>(opts: {
+  database: BetterSQLite3Database<T>;
+  path: string;
+  verbose?: number;
+}): Promise<express.Router> {
+  const { database, path, verbose = 3 } = opts;
+  config.adminBasePath = path;
   const router = express.Router();
-  return router.use(
+
+  // make database available to all routes
+  router.use((req, res, next) => {
+    res.locals.database = database;
+    next();
+  });
+  router.use(
     "/database",
-    (req, res, next) => {
-      res.locals.database = database;
-      next();
-    },
-    await fileRouter({ dir: "", loadedFileRoutes, verbose }),
+    await fileRouter({ dir: "", loadedFileRoutes: databaseRoutes, verbose }),
   );
+  // redirect / to /database
+  router.use("/", (req, res) => {
+    console.log(req.path);
+    verbose && console.log("[admin] redirecting / to /database");
+    res.redirect(`${path}/database`);
+  });
+  return router;
 }
