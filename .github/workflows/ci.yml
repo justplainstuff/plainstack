@@ -62,7 +62,10 @@ jobs:
           kill $!  # Stop the server
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy to fly cli 🚀
-        run: flyctl deploy --remote-only
+        run: |
+          cd my-plainweb-project
+          sed -i 's/app = '"'"'my-app'"'"'/app = '"'"'plainweb-template'"'"'/' fly.toml
+          flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: check fly deployment ⬆️
