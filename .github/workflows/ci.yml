@@ -60,3 +60,10 @@ jobs:
             exit 1
           fi
           kill $!  # Stop the server
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: deploy to fly cli 🚀
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: check fly deployment ⬆️
+        run: curl -s http://plainweb-template.fly.dev | grep -q "Let's go"

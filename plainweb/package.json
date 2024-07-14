@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "NODE_ENV=test vitest run",
-    "build": "tsup && pnpm build:tw && tsc --noEmit",
+    "build": "pnpm build:tw && tsup && tsc --noEmit",
     "build:tw": "tailwindcss -i ./styles.css -o ./output.css --minify",
     "dev:tw": "tailwindcss -i ./styles.css -o ./output.css --watch",
     "dev:admin": "tsx --watch bin/admin.ts",
