@@ -61,6 +61,7 @@ jobs:
             exit 1
           fi
           kill $!  # Stop the server
+          rm -r node_modules
       - name: Upload project artifact
         uses: actions/upload-artifact@v3
         with:
@@ -77,6 +78,16 @@ jobs:
         with:
           name: plainweb-project
           path: my-plainweb-project
+      - name: install pnpm 📦
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+      - name: setup node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+      - name: install dependencies 🔧
+        run: pnpm install
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy to fly cli 🚀
         run: |
