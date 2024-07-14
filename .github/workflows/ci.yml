@@ -63,7 +63,7 @@ jobs:
           kill $!  # Stop the server
           rm -rf node_modules
       - name: Upload project artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plainweb-project
           path: my-plainweb-project
@@ -74,7 +74,7 @@ jobs:
     concurrency: deploy
     steps:
       - name: download project artifact 📥
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: plainweb-project
           path: my-plainweb-project
