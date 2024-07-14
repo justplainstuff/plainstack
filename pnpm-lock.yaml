@@ -275,6 +275,9 @@ importers:
       express:
         specifier: ^4.19.2
         version: 4.19.2
+      express-basic-auth:
+        specifier: ^1.2.1
+        version: 1.2.1
       express-rate-limit:
         specifier: ^7.3.1
         version: 7.3.1(express@4.19.2)
@@ -1906,6 +1909,9 @@ packages:
   expand-template@2.0.3:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
+
+  express-basic-auth@1.2.1:
+    resolution: {integrity: sha512-L6YQ1wQ/mNjVLAmK3AG1RK6VkokA1BIY6wmiH304Xtt/cLTps40EusZsU1Uop+v9lTDPxdtzbFmdXfFO3KEnwA==}
 
   express-list-endpoints@7.1.0:
     resolution: {integrity: sha512-7FyKxABfkRC0t6B6btxlAcFr0WrpPAL12MFAGhAxoIi/OyphxVQzVmyuWbcNxEApBmNzzgt2khjlqj/3wyHMMA==}
@@ -4979,6 +4985,10 @@ snapshots:
       strip-final-newline: 3.0.0
 
   expand-template@2.0.3: {}
+
+  express-basic-auth@1.2.1:
+    dependencies:
+      basic-auth: 2.0.1
 
   express-list-endpoints@7.1.0: {}
 

@@ -3,6 +3,7 @@ import { env } from "app/config/env";
 import compression from "compression";
 import errorHandler from "errorhandler";
 import express from "express";
+import basicAuth from "express-basic-auth";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import { fileRouter, flyHeaders, redirectWWW, unstable_admin } from "plainweb";
@@ -58,7 +59,21 @@ export async function app(): Promise<express.Express> {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(addDatabase);
-  app.use("/_", await unstable_admin({ database, path: "/_" }));
+  app.use("/_", (req, res, next) => {
+    console.log("Before basicAuth middleware");
+    next();
+  });
+  app.use(
+    "/_",
+    basicAuth({
+      users: { admin: env.ADMIN_PASSWORD },
+      challenge: true,
+      unauthorizedResponse: () => {
+        console.error("Unauthorized access to admin!");
+      },
+    }),
+    await unstable_admin({ database, path: "/_" }),
+  );
   app.use(await fileRouter({ dir: "app/routes", verbose: 3 }));
   return app;
 }
