@@ -61,6 +61,22 @@ jobs:
             exit 1
           fi
           kill $!  # Stop the server
+      - name: Upload project artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plainweb-project
+          path: my-plainweb-project
+
+  deploy:
+    needs: create-plainweb
+    runs-on: ubuntu-latest
+    concurrency: deploy
+    steps:
+      - name: download project artifact 📥
+        uses: actions/download-artifact@v3
+        with:
+          name: plainweb-project
+          path: my-plainweb-project
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy to fly cli 🚀
         run: |
