@@ -48,6 +48,7 @@ jobs:
           pnpm build
           pnpm test
           pnpm check
+          pnpm routes
       - name: start server and check response 🌐
         run: |
           cd my-plainweb-project
