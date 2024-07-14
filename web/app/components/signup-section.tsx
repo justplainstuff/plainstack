@@ -3,10 +3,10 @@ import { env } from "app/config/env";
 export function SignupSection() {
   return (
     <div class="mx-auto max-w-4xl pb-24 py-10 sm:pb-32 px-8 text-center">
-      <h2 class="text-4xl font-bold tracking-tight text-neutral">
+      <h2 class="text-4xl font-bold tracking-tight text-base-content">
         Stay up to date
       </h2>
-      <p class="text-neutral-700 mt-6 max-w-xl mx-auto">
+      <p class="text-base-content mt-6 max-w-xl mx-auto">
         Receive ~2 updates a month, no spam, unsubscribe anytime.
       </p>
       <form class="join mt-10" hx-post="/" hx-swap="outerHTML">

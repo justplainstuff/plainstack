@@ -5,13 +5,13 @@ export async function HeroSection() {
   const nrOfSparks = await getNrOfSparks();
   return (
     <div class="mx-auto max-w-5xl pb-24 py-10 sm:pb-32 px-4 md:px-8 mt-20 lg:mt-26">
-      <h1 class="text-6xl md:text-8xl font-bold tracking-tight text-neutral text-center">
+      <h1 class="text-6xl md:text-8xl font-bold tracking-tight text-base-content text-center">
         plainweb
       </h1>
       <div class="mx-auto max-w-xl">
         <h2
           x-data="{}"
-          class="mt-10 text-2xl leading-8 text-neutral-700 text-center"
+          class="mt-10 text-2xl leading-8 text-base-content text-center"
         >
           plainweb is a framework combining HTMX, SQLite and TypeScript for less
           complexity and more{" "}
@@ -28,8 +28,8 @@ export async function HeroSection() {
         </h2>
       </div>
       <div class="mt-10 text-center">
-        <div class="select-all cursor-text rounded-lg bg-slate-200 px-5 py-2.5 inline-block">
-          <pre class="text-xl">npx create-plainweb</pre>
+        <div class="select-all cursor-text rounded-lg bg-neutral px-5 py-2.5 inline-block">
+          <pre class="text-xl text-neutral-content">npx create-plainweb</pre>
         </div>{" "}
       </div>
       <div class="mx-auto mt-36">

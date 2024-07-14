@@ -31,8 +31,7 @@ export const GET: Handler = async () => {
 }
 
 `;
-      const safeCode = await renderCode(code, "tsx");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "tsx");
     },
   },
   {
@@ -55,8 +54,7 @@ export function Form(props: FormProps) {
 }
 
 `;
-      const safeCode = await renderCode(code, "tsx");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "tsx");
     },
   },
   {
@@ -78,8 +76,7 @@ export async function createContact(database: Database, email: string) {
 }
 
 `;
-      const safeCode = await renderCode(code, "typescript");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "typescript");
     },
   },
   {
@@ -97,8 +94,7 @@ export const contacts = sqliteTable("contacts", {
 export type Contact = typeof contacts.$inferSelect;
 
 `;
-      const safeCode = await renderCode(code, "typescript");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "typescript");
     },
   },
   {
@@ -117,8 +113,7 @@ export const database = drizzle<typeof schema>(connection, { schema });
 export type Database = typeof database;
 
 `;
-      const safeCode = await renderCode(code, "typescript");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "typescript");
     },
   },
   {
@@ -141,8 +136,7 @@ export type Env = z.infer<typeof envSchema>;
 export const env: Env = envSchema.parse(process.env);
 
 `;
-      const safeCode = await renderCode(code, "typescript");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "typescript");
     },
   },
   {
@@ -160,8 +154,7 @@ async function serve() {
 void serve();
 
 `;
-      const safeCode = await renderCode(code, "typescript");
-      return <div>{safeCode}</div>;
+      return await renderCode(code, "typescript");
     },
   },
 ];
@@ -228,7 +221,7 @@ export async function Showcase() {
       <div class="font-mono overflow-y-auto max-h-[calc(100vh-200px)] pr-4 flex-shrink-0">
         {renderTree(fileTree)}
       </div>
-      <div class="mt-2 lg:mt-0 lg:ml-6 border-l-2 p-2 px-2 lg:px-6 rounded-lg w-full bg-[#282A36] overflow-x-auto">
+      <div class="mt-2 lg:mt-0 lg:ml-6 px-2 lg:px-6 rounded-lg w-full bg-[#282A36] overflow-x-auto">
         {features.map((feature, idx) => {
           const safe = feature.content;
           return (
@@ -236,7 +229,7 @@ export async function Showcase() {
               x-show={`open === '${feature.title}'`}
               style={idx > 0 ? "display:none" : ""}
             >
-              <div>{safe()}</div>
+              {safe()}
             </div>
           );
         })}

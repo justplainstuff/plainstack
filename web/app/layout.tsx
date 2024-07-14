@@ -13,7 +13,7 @@ export default function Layout(
   return (
     <>
       {"<!doctype html>"}
-      <html lang="en" data-theme="light">
+      <html lang="en" data-theme="auto">
         <head>
           <meta charset="UTF-8" />
           <meta
@@ -67,7 +67,7 @@ export default function Layout(
                     aria-label="Read the docs"
                     href="/docs/getting-started"
                     preload
-                    class={"text-lg text-neutral-700"}
+                    class={"text-lg text-base-content"}
                   >
                     Docs
                   </a>
