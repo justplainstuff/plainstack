@@ -2,6 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { env } from "app/config/env";
 import MarkdownIt from "markdown-it";
+import slugify from "slugify";
 
 type Page = {
   title: string;
@@ -16,9 +17,7 @@ const idPrefix = "page-";
 let cache: Page[] = [];
 
 export function getHeadingId(heading: string) {
-  const GithubSlugger = require("github-slugger");
-  const slugger = new GithubSlugger.default();
-  return idPrefix + slugger.slug(heading);
+  return idPrefix + slugify(heading, { lower: true });
 }
 
 export async function createMarkdownRenderer() {
