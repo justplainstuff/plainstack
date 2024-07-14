@@ -15,8 +15,8 @@ type Page = {
 const idPrefix = "page-";
 let cache: Page[] = [];
 
-export async function getHeadingId(heading: string) {
-  const GithubSlugger = await import("github-slugger");
+export function getHeadingId(heading: string) {
+  const GithubSlugger = require("github-slugger");
   const slugger = new GithubSlugger.default();
   return idPrefix + slugger.slug(heading);
 }
