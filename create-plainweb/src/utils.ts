@@ -1,16 +1,13 @@
 import fs from "node:fs";
-import os from "node:os";
 // Adapted from https://github.com/remix-run/remix/blob/main/packages/create-remix/copy-template.ts
 // MIT License Copyright (c) Remix Software Inc. 2020-2021 Copyright (c) Shopify Inc. 2022-2024
 import path from "node:path";
 import process from "node:process";
-import type { Key as ActionKey } from "node:readline";
-import chalk from "chalk";
+import chalk, { supportsColor, type ChalkInstance } from "chalk";
 import recursiveReaddir from "recursive-readdir";
-import { cursor, erase } from "sisteransi";
 
 // https://no-color.org/
-const SUPPORTS_COLOR = chalk.supportsColor && !process.env.NO_COLOR;
+const SUPPORTS_COLOR = supportsColor && !process.env.NO_COLOR;
 
 export const color = {
   supportsColor: SUPPORTS_COLOR,
@@ -56,8 +53,8 @@ export const color = {
   underline: chalk.underline,
 };
 
-function safeColor(style: chalk.Chalk) {
-  return SUPPORTS_COLOR ? style : identity;
+function safeColor(style: ChalkInstance) {
+  return SUPPORTS_COLOR ? style : (...text: unknown[]) => text.join("");
 }
 
 export function isInteractive() {
@@ -86,8 +83,8 @@ function logError(message: string) {
 
 function logBullet(
   logger: typeof log | typeof logError,
-  colorizePrefix: <V>(v: V) => V,
-  colorizeText: <V>(v: V) => V,
+  colorizePrefix: (...text: unknown[]) => string,
+  colorizeText: (...text: unknown[]) => string,
   symbol: string,
   prefix: string,
   text?: string | string[],

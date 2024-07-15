@@ -36,8 +36,8 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
       chalk:
-        specifier: 4.1.2
-        version: 4.1.2
+        specifier: 5.3.0
+        version: 5.3.0
       execa:
         specifier: 9.3.0
         version: 9.3.0
@@ -59,9 +59,6 @@ importers:
       semver:
         specifier: ^7.6.2
         version: 7.6.2
-      sisteransi:
-        specifier: ^1.0.5
-        version: 1.0.5
       sort-package-json:
         specifier: ^2.0.0
         version: 2.10.0
@@ -90,6 +87,9 @@ importers:
       tsup:
         specifier: ^8.0.2
         version: 8.1.0(postcss@8.4.39)(typescript@5.5.3)
+      tsx:
+        specifier: ^4.16.2
+        version: 4.16.2
       typescript:
         specifier: ^5.3.3
         version: 5.5.3
@@ -2983,9 +2983,6 @@ packages:
 
   simple-get@4.0.1:
     resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
-
-  sisteransi@1.0.5:
-    resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -6120,8 +6117,6 @@ snapshots:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
-
-  sisteransi@1.0.5: {}
 
   slash@3.0.0: {}
 
