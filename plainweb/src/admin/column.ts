@@ -1,4 +1,4 @@
-export interface ColumnInfo {
+export interface Column {
   cid: number;
   name: string;
   type: "INTEGER" | "REAL" | "TEXT" | "BLOB" | "TIMESTAMP";
@@ -7,7 +7,7 @@ export interface ColumnInfo {
   pk: number;
 }
 
-export function columnType(sqliteType: ColumnInfo["type"]): string {
+export function columnType(sqliteType: Column["type"]): string {
   switch (sqliteType) {
     case "INTEGER":
       return "number";

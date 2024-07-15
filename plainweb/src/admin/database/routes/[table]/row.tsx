@@ -1,4 +1,4 @@
-import type { ColumnInfo } from "admin/column";
+import type { Column } from "admin/column";
 import { config } from "admin/config";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
@@ -12,7 +12,7 @@ export const GET: Handler = async ({ req, res }) => {
   >;
   const row = JSON.parse(decodeURIComponent(req.query.row as string));
 
-  const columns = db.all<ColumnInfo>(
+  const columns = db.all<Column>(
     sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`,
   );
 

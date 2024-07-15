@@ -1,4 +1,4 @@
-import type { ColumnInfo } from "admin/column";
+import type { Column } from "admin/column";
 import { config } from "admin/config";
 import { AdminLayout, type NavigationItem } from "admin/layout";
 import { sql } from "drizzle-orm";
@@ -12,7 +12,7 @@ export const GET: Handler = async ({ req, res }) => {
     Record<string, unknown>
   >;
 
-  const columns = db.all<ColumnInfo>(
+  const columns = db.all<Column>(
     sql`SELECT * from pragma_table_info(${tableName}) LIMIT 100`,
   );
 
@@ -53,7 +53,12 @@ export const GET: Handler = async ({ req, res }) => {
           </thead>
           <tbody hx-target="closest tr" hx-swap="outerHTML">
             {rows.map((row) => (
-              <TableRow tableName={tableName} columns={columns} row={row} />
+              <TableRow
+                tableName={tableName}
+                columns={columns}
+                row={row}
+                editing={false}
+              />
             ))}
           </tbody>
         </table>

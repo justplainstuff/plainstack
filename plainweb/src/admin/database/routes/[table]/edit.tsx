@@ -1,6 +1,6 @@
-import { type ColumnInfo, columnType, renderValue } from "admin/column";
-import { PencilIcon } from "admin/components";
+import { type Column, columnType, renderValue } from "admin/column";
 import { config } from "admin/config";
+import { TableRow } from "admin/database/routes/[table]/components/table-row";
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type { Handler } from "handler";
@@ -12,7 +12,7 @@ export const POST: Handler = async ({ req, res }) => {
   >;
   const { __row, ...updatedData } = req.body;
 
-  const columns = db.all<ColumnInfo>(
+  const columns = db.all<Column>(
     sql`SELECT * FROM pragma_table_info(${tableName})`,
   );
 
@@ -48,41 +48,19 @@ export const POST: Handler = async ({ req, res }) => {
 
   config.verbose >= 1 || console.log("[admin] [database]", "row saved");
 
-  return (
-    <tr>
-      <td>
-        <button
-          class="btn btn-xs mr-2"
-          type="submit"
-          hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(oldRow))}`}
-        >
-          <PencilIcon />
-        </button>
-      </td>
-      {columns.map((column) => {
-        const tsType = columnType(column.type);
-        const value = newData?.[column.name];
-        const formattedValue = renderValue(value, tsType);
-        return (
-          <td
-            safe
-            data-type={tsType}
-            class="border border-neutral px-2 py-1 max-w-64 min-w-32 truncate"
-          >
-            {formattedValue}
-          </td>
-        );
-      })}
-    </tr>
-  );
+  return <TableRow tableName={tableName} columns={columns} row={newData} />;
 };
+
+function estimateNrOfRows(value: string) {
+  return String(Math.max(Math.round(String(value).length / 30), 1));
+}
 
 export const GET: Handler = async ({ req, res }) => {
   const tableName = req.params.table as string;
   const rowData = JSON.parse(decodeURIComponent(req.query.row as string));
   const db = res.locals.database as BetterSQLite3Database;
 
-  const columns = db.all<ColumnInfo>(
+  const columns = db.all<Column>(
     sql`SELECT * FROM pragma_table_info(${tableName})`,
   );
 
@@ -101,18 +79,20 @@ export const GET: Handler = async ({ req, res }) => {
       </td>
       {columns.map((column) => {
         const tsType = columnType(column.type);
-        const value = rowData[column.name];
-        // TODO consider content editable
+        const safeValue = rowData[column.name];
+        console.log(safeValue, estimateNrOfRows(safeValue));
         return (
           <td
             data-type={tsType}
-            class="border border-neutral px-2 py-1 max-w-32"
+            class="border border-neutral px-2 py-1 max-w-32 relative"
           >
-            <input
-              class="w-full h-full p-0 m-0 bg-neutral"
+            <textarea
+              class="top-0 left-0 w-full py-1 pl-2 m-0 bg-base-200 absolute"
+              rows={estimateNrOfRows(safeValue)}
               name={column.name}
-              value={value}
-            />
+            >
+              {safeValue}
+            </textarea>
           </td>
         );
       })}

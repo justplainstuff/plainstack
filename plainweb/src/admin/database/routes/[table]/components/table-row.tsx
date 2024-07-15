@@ -1,16 +1,17 @@
-import { type ColumnInfo, columnType, renderValue } from "admin/column";
+import { type Column, columnType, renderValue } from "admin/column";
 import { PencilIcon } from "admin/components";
 
 interface TableRowProps {
   tableName: string;
-  columns: ColumnInfo[];
+  columns: Column[];
   row: Record<string, unknown>;
+  editing?: boolean;
 }
 
-export function TableRow({ tableName, columns, row }: TableRowProps) {
+export function TableRow({ editing, tableName, columns, row }: TableRowProps) {
   return (
     <tr>
-      <td class="px-1 py-0 text-sm">
+      <td class="px-1 py-0 text-sm invisible">
         <button
           class="btn btn-xs mr-2"
           type="submit"
