@@ -3,11 +3,11 @@ import fs from "node:fs";
 // MIT License Copyright (c) Remix Software Inc. 2020-2021 Copyright (c) Shopify Inc. 2022-2024
 import path from "node:path";
 import process from "node:process";
-import chalk, { supportsColor, type ChalkInstance } from "chalk";
+import chalk, { type Chalk } from "chalk";
 import recursiveReaddir from "recursive-readdir";
 
 // https://no-color.org/
-const SUPPORTS_COLOR = supportsColor && !process.env.NO_COLOR;
+const SUPPORTS_COLOR = chalk.supportsColor && !process.env.NO_COLOR;
 
 export const color = {
   supportsColor: SUPPORTS_COLOR,
@@ -53,7 +53,7 @@ export const color = {
   underline: chalk.underline,
 };
 
-function safeColor(style: ChalkInstance) {
+function safeColor(style: Chalk) {
   return SUPPORTS_COLOR ? style : (...text: unknown[]) => text.join("");
 }
 
