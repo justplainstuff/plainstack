@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@kitajs/html": "^4.1.0",
-    "better-sqlite3": "^10.0.0",
+    "better-sqlite3": "^11.0.0",
     "compression": "^1.7.4",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.32.0",
