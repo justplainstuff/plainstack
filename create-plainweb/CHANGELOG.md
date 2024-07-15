@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.22
+
+### Patch Changes
+
+- fix: downgrade execa to use without esm
+
 ## 0.0.21
 
 ### Patch Changes

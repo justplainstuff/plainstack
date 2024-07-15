@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import arg from "arg";
-import { execa } from "execa";
+import execa from "execa";
 import fse from "fs-extra";
 import semver from "semver";
 import sortPackageJSON from "sort-package-json";
