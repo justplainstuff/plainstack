@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.23
+
+### Patch Changes
+
+- fix: downgrade dependency to fix esm issue
+
 ## 0.0.22
 
 ### Patch Changes
