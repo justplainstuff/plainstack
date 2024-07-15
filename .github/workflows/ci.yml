@@ -25,21 +25,8 @@ jobs:
         run: pnpm install
       - name: run check ✅
         run: pnpm check
-
-  create-plainweb:
-    runs-on: ubuntu-latest
-    steps:
-      - name: install pnpm 📦
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.5.0
-      - name: setup node 🟢
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.10.0"
       - name: create plainweb project 🪨
-        run: |
-          pnpm dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
+        run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug
         env:
           npm_config_user_agent: ${{ github.actor }}
       - name: run build, test, and check 🚀
@@ -69,7 +56,7 @@ jobs:
           path: my-plainweb-project
 
   deploy:
-    needs: create-plainweb
+    needs: check
     runs-on: ubuntu-latest
     concurrency: deploy
     steps:

@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.24
+
+### Patch Changes
+
+- fix: downgrade another deps for esm reasons
+
 ## 0.0.23
 
 ### Patch Changes
