@@ -8,7 +8,8 @@
   },
   "typings": "dist/cli.d.ts",
   "scripts": {
-    "build": "tsc --noEmit && tsup"
+    "build": "tsc --noEmit && tsup",
+    "dev": "tsx src/cli.ts"
   },
   "keywords": [
     "plainweb",
@@ -32,18 +33,23 @@
     "proxy-agent": "^6.3.0",
     "recursive-readdir": "^2.2.3",
     "semver": "^7.6.2",
+<<<<<<< HEAD
     "sisteransi": "^1.0.5",
     "sort-package-json": "^2.0.0",
+=======
+    "sort-package-json": "^1.55.0",
+>>>>>>> a0943c9 (make it build)
     "strip-ansi": "^6.0.1",
     "tar-fs": "^3.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
     "@types/fs-extra": "^11.0.4",
     "@types/gunzip-maybe": "^1.4.2",
     "@types/recursive-readdir": "^2.2.4",
     "@types/semver": "^7.5.8",
     "@types/tar-fs": "^2.0.4",
-    "tsup": "^8.0.2"
+    "tsup": "^8.0.2",
+    "tsx": "^4.16.2",
+    "typescript": "^5.3.3"
   }
 }
