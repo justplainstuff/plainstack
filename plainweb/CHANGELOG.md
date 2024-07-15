@@ -1,5 +1,15 @@
 # plainweb
 
+## 0.0.11
+
+### Patch Changes
+
+- - feat: admin dashboard preview
+  - feat: `pnpm routes` prints all http routes
+  - feat: prettier/eslint -> biome
+  - feat: plainweb.dev dark mode
+  - chore: updating several dependencies
+
 ## 0.0.10
 
 ### Patch Changes
