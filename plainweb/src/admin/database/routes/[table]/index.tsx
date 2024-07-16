@@ -2,7 +2,6 @@ import type { Column } from "admin/column";
 import { config } from "admin/config";
 import { AdminLayout, type NavigationItem } from "admin/layout";
 import { sql } from "drizzle-orm";
-import { count } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type { Handler } from "handler";
 import { TableRow } from "./components/table-row";
