@@ -1,5 +1,5 @@
 import { type Column, columnType, renderValue } from "admin/column";
-import { PencilIcon } from "admin/components";
+import { config } from "admin/config";
 
 interface TableRowProps {
   tableName: string;
@@ -11,17 +11,15 @@ interface TableRowProps {
 export function TableRow({ editing, tableName, columns, row }: TableRowProps) {
   return (
     <tr>
-      <td class="px-1 py-0 text-sm invisible">
+      <td class="px-1 py-0 text-sm invisible w-16">
         <button
           class="btn btn-xs mr-2"
           type="submit"
           hx-target="closest tr"
           hx-swap="outerHTML"
-          hx-get={`/admin/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(row))}`}
+          hx-get={`${config.adminBasePath}/database/${tableName}/edit?row=${encodeURIComponent(JSON.stringify(row))}`}
           hx-trigger="click from:closest tr"
-        >
-          <PencilIcon />
-        </button>
+        />
       </td>
       {columns.map((column) => {
         const tsType = columnType(column.type);

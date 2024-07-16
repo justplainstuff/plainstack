@@ -66,10 +66,10 @@ export const GET: Handler = async ({ req, res }) => {
 
   return (
     <tr>
-      <td>
+      <td class="w-16 flex items-center justify-center">
         <button
           class="btn btn-xs btn-primary"
-          type="reset"
+          type="submit"
           hx-post={`${config.adminBasePath}/database/${tableName}/edit`}
           hx-include="closest tr"
         >
@@ -79,27 +79,29 @@ export const GET: Handler = async ({ req, res }) => {
       </td>
       {columns.map((column) => {
         const tsType = columnType(column.type);
-        const safeValue = rowData[column.name];
-        console.log(safeValue, estimateNrOfRows(safeValue));
+        const value = rowData[column.name];
+        const safeFormattedValue = renderValue(value, tsType);
         return (
           <td
             data-type={tsType}
             class="border border-neutral px-2 py-1 max-w-32 relative"
           >
+            {safeFormattedValue}
             <textarea
               class="top-0 left-0 w-full py-1 pl-2 m-0 bg-base-200 absolute"
-              rows={estimateNrOfRows(safeValue)}
+              rows={estimateNrOfRows(value)}
               name={column.name}
+              safe
             >
-              {safeValue}
+              {value}
             </textarea>
           </td>
         );
       })}
       <td>
         <button
-          class="btn btn-xs mr-1"
-          type="submit"
+          class="btn btn-xs ml-1"
+          type="reset"
           hx-get={`${config.adminBasePath}/database/${tableName}/row?row=${encodeURIComponent(JSON.stringify(rowData))}`}
         >
           Cancel

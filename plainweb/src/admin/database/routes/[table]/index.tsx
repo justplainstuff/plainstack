@@ -2,6 +2,7 @@ import type { Column } from "admin/column";
 import { config } from "admin/config";
 import { AdminLayout, type NavigationItem } from "admin/layout";
 import { sql } from "drizzle-orm";
+import { count } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type { Handler } from "handler";
 import { TableRow } from "./components/table-row";
@@ -25,14 +26,30 @@ export const GET: Handler = async ({ req, res }) => {
     .from(sql`sqlite_master`)
     .where(sql`type=${"table"} AND name NOT LIKE ${"sqlite_%"}`);
 
-  const suNavigatinoItems: NavigationItem[] = tables.map((table) => ({
-    href: `${config.adminBasePath}/database/${table.name}`,
-    label: table.name,
-  }));
+  const tableCounts: { tableName: string; count: number }[] = [];
+  for (const table of tables) {
+    const [rowCount] = db.all<{ count: number }>(
+      sql`SELECT COUNT(*) as count FROM ${sql.identifier(table.name)}`,
+    );
+
+    tableCounts.push({ tableName: table.name, count: rowCount?.count ?? 0 });
+  }
+
+  const subNavigationItems: NavigationItem[] = tableCounts.map(
+    ({ tableName, count }) => ({
+      href: `${config.adminBasePath}/database/${tableName}`,
+      label: (
+        <span class="flex justify-between items-center w-full">
+          <span safe>{tableName}</span>
+          <span class="ml-2 text-xs text-neutral-content">{count}</span>
+        </span>
+      ),
+    }),
+  );
 
   return (
     <AdminLayout
-      subNavigation={suNavigatinoItems}
+      subNavigation={subNavigationItems}
       active="database"
       path={req.path}
     >
