@@ -79,3 +79,50 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: check fly deployment ⬆️
         run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
+
+  create-plainweb:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: install pnpm 📦
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+      - name: setup node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+          cache: "pnpm"
+      - name: install dependencies 🔧
+        run: pnpm install
+      - name: run check ✅
+        run: pnpm check
+      - name: create plainweb project 🪨
+        run: pnp dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
+        env:
+          npm_config_user_agent: ${{ github.actor }}
+      - name: run build, test, and check 🚀
+        run: |
+          cd my-plainweb-project
+          pnpm build
+          pnpm test
+          pnpm check
+          pnpm routes
+      - name: start server and check response 🌐
+        run: |
+          cd my-plainweb-project
+          pnpm start &
+          sleep 5  # Wait for the server to start
+          if curl -s http://localhost:3000 | grep -q "Let's go"; then
+            echo "Server started successfully and contains 'Let's go'"
+          else
+            echo "Server check failed"
+            exit 1
+          fi
+          kill $!  # Stop the server
+          rm -rf node_modules
+      - name: Upload project artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plainweb-project
+          path: my-plainweb-project
