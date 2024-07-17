@@ -147,7 +147,7 @@ importers:
         version: 7.0.0
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.5
+        version: 3.4.6
       tempy:
         specifier: ^3.1.0
         version: 3.1.0
@@ -241,7 +241,7 @@ importers:
         version: 6.2.2
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.5
+        version: 3.4.6
       typescript:
         specifier: ^5.3.3
         version: 5.5.3
@@ -323,7 +323,7 @@ importers:
         version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.3)
       '@tailwindcss/typography':
         specifier: ^0.5.13
-        version: 0.5.13(tailwindcss@3.4.5)
+        version: 0.5.13(tailwindcss@3.4.6)
       '@types/better-sqlite3':
         specifier: ^7.6.10
         version: 7.6.11
@@ -362,7 +362,7 @@ importers:
         version: 6.2.2
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.5
+        version: 3.4.6
       typescript:
         specifier: ^5.3.3
         version: 5.5.3
@@ -3122,8 +3122,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tailwindcss@3.4.5:
-    resolution: {integrity: sha512-DlTxttYcogpDfx3tf/8jfnma1nfAYi2cBUYV2YNoPPecwmO3YGiFlOX9D8tGAu+EDF38ryBzvrDKU/BLMsUwbw==}
+  tailwindcss@3.4.6:
+    resolution: {integrity: sha512-1uRHzPB+Vzu57ocybfZ4jh5Q3SdlH7XW23J5sQoM9LhE9eIOlzxer/3XPSsycvih3rboRsvt0QCmzSrqyOYUIA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4178,13 +4178,13 @@ snapshots:
       ignore: 5.3.1
       p-map: 4.0.0
 
-  '@tailwindcss/typography@0.5.13(tailwindcss@3.4.5)':
+  '@tailwindcss/typography@0.5.13(tailwindcss@3.4.6)':
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.5
+      tailwindcss: 3.4.6
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
@@ -6250,7 +6250,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tailwindcss@3.4.5:
+  tailwindcss@3.4.6:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
