@@ -1,27 +1,30 @@
+// core
+export { defineConfig } from "./config";
+export { log, getLogger } from "./log";
+export { randomId } from "./id";
+
 // http & web
-export { type FileRoute, fileRouter } from "./file-router";
-export {
-  type HandlerArgs,
-  type Handler,
-  type JSONSerializable,
-  type ExpressResponse,
-} from "./handler";
+export { fileRouter } from "./file-router";
+export { type Handler } from "./handler";
 export { html, json, redirect, stream, notFound } from "./plain-response";
-export { flyHeaders, redirectWWW } from "./middleware";
 export { printRoutes } from "./print-routes";
+export { middleware, defineMiddleware } from "./middleware";
+export { testHandler } from "./test-handler";
+export { getApp } from "./get-app";
 
 // mail
-export { outbox, sendMail, useTransporter } from "./mail";
+export { outbox, sendMail } from "./mail";
 
-// testing
+// database
+export { getDatabase } from "./get-database";
 export { isolate } from "./isolate";
 export { migrate } from "./migrate";
-export { testHandler } from "./test-handler";
 
 // tasks
-export { type Task, runTasks, perform, type DefineTaskOpts } from "./task/task";
-export { type Database, defineDatabaseTask } from "./task/database";
-export { defineInmemoryTask } from "./task/inmemory";
+export { perform } from "./task/work-tasks";
+export { getWorker } from "./get-worker";
+export { defineDatabaseTask as defineTask } from "./task/database-task";
+export { defineInmemoryTask } from "./task/inmemory-task";
 
 // unstable
 import { adminRouter } from "./admin/admin";

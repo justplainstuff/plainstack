@@ -11,12 +11,11 @@ import {
 } from "drizzle-orm/sqlite-core";
 import {
   type DefineTaskOpts,
-  type PersistedTask,
-  type Task,
-  type TaskStorage,
-  composePersistedTask,
-  defineTaskWithAdapter,
-} from "./task";
+  defineTaskWithStorageAdapter,
+} from "./define-task";
+import { type PersistedTask, createPersistedTask } from "./persisted-task";
+import type { Task } from "./task";
+import type { TaskStorage } from "./task-storage";
 
 const tasks = sqliteTable("tasks", {
   id: text("id").primaryKey(),
@@ -33,17 +32,17 @@ const _ = tasks.$inferSelect satisfies PersistedTask<unknown>;
 
 const schema = { tasks };
 
-export type Database = BaseSQLiteDatabase<
+type Database = BaseSQLiteDatabase<
   "sync",
   BetterSqlite3Database.RunResult,
   typeof schema,
   ExtractTablesWithRelations<typeof schema>
 >;
 
-function composeDatabaseAdapter(database: Database): TaskStorage<unknown> {
+function createDatabaseAdapter(database: Database): TaskStorage<unknown> {
   return {
     async enqueue({ data, name }) {
-      const persistedTask = composePersistedTask({ data, name });
+      const persistedTask = createPersistedTask({ data, name });
       await database.insert(tasks).values(persistedTask);
     },
     async fetch({ name: taskName, batchSize, maxRetries, retryIntervall }) {
@@ -82,12 +81,16 @@ function composeDatabaseAdapter(database: Database): TaskStorage<unknown> {
   };
 }
 
+/**
+ * Define a task that gets persisted to the database.
+ * A database tasks survives server restarts.
+ * */
 export function defineDatabaseTask<T>(
   database: Database,
   opts: DefineTaskOpts<T>,
 ): Task<T> {
-  return defineTaskWithAdapter(
-    composeDatabaseAdapter(database),
+  return defineTaskWithStorageAdapter(
+    createDatabaseAdapter(database),
     opts as DefineTaskOpts<unknown>,
   );
 }

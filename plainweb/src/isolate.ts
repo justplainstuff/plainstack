@@ -1,6 +1,11 @@
 import { sql } from "drizzle-orm";
 import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 
+/**
+ * Run a a function in a database transaction.
+ * The transaction is automatically rolled back, even if the function doesn't throw an error.
+ * ONLY USE during testing, to keep test cases isolated from each other.
+ * */
 export async function isolate<Schema extends Record<string, unknown>>(
   db: BetterSQLite3Database<Schema>,
   fn: (db: BetterSQLite3Database<Schema>) => Promise<void>,
@@ -25,7 +30,7 @@ export async function isolate<Schema extends Record<string, unknown>>(
 
   if (err) {
     // rethrow the error with the original error attached
-    const e = new Error(`Rethrowing the "${err.message}" error`);
+    const e = new Error(`Rethrowing error: "${err.message}"`);
     // @ts-ignore
     e.original_error = err;
     e.stack = err.stack;

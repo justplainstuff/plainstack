@@ -3,7 +3,7 @@
 import BetterSqlite3Database, { type Database } from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import express from "express";
-import { printRoutes, unstable_admin } from "../src";
+import { log, printRoutes, unstable_admin } from "../src";
 
 function migrate(connection: Database) {
   const run = `
@@ -93,7 +93,7 @@ INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal, d
 
 async function start() {
   process.env.BIN_ADMIN_TESTING = "1";
-  console.log("Starting server...");
+  log.info("Starting server...");
   const connection = new BetterSqlite3Database(":memory:");
   const database = drizzle(connection);
   connection.pragma("journal_mode = WAL");
@@ -104,11 +104,12 @@ async function start() {
   app.use("/admin", await unstable_admin({ database, path: "/admin" }));
   app.use("/public", express.static(`${process.cwd()}`));
   app.listen(3000);
-  printRoutes(app);
+  // TODO config
+  // printRoutes(app);
   app.use("/", (req, res) => {
     res.redirect("/admin/database");
   });
-  console.log("http://localhost:3000/admin/database");
+  log.info("http://localhost:3000/admin/database");
 }
 
 void start();

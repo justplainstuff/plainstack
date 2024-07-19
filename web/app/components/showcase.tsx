@@ -3,13 +3,13 @@ import { renderCode } from "app/services/render-code";
 
 const features: { title: string; content: () => JSX.Element }[] = [
   {
-    title: "app/routes/signup.tsx",
+    title: "repo/app/routes/signup.tsx",
     content: async () => {
       const code = `
 import { zfd } from "zod-form-data";
 import { type Handler } from "plainweb";
 import { database } from "app/config/database";
-import { contacts } from "app/config/schema";
+import { contacts } from "app/schema";
 import { createContact } from "app/services/contacts";
 import { Form } from "app/components/form";
 
@@ -35,7 +35,7 @@ export const GET: Handler = async () => {
     },
   },
   {
-    title: "app/components/form.tsx",
+    title: "repo/app/components/form.tsx",
     content: async () => {
       const code = `
 export interface FormProps {
@@ -58,12 +58,12 @@ export function Form(props: FormProps) {
     },
   },
   {
-    title: "app/services/contacts.ts",
+    title: "repo/app/services/contacts.ts",
     content: async () => {
       const code = `
 import { sendMail } from "plainweb";
 import { type Database } from "app/config/database";
-import { contacts } from "app/config/schema";
+import { contacts } from "app/schema";
 
 export async function createContact(database: Database, email: string) {
    await sendMail({
@@ -80,7 +80,48 @@ export async function createContact(database: Database, email: string) {
     },
   },
   {
-    title: "app/config/schema.ts",
+    title: "repo/plainweb.config.ts",
+    content: async () => {
+      const code = `
+import { env } from "app/config/env";
+import middleware from "app/config/middleware";
+import * as schema from "app/schema";
+import { defineConfig } from "plainweb";
+
+export default defineConfig({
+  nodeEnv: env.NODE_ENV,
+  http: {
+    port: 3000,
+    staticPath: "/public",
+    middleware,
+  },
+  database: {
+    dbUrl: env.DB_URL,
+    testDbUrl: ":memory:",
+    schema: schema,
+    pragma: {
+      journal_mode: "WAL",
+    },
+  },
+  mail: {
+    default: {
+      host: env.SMTP_HOST,
+      port: 587,
+      secure: false,
+      auth: {
+        user: env.SMTP_USER,
+        pass: env.SMTP_PASS,
+      },
+    },
+  },
+});
+
+`;
+      return await renderCode(code, "typescript");
+    },
+  },
+  {
+    title: "repo/app/schema.ts",
     content: async () => {
       const code = `
 import { text, sqliteTable, int } from "drizzle-orm/sqlite-core";
@@ -98,18 +139,13 @@ export type Contact = typeof contacts.$inferSelect;
     },
   },
   {
-    title: "app/config/database.ts",
+    title: "repo/app/config/database.ts",
     content: async () => {
       const code = `
-import BetterSqlite3Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import { env } from "app/config/env";
-import * as schema from "./schema";
+import { getDatabase } from "plainweb";
+import config from "plainweb.config";
 
-const connection = new BetterSqlite3Database(env.DB_URL);
-connection.pragma("journal_mode = WAL");
-
-export const database = drizzle<typeof schema>(connection, { schema });
+export const database = getDatabase(config);
 export type Database = typeof database;
 
 `;
@@ -117,7 +153,7 @@ export type Database = typeof database;
     },
   },
   {
-    title: "app/config/env.ts",
+    title: "repo/app/config/env.ts",
     content: async () => {
       const code = `
 import dotenv from "dotenv";
@@ -140,18 +176,19 @@ export const env: Env = envSchema.parse(process.env);
     },
   },
   {
-    title: "app/cli/serve.ts",
+    title: "repo/app/cli/serve.ts",
     content: async () => {
       const code = `
-import { debug, env } from "app/config/env";
-import { http } from "app/config/http";
+import { getApp, log } from "plainweb";
+import config from "plainweb.config";
 
 async function serve() {
-  await http();
-  debug && console.log(\`⚡️ http://localhost:\${env.PORT}\`);
+  const app = await getApp(config);
+  app.listen(config.http.port);
+  log.info(\`⚡️ http://localhost:\${config.http.port}\`);
 }
 
-void serve();
+serve();
 
 `;
       return await renderCode(code, "typescript");
@@ -160,54 +197,74 @@ void serve();
 ];
 
 const fileTree = {
-  app: {
-    routes: ["signup.tsx"],
-    components: ["form.tsx"],
-    services: ["contacts.ts"],
-    config: ["schema.ts", "database.ts", "env.ts"],
-    cli: ["serve.ts"],
+  repo: {
+    "plainweb.config.ts": true,
+    app: {
+      "schema.ts": true,
+      routes: ["signup.tsx"],
+      components: ["form.tsx"],
+      services: ["contacts.ts"],
+      config: ["database.ts", "env.ts"],
+      cli: ["serve.ts"],
+    },
   },
 };
 
 function renderTree(tree: Record<string, unknown>, prefix = "", isRoot = true) {
   return (
     <ul class={`${isRoot ? "" : "ml-3"}`}>
-      {Object.entries(tree).map(([safeKey, value], index, array) => {
+      {Object.entries(tree).map(([key, value], index, array) => {
         const isLastItem = index === array.length - 1;
+        const isFile = typeof value === "boolean";
+        const safeKey = `${key}/`;
+
         return (
           <li>
             <div>
               <span class="font-normal">
                 {isRoot ? "" : isLastItem ? "└── " : "├── "}
-                {safeKey}/
+                {isFile ? (
+                  <button
+                    type="submit"
+                    x-on:click={`open = '${prefix}${key}'`}
+                    x-bind:class={`{'text-primary': open === '${prefix}${key}'}`}
+                    class="hover:text-primary focus:outline-none font-bold link"
+                  >
+                    {Html.escapeHtml(key)}
+                  </button>
+                ) : (
+                  safeKey
+                )}
               </span>
             </div>
-            {Array.isArray(value) ? (
-              <ul class="ml-0">
-                {value.map((file, fileIndex, fileArray) => (
-                  <li>
-                    <span>
-                      {isLastItem ? " &nbsp; " : "│ "}
-                      {fileIndex === fileArray.length - 1 ? "└── " : "├── "}
-                    </span>
-                    <button
-                      type="submit"
-                      x-on:click={`open = '${prefix}${safeKey}/${file}'`}
-                      x-bind:class={`{'text-primary': open === '${prefix}${safeKey}/${file}'}`}
-                      class="hover:text-primary focus:outline-none font-bold link"
-                    >
-                      {Html.escapeHtml(file)}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              renderTree(
-                value as Record<string, unknown>,
-                `${prefix}${safeKey}/`,
-                false,
+            {!isFile ? (
+              Array.isArray(value) ? (
+                <ul class="ml-0">
+                  {value.map((file, fileIndex, fileArray) => (
+                    <li>
+                      <span>
+                        {isLastItem ? " &nbsp; " : "│ "}
+                        {fileIndex === fileArray.length - 1 ? "└── " : "├── "}
+                      </span>
+                      <button
+                        type="submit"
+                        x-on:click={`open = '${prefix}${key}/${file}'`}
+                        x-bind:class={`{'text-primary': open === '${prefix}${key}/${file}'}`}
+                        class="hover:text-primary focus:outline-none font-bold link"
+                      >
+                        {Html.escapeHtml(file)}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                renderTree(
+                  value as Record<string, unknown>,
+                  `${prefix}${key}/`,
+                  false,
+                )
               )
-            )}
+            ) : null}
           </li>
         );
       })}

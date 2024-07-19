@@ -1,5 +1,10 @@
 const cache = new Map<string, string>();
 
+let codeToHtml: (
+  code: string,
+  options: { lang: string; theme: string },
+) => Promise<string>;
+
 export async function renderCode(
   code: string,
   lang: "bash" | "tsx" | "typescript" = "typescript",
@@ -8,7 +13,10 @@ export async function renderCode(
     return cache.get(code) as string;
   }
   try {
-    const { codeToHtml } = await import("shiki");
+    if (!codeToHtml) {
+      const shiki = await import("shiki");
+      codeToHtml = shiki.codeToHtml;
+    }
     const rendered = await codeToHtml(code, {
       lang: lang,
       theme: "dracula-soft",

@@ -6,11 +6,11 @@ import type { Database } from "app/config/database";
 import { env } from "app/config/env";
 import Layout from "app/layout";
 import { createContact } from "app/services/contacts";
-import type express from "express";
+import type { Request } from "express";
 import type { Handler } from "plainweb";
 import { zfd } from "zod-form-data";
 
-async function validateTurnstile(req: express.Request, token: string) {
+async function validateTurnstile(req: Request, token: string) {
   const ip = req.header("CF-Connecting-IP");
   const formData = new FormData();
   formData.append("secret", env.CF_TURNSTILE_SECRET);
@@ -22,7 +22,7 @@ async function validateTurnstile(req: express.Request, token: string) {
     method: "POST",
   });
 
-  const outcome = await result.json();
+  const outcome = (await result.json()) as { success: boolean };
   if (!outcome.success) {
     console.error("Turnstile error", outcome);
     return false;
@@ -60,7 +60,7 @@ export const POST: Handler = async ({ req, res }) => {
   try {
     await createContact(database, parsed.data.email);
     return (
-      <div class="mt-10 text-xl text-neutral-700">
+      <div class="mt-10 text-xl text-base-content">
         Thanks for subscribing, check your inbox.
       </div>
     );

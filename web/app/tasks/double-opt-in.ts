@@ -1,10 +1,11 @@
 import { database } from "app/config/database";
-import { type Contact, contacts } from "app/config/schema";
+import { type Contact, contacts } from "app/schema";
 import { sendDoubleOptInEmail } from "app/services/contacts";
 import { eq } from "drizzle-orm";
-import { defineDatabaseTask } from "plainweb";
+import { defineTask } from "plainweb";
 
-export default defineDatabaseTask<Contact>(database, {
+export default defineTask<Contact>(database, {
+  name: __filename,
   batchSize: 5,
   async process({ data }) {
     await sendDoubleOptInEmail(database, data);

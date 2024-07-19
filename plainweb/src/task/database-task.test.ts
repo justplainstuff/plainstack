@@ -4,8 +4,10 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { beforeAll, describe, expect, test } from "vitest";
 import { isolate } from "../isolate";
-import { defineDatabaseTask } from "./database";
-import { type Task, _runTasks, composeStartableTask, perform } from "./task";
+import { getLogger } from "../log";
+import { defineDatabaseTask } from "./database-task";
+import type { Task } from "./task";
+import { perform, workLoadedTasks } from "./work-tasks";
 
 const tasks = sqliteTable("tasks", {
   id: text("id").primaryKey(),
@@ -22,27 +24,26 @@ connection.pragma("journal_mode = WAL");
 const database = drizzle<typeof schema>(connection, { schema });
 type Database = typeof database;
 
+const log = getLogger("test");
+
 async function processUntil(
   tasks: Task<unknown>[],
   {
     f,
     until = (db) =>
       db.query.tasks.findMany().then((tasks) => tasks.length === 0),
-    debug = false,
   }: {
     f: () => Promise<void>;
     until?: (database: Database) => Promise<boolean>;
     debug?: boolean;
   },
 ): Promise<void> {
-  const runnableTasks = tasks.map((task, idx) =>
-    composeStartableTask(task, `task-${idx}`, { debug: true }),
-  );
-  const timeouts = _runTasks(runnableTasks, { debug: true });
+  const workable = tasks;
+  const timeouts = workLoadedTasks(workable);
   await f();
   while (!(await until(database))) {
     await new Promise((resolve) => setTimeout(resolve, 1));
-    debug && console.log(await database.query.tasks.findMany());
+    log.info(await database.query.tasks.findMany());
   }
   for (const timeout of Object.values(timeouts)) {
     clearInterval(timeout);
@@ -70,6 +71,7 @@ describe("database task", () => {
     let total = 0;
     await isolate(database, async (tx) => {
       const task = defineDatabaseTask<{ add: number }>(tx, {
+        name: "task",
         process: async ({ data }) => {
           total = total + data.add;
         },
@@ -88,6 +90,7 @@ describe("database task", () => {
   test("process task with failure", async () => {
     await isolate(database, async (tx) => {
       const task = defineDatabaseTask(tx, {
+        name: "task",
         process: async () => {
           throw new Error("test");
         },

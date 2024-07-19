@@ -9,7 +9,8 @@
       "**/node_modules/**",
       "**/dist/**",
       "**/.turbo/**",
-      "**/tsup.config.bundled*"
+      "**/tsup.config.bundled*",
+      "**/coverage/**"
     ]
   },
   "linter": {

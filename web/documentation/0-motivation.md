@@ -5,7 +5,7 @@ plainweb is a set of tools, documentation, and design principles for building si
 It consists of three parts:
 
 1. This documentation
-2. `create-plainweb`: A CLI tool to create a starter project
+2. `create-plainweb`: A CLI for creating a starter project
 3. `plainweb`: A small NPM package that integrates existing tools and packages
 
 ## Motivation
@@ -21,23 +21,23 @@ I wanted something that:
 
 ## Minimal Lock-in
 
-The term "framework" can be intimidating. Why would you run your business-critical code on yet another JS framework?
+The term "framework" can be intimidating. Why would you lock your business-critical code into yet another JS framework?
 
 plainweb isn't a framework like Rails, Django, or Laravel. The `plainweb` NPM package is tiny, and our long-term goal is to eliminate it entirely! Underneath this thin layer is a set of battle-tested tools, each with a small API surface area.
 
 The documentation is the most crucial part of the plainweb framework. `create-plainweb` (starter) and `plainweb` (library) provide the building blocks, while the docs show how to compose them.
 
-If plainweb doesn't meet your needs at some point, it's easy to transition away if you have a solid understanding of the following tools:
+Once plainweb doesn't meet your needs anymore, it's easy to transition away. All you need is a solid understanding of the following tools:
 
-- [htmx](https://htmx.org/)
 - [drizzle](https://orm.drizzle.team/docs/get-started-sqlite)
 - [tailwind](https://tailwindcss.com/docs/utility-first)
 - [zod](https://zod.dev/)
 - [express](https://expressjs.com/en/guide/routing.html)
+- [htmx](https://htmx.org/)
 
 ## The Price of Simplicity
 
-Simplicity comes with trade-offs. We have to say "no" to certain features and technologies.
+Simplicity is a trade-off. We have to say "no" to certain things.
 
 ### SQLite (vs. Postgres, MySQL, MongoDB, Redis)
 
@@ -53,19 +53,19 @@ The trade-off is that this traditional model makes it more challenging to deploy
 
 ### HTMX/Alpine.js (vs. React, Vue, Svelte)
 
-plainweb prohibits frontend build processes. Instead, it uses HTMX and Alpine.js to enhance server-side rendered HTML.
+plainweb strongly discourages frontend build processes. Instead, HTMX and Alpine.js are embraced to progressively enhance server-side rendered HTML.
 
 While this approach simplifies development, it makes it harder to leverage existing frontend ecosystems like React.
 
 ### Node.js (vs. Deno, Bun)
 
-Node.js is a mature and reliable runtime.
+Node.js is a mature and reliable runtime. It's been around for a while and edge cases have been ironed out.
 
-Bun is generally faster than Node.js and plainweb might switch to Bun once it reaches a stable state.
+Bun is generally faster than Node.js and plainweb might switch to Bun once it reaches a stable state. Bun's file router and built-in SQLite support would allow us to remove these bits from plainweb.
 
 ### Express (vs. Hono, Fastify)
 
-Similar to Node.js, Express is a mature and well-tested framework with a rich middleware ecosystem. Since plainweb doesn't support multiple deployment targets like Hono, it can fully utilize the Node.js ecosystem.
+Express is a mature and well-tested framework with a rich middleware ecosystem. Since plainweb doesn't support multiple deployment targets like Hono, it can fully lean into the Node.js ecosystem.
 
 Express receives less attention from the community, and some middleware packages are not actively maintained. Note that plainweb may switch to Hono in the future.
 
@@ -89,3 +89,41 @@ plainweb is probably not the right tool for you if you:
 ## Inspiration
 
 plainweb draws inspiration from and builds upon the ideas of the [Grug Brained Developer](https://grugbrain.dev/), [SQLite](https://sqlite.org/), [HTMX](https://htmx.org/), [PocketBase](https://pocketbase.io/), [Remix](https://remix.run/), [Litestream](https://litestream.io/), and some of the [Go proverbs](https://www.youtube.com/watch?v=PAAkCSZUG1c&t=568s).
+
+## plainweb API
+
+To get a rough idea of the API surface area of `plainweb`, here is the complete API:
+
+```typescript
+// core
+export { defineConfig } from "./config";
+export { log, getLogger } from "./log";
+export { randomId } from "./id";
+
+// http & web
+export { fileRouter } from "./file-router";
+export { type Handler } from "./handler";
+export { html, json, redirect, stream, notFound } from "./plain-response";
+export { printRoutes } from "./print-routes";
+export { middleware, defineMiddleware } from "./middleware";
+export { testHandler } from "./test-handler";
+export { getApp } from "./get-app";
+
+// mail
+export { outbox, sendMail } from "./mail";
+
+// database
+export { getDatabase } from "./get-database";
+export { isolate } from "./isolate";
+export { migrate } from "./migrate";
+
+// tasks
+export { perform } from "./task/task";
+export { getWorker } from "./get-worker";
+export { defineDatabaseTask } from "./task/database";
+export { defineInmemoryTask } from "./task/inmemory";
+
+// unstable
+import { adminRouter } from "./admin/admin";
+export const unstable_admin = adminRouter;
+```
