@@ -28,7 +28,7 @@ importers:
     dependencies:
       '@inquirer/prompts':
         specifier: ^5.0.4
-        version: 5.3.0
+        version: 5.3.2
       '@remix-run/web-fetch':
         specifier: ^4.4.2
         version: 4.4.2
@@ -1086,16 +1086,16 @@ packages:
     resolution: {integrity: sha512-/u6DM/fDHXoBWyA+9aRhghkeo5smE7wO9k4E2UoJbgiRCkt3JjBEuBqLOJNrz8E16M0ez4UM1vd5cXrmICHW+A==}
     engines: {node: '>=18'}
 
-  '@inquirer/prompts@5.3.0':
-    resolution: {integrity: sha512-r12wsB23AFTEirWJY8TyMItyfgVB/lk8Hu8gwgOW2+4U5pkiBmUE3mkucz6BRQ2jbvg4jwpbyGSmJ5T/Wo2BRQ==}
+  '@inquirer/prompts@5.3.2':
+    resolution: {integrity: sha512-8Jv+6rbY98ilFAZMYYfetu6XGXF/ZU44i5Z6Jx4t0xmwDh/AihdBV/FgetzDDZZMv5AMW1MT35LI0FiS55LoXw==}
     engines: {node: '>=18'}
 
   '@inquirer/rawlist@2.1.17':
     resolution: {integrity: sha512-RFrw34xU5aVlMA3ZJCaeKGxYjhu3j4i46O2GMmaRRGeLObCRM1yOKQOsRclSTzjd4A7+M5QleR2iuW/68J9Kwg==}
     engines: {node: '>=18'}
 
-  '@inquirer/search@1.0.0':
-    resolution: {integrity: sha512-hDx//88Ry8UZSiIbJKLhZ93yVETrziKGhhsRr9x3zovqRcjBoNroVpSxTz4wVWfeaq7UWeRCSW5LfoKep5fiiw==}
+  '@inquirer/search@1.0.2':
+    resolution: {integrity: sha512-E/JD3MeJwJeNilOnRDmHGnlUksyVqrTQEUNqkRpioj8J0sVxW7+pFRHBM2coFsiCpvI4XKRRhWsai5VP8rrfrQ==}
     engines: {node: '>=18'}
 
   '@inquirer/select@2.4.2':
@@ -4231,7 +4231,7 @@ snapshots:
       '@inquirer/type': 1.5.1
       ansi-escapes: 4.3.2
 
-  '@inquirer/prompts@5.3.0':
+  '@inquirer/prompts@5.3.2':
     dependencies:
       '@inquirer/checkbox': 2.4.2
       '@inquirer/confirm': 3.1.17
@@ -4241,7 +4241,7 @@ snapshots:
       '@inquirer/number': 1.0.5
       '@inquirer/password': 2.1.17
       '@inquirer/rawlist': 2.1.17
-      '@inquirer/search': 1.0.0
+      '@inquirer/search': 1.0.2
       '@inquirer/select': 2.4.2
 
   '@inquirer/rawlist@2.1.17':
@@ -4250,7 +4250,7 @@ snapshots:
       '@inquirer/type': 1.5.1
       yoctocolors-cjs: 2.1.2
 
-  '@inquirer/search@1.0.0':
+  '@inquirer/search@1.0.2':
     dependencies:
       '@inquirer/core': 9.0.5
       '@inquirer/figures': 1.0.5
