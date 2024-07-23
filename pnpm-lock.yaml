@@ -214,7 +214,7 @@ importers:
         version: 1.8.3
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)
+        version: 4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)
       '@types/better-sqlite3':
         specifier: ^7.6.10
         version: 7.6.11
@@ -320,7 +320,7 @@ importers:
         version: 1.8.3
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)
+        version: 4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)
       '@tailwindcss/typography':
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.6)
@@ -1137,6 +1137,13 @@ packages:
     hasBin: true
     peerDependencies:
       '@kitajs/html': ^4.1.0
+      typescript: ^5.3.3
+
+  '@kitajs/ts-html-plugin@4.0.2':
+    resolution: {integrity: sha512-uMVk/OdLJM8pzDVcbXnHNkZGRNZc9O8tx9Iw29s4UVi55i+fFwVPHBMtBuC+iPR2ecsihxOlo0W4PpvlO/cfKA==}
+    hasBin: true
+    peerDependencies:
+      '@kitajs/html': ^4.2.0
       typescript: ^5.3.3
 
   '@manypkg/find-root@1.1.0':
@@ -4312,7 +4319,7 @@ snapshots:
       typescript: 5.5.3
       yargs: 17.7.2
 
-  '@kitajs/ts-html-plugin@4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)':
+  '@kitajs/ts-html-plugin@4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)':
     dependencies:
       '@kitajs/html': 4.1.0
       chalk: 4.1.2
