@@ -16,13 +16,13 @@ importers:
         version: 2.27.7
       knip:
         specifier: ^5.25.1
-        version: 5.26.0(@types/node@20.14.11)(typescript@5.5.3)
+        version: 5.26.0(@types/node@20.14.11)(typescript@5.5.4)
       turbo:
         specifier: 2.0.9
         version: 2.0.9
       typescript:
         specifier: ^5.3.3
-        version: 5.5.3
+        version: 5.5.4
 
   create-plainweb:
     dependencies:
@@ -86,13 +86,13 @@ importers:
         version: 2.0.4
       tsup:
         specifier: ^8.0.2
-        version: 8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.3)(yaml@2.4.5)
+        version: 8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5)
       tsx:
         specifier: ^4.16.2
         version: 4.16.2
       typescript:
         specifier: ^5.3.3
-        version: 5.5.3
+        version: 5.5.4
 
   plainweb:
     dependencies:
@@ -153,16 +153,16 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.2
-        version: 8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.3)(yaml@2.4.5)
+        version: 8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5)
       tsx:
         specifier: ^4.16.2
         version: 4.16.2
       typescript:
         specifier: ^5.3.3
-        version: 5.5.3
+        version: 5.5.4
       vite-tsconfig-paths:
         specifier: ^4.3.2
-        version: 4.3.2(typescript@5.5.3)(vite@5.3.4(@types/node@20.14.11))
+        version: 4.3.2(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.11))
       vitest:
         specifier: ^2.0.2
         version: 2.0.4(@types/node@20.14.11)
@@ -214,7 +214,7 @@ importers:
         version: 1.8.3
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.3)
+        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)
       '@types/better-sqlite3':
         specifier: ^7.6.10
         version: 7.6.11
@@ -244,7 +244,7 @@ importers:
         version: 3.4.6
       typescript:
         specifier: ^5.3.3
-        version: 5.5.3
+        version: 5.5.4
       vitest:
         specifier: ^2.0.1
         version: 2.0.4(@types/node@20.14.11)
@@ -320,7 +320,7 @@ importers:
         version: 1.8.3
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.3)
+        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)
       '@tailwindcss/typography':
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.6)
@@ -365,7 +365,7 @@ importers:
         version: 3.4.6
       typescript:
         specifier: ^5.3.3
-        version: 5.5.3
+        version: 5.5.4
       vitest:
         specifier: ^2.0.1
         version: 2.0.4(@types/node@20.14.11)
@@ -3469,6 +3469,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@5.5.4:
+    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
@@ -4305,6 +4310,14 @@ snapshots:
       chalk: 4.1.2
       tslib: 2.6.3
       typescript: 5.5.3
+      yargs: 17.7.2
+
+  '@kitajs/ts-html-plugin@4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)':
+    dependencies:
+      '@kitajs/html': 4.1.0
+      chalk: 4.1.2
+      tslib: 2.6.3
+      typescript: 5.5.4
       yargs: 17.7.2
 
   '@manypkg/find-root@1.1.0':
@@ -5680,7 +5693,7 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  knip@5.26.0(@types/node@20.14.11)(typescript@5.5.3):
+  knip@5.26.0(@types/node@20.14.11)(typescript@5.5.4):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@snyk/github-codeowners': 1.1.0
@@ -5697,7 +5710,7 @@ snapshots:
       smol-toml: 1.3.0
       strip-json-comments: 5.0.1
       summary: 2.1.0
-      typescript: 5.5.3
+      typescript: 5.5.4
       zod: 3.23.8
       zod-validation-error: 3.3.0(zod@3.23.8)
 
@@ -6646,13 +6659,13 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  tsconfck@3.1.1(typescript@5.5.3):
+  tsconfck@3.1.1(typescript@5.5.4):
     optionalDependencies:
-      typescript: 5.5.3
+      typescript: 5.5.4
 
   tslib@2.6.3: {}
 
-  tsup@8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.3)(yaml@2.4.5):
+  tsup@8.2.2(jiti@1.21.6)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -6672,7 +6685,7 @@ snapshots:
       tree-kill: 1.2.2
     optionalDependencies:
       postcss: 8.4.39
-      typescript: 5.5.3
+      typescript: 5.5.4
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -6730,6 +6743,8 @@ snapshots:
 
   typescript@5.5.3: {}
 
+  typescript@5.5.4: {}
+
   uc.micro@2.1.0: {}
 
   undici-types@5.26.5: {}
@@ -6775,11 +6790,11 @@ snapshots:
       - supports-color
       - terser
 
-  vite-tsconfig-paths@4.3.2(typescript@5.5.3)(vite@5.3.4(@types/node@20.14.11)):
+  vite-tsconfig-paths@4.3.2(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.11)):
     dependencies:
       debug: 4.3.5
       globrex: 0.1.2
-      tsconfck: 3.1.1(typescript@5.5.3)
+      tsconfck: 3.1.1(typescript@5.5.4)
     optionalDependencies:
       vite: 5.3.4(@types/node@20.14.11)
     transitivePeerDependencies:
