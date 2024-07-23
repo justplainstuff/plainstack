@@ -298,7 +298,7 @@ importers:
         version: link:../plainweb
       shiki:
         specifier: ^1.7.0
-        version: 1.11.0
+        version: 1.11.1
       slugify:
         specifier: ^1.6.6
         version: 1.6.6
@@ -1264,8 +1264,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@shikijs/core@1.11.0':
-    resolution: {integrity: sha512-VbEhDAhT/2ozO0TPr5/ZQBO/NWLqtk4ZiBf6NplYpF38mKjNfMMied5fNEfIfYfN+cdKvhDB4VMcKvG/g9c3zg==}
+  '@shikijs/core@1.11.1':
+    resolution: {integrity: sha512-Qsn8h15SWgv5TDRoDmiHNzdQO2BxDe86Yq6vIHf5T0cCvmfmccJKIzHtep8bQO9HMBZYCtCBzaXdd1MnxZBPSg==}
 
   '@snyk/github-codeowners@1.1.0':
     resolution: {integrity: sha512-lGFf08pbkEac0NYgVf4hdANpAgApRjNByLXB+WBip3qj1iendOIyAwP2GKkKbQMNVy2r1xxDf0ssfWscoiC+Vw==}
@@ -3122,8 +3122,8 @@ packages:
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
-  shiki@1.11.0:
-    resolution: {integrity: sha512-NqH/O1zRHvnuk/WfSL6b7+DtI7/kkMMSQGlZhm9DyzSU+SoIHhaw/fBZMr+zp9R8KjdIzkk3JKSC6hORuGDyng==}
+  shiki@1.11.1:
+    resolution: {integrity: sha512-VHD3Q0EBXaaa245jqayBe5zQyMQUdXBFjmGr9MpDaDpAKRMYn7Ff00DM5MLk26UyKjnml3yQ0O2HNX7PtYVNFQ==}
 
   side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
@@ -4433,7 +4433,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.19.0':
     optional: true
 
-  '@shikijs/core@1.11.0':
+  '@shikijs/core@1.11.1':
     dependencies:
       '@types/hast': 3.0.4
 
@@ -6364,9 +6364,9 @@ snapshots:
 
   shell-quote@1.8.1: {}
 
-  shiki@1.11.0:
+  shiki@1.11.1:
     dependencies:
-      '@shikijs/core': 1.11.0
+      '@shikijs/core': 1.11.1
       '@types/hast': 3.0.4
 
   side-channel@1.0.6:
