@@ -192,7 +192,7 @@ importers:
         version: 4.19.2
       express-rate-limit:
         specifier: ^7.3.1
-        version: 7.3.1(express@4.19.2)
+        version: 7.4.0(express@4.19.2)
       helmet:
         specifier: ^7.1.0
         version: 7.1.0
@@ -280,7 +280,7 @@ importers:
         version: 1.2.1
       express-rate-limit:
         specifier: ^7.3.1
-        version: 7.3.1(express@4.19.2)
+        version: 7.4.0(express@4.19.2)
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -2084,8 +2084,8 @@ packages:
     resolution: {integrity: sha512-7FyKxABfkRC0t6B6btxlAcFr0WrpPAL12MFAGhAxoIi/OyphxVQzVmyuWbcNxEApBmNzzgt2khjlqj/3wyHMMA==}
     engines: {node: '>=18'}
 
-  express-rate-limit@7.3.1:
-    resolution: {integrity: sha512-BbaryvkY4wEgDqLgD18/NSy2lDO2jTuT9Y8c1Mpx0X63Yz0sYd5zN6KPe7UvpuSVvV33T6RaE1o1IVZQjHMYgw==}
+  express-rate-limit@7.4.0:
+    resolution: {integrity: sha512-v1204w3cXu5gCDmAvgvzI6qjzZzoMWKnyVDk3ACgfswTQLYiGen+r8w0VnXnGMmzEN/g8fwIQ4JrFFd4ZP6ssg==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: 4 || 5 || ^5.0.0-beta.1
@@ -5291,7 +5291,7 @@ snapshots:
 
   express-list-endpoints@7.1.0: {}
 
-  express-rate-limit@7.3.1(express@4.19.2):
+  express-rate-limit@7.4.0(express@4.19.2):
     dependencies:
       express: 4.19.2
 
