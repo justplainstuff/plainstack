@@ -101,7 +101,7 @@ importers:
         version: 4.1.0
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.3)
+        version: 4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
@@ -252,8 +252,8 @@ importers:
   web:
     dependencies:
       '@kitajs/html':
-        specifier: 4.1.0
-        version: 4.1.0
+        specifier: 4.2.0
+        version: 4.2.0
       better-sqlite3:
         specifier: ^11.0.0
         version: 11.1.2
@@ -320,7 +320,7 @@ importers:
         version: 1.8.3
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)
+        version: 4.0.2(@kitajs/html@4.2.0)(typescript@5.5.4)
       '@tailwindcss/typography':
         specifier: ^0.5.13
         version: 0.5.13(tailwindcss@3.4.6)
@@ -3478,11 +3478,6 @@ packages:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
 
-  typescript@5.5.3:
-    resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
   typescript@5.5.4:
     resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
     engines: {node: '>=14.17'}
@@ -4322,15 +4317,7 @@ snapshots:
     dependencies:
       csstype: 3.1.3
 
-  '@kitajs/ts-html-plugin@4.0.1(@kitajs/html@4.1.0)(typescript@5.5.3)':
-    dependencies:
-      '@kitajs/html': 4.1.0
-      chalk: 4.1.2
-      tslib: 2.6.3
-      typescript: 5.5.3
-      yargs: 17.7.2
-
-  '@kitajs/ts-html-plugin@4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)':
+  '@kitajs/ts-html-plugin@4.0.1(@kitajs/html@4.1.0)(typescript@5.5.4)':
     dependencies:
       '@kitajs/html': 4.1.0
       chalk: 4.1.2
@@ -6770,8 +6757,6 @@ snapshots:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
-
-  typescript@5.5.3: {}
 
   typescript@5.5.4: {}
 
