@@ -15,7 +15,7 @@
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.3",
     "knip": "^5.25.1",
-    "turbo": "2.0.9",
+    "turbo": "2.0.10",
     "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@9.5.0",
