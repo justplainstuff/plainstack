@@ -20,7 +20,7 @@
     "fly": "fly deploy .. --config web/fly.toml --dockerfile web/Dockerfile"
   },
   "dependencies": {
-    "@kitajs/html": "4.2.0",
+    "@kitajs/html": "4.2.1",
     "better-sqlite3": "^11.0.0",
     "compression": "^1.7.4",
     "dotenv": "^16.4.5",
