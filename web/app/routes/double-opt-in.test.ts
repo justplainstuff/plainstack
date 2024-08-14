@@ -1,17 +1,19 @@
 import { database } from "app/config/database";
-import { contacts } from "app/config/schema";
 import { GET } from "app/routes/double-opt-in";
+import { contacts } from "app/schema";
 import { eq } from "drizzle-orm";
 import { createRequest } from "node-mocks-http";
-import { isolate, migrate, outbox, testHandler } from "plainweb";
+import { isolate, migrate, outbox, randomId, testHandler } from "plainweb";
+import config from "plainweb.config";
 import { beforeAll, describe, expect, test } from "vitest";
 
 describe("double opt in", () => {
-  beforeAll(async () => await migrate(database));
+  beforeAll(async () => await migrate(config));
 
   test("send email with correct token and email", async () => {
     await isolate(database, async (tx) => {
       await tx.insert(contacts).values({
+        id: randomId("con"),
         email: "walter@example.org",
         created: Date.now(),
         doubleOptInSent: Date.now(),
@@ -35,6 +37,7 @@ describe("double opt in", () => {
   test("send email with incorrect token", async () => {
     await isolate(database, async (tx) => {
       await tx.insert(contacts).values({
+        id: randomId("con"),
         email: "walter@example.org",
         created: Date.now(),
         doubleOptInToken: "123",

@@ -4,7 +4,13 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["**/.git/**", "**/node_modules/**", "**/dist/**", "**/.turbo/**"]
+    "ignore": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.turbo/**",
+      "**/coverage/**"
+    ]
   },
   "linter": {
     "enabled": true,

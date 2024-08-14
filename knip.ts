@@ -12,6 +12,7 @@ const config: KnipConfig = {
     },
     plainweb: {
       entry: ["src/index.ts", "bin/**/*.ts"],
+      ignoreDependencies: ["@vitest/coverage-v8", "dotenv", "zod"],
     },
     "create-plainweb": {
       entry: ["src/cli.ts"],

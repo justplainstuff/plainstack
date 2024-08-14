@@ -14,6 +14,7 @@ export default defineConfig({
   target: "node20",
   format: ["cjs"],
   entry: ["src/index.ts"],
+  external: ["esbuild", "dotenv", "drizzle-orm", "zod", "tsx", "@kitajs/html"],
   env: {
     ADMIN_STYLES: loadStyles(),
   },

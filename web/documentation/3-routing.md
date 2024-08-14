@@ -36,3 +36,23 @@ The routing rules follow the Next.js Pages Router conventions.
 | `routes/posts/[...slug]` | `/posts/:slug(*)` | `/posts/hotels/italy` | `{slug: ["hotels", "italy"]}` |
 | `routes/users.test.ts`   | `-` (ignored)     | `-`                   |                               |
 | `routes/find-orders.ts`  | `-` (ignored)     | `-`                   |                               |
+
+## Serving HTTP Requests
+
+Following is the main entry point to your app:
+
+```typescript
+// app/cli/serve.ts
+import { getApp, log } from "plainweb";
+import config from "plainweb.config";
+
+async function serve() {
+  const app = await getApp(config);
+  app.listen(config.http.port);
+  log.info(`⚡️ http://localhost:${config.http.port}`);
+}
+
+serve();
+```
+
+`getApp()` returns an express app, which you can use to serve HTTP requests.

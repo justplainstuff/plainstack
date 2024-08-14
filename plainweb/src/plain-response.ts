@@ -1,8 +1,8 @@
 import "@kitajs/html";
 import { renderToStream } from "@kitajs/html/suspense";
 import type express from "express";
-import type { JSONSerializable } from ".";
 import type { FlashMessage } from "./flash-message";
+import type { JSONSerializable } from "./handler";
 
 export interface PlainResponse {
   _tag: "PlainResponse";
@@ -54,6 +54,7 @@ export async function sendPlainResponse(
   }
 }
 
+/** Return a HTML response with Content-Type set to text/html. */
 export function html(
   html: Promise<string> | string,
   opts?: { status?: number },
@@ -68,6 +69,10 @@ export function html(
   };
 }
 
+/**
+ * Stream a HTML response with Content-Type set to text/html.
+ * Cache-Control is set to no-transform to prevent caching.
+ */
 export function stream(
   htmlStream: (rid: number | string) => JSX.Element,
 ): PlainResponse {
@@ -81,20 +86,25 @@ export function stream(
   };
 }
 
+/**
+ * Redirect to a new path.
+ * The status code defaults to 302.
+ */
 export function redirect(
   path: string,
-  opts?: { message?: FlashMessage },
+  opts?: { message?: FlashMessage; status?: number },
 ): PlainResponse {
   // TODO store flash message
   return {
     _tag: "PlainResponse",
-    status: 302,
+    status: opts?.status ?? 302,
     headers: {
       Location: path,
     },
   };
 }
 
+/** Return a JSON response with Content-Type set to application/json. */
 export function json(
   json: JSONSerializable,
   opts?: { status?: number },
@@ -109,6 +119,7 @@ export function json(
   };
 }
 
+/** Return a 404 response. */
 export function notFound(): PlainResponse {
   return {
     _tag: "PlainResponse",

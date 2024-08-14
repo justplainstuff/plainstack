@@ -1,6 +1,9 @@
 import { database } from "app/config/database";
-import { sparks } from "app/config/schema";
-import WebSocket from "ws";
+import { sparks } from "app/schema";
+import { getLogger } from "plainweb";
+import { type Server, WebSocket } from "ws";
+
+const log = getLogger("confetti");
 
 interface ConfettiTrigger {
   id: string;
@@ -24,10 +27,7 @@ async function initializeTotalJoys() {
   totalJoys = found?.nr ?? 0;
 }
 
-async function broadcastConfettiTrigger(
-  wss: WebSocket.Server,
-  triggerId: string,
-) {
+async function broadcastConfettiTrigger(wss: Server, triggerId: string) {
   totalJoys++;
   await updateSparks();
   const message = JSON.stringify({
@@ -76,11 +76,11 @@ export async function getNrOfSparks() {
   return found?.nr ?? 0;
 }
 
-export async function listenWebsocket(wss: WebSocket.Server) {
+export async function listenWebsocket(wss: Server) {
   await initializeTotalJoys();
-  console.log("Listening for websocket connections");
+  log.info("listening for websocket connections");
   wss.on("connection", (ws: WebSocket) => {
-    console.log("New websocket connection");
+    log.info("new websocket connection");
     const id = Math.random().toString(36).substr(2, 9);
 
     // Send user ID to the client
@@ -100,7 +100,7 @@ export async function listenWebsocket(wss: WebSocket.Server) {
 
     ws.on("message", async (message: string) => {
       const data = JSON.parse(message);
-      console.log("Received websocket data", data);
+      log.info("Received websocket data", data);
       if (data.type === "confetti") {
         if (isRateLimited(id)) {
           ws.send(
@@ -122,7 +122,7 @@ export async function listenWebsocket(wss: WebSocket.Server) {
     });
 
     ws.on("close", () => {
-      console.log("Websocket connection closed");
+      log.info("Websocket connection closed");
       userRateLimits.delete(id); // Clean up rate limit data when connection closes
     });
   });

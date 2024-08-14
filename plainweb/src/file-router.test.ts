@@ -84,7 +84,6 @@ describe("expressRouter", () => {
     const router = expressRouter({
       loadedFileRoutes: routes,
       dir: "routes",
-      verbose: 3,
     });
 
     const app = express();

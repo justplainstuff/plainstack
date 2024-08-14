@@ -6,7 +6,7 @@ plainweb includes a simple, persistent task queue backed by SQLite. The web serv
 
 ## Setup
 
-### 1. Define the Tasks Table
+### 1. Tasks Table
 
 Add a `tasks` table to your database schema:
 
@@ -27,18 +27,20 @@ export const tasks = sqliteTable("tasks", {
 export type Task = typeof tasks.$inferSelect;
 ```
 
-### 2. Initialize the Task Worker
+### 2. Start Background Task Worker
 
-To start the task worker when running `pnpm start` and `pnpm dev`, call `runTasks` in your `app/cli/serve.ts` file:
+To start the task worker when running `pnpm start` and `pnpm dev`, call `getWorker()` to get an instance of you worker to start in your `app/cli/serve.ts` file:
 
 ```typescript
 // app/cli/serve.ts
-import { runTasks } from "plainweb";
-import { http } from "app/config/http";
+import { getWorker, log } from "plainweb";
+import config from "plainweb.config";
 
 async function serve() {
-  await runTasks("app/tasks"); // Initialize task worker
-  await http();
+  const worker = getWorker(config);
+  await worker.start(); // work all tasks in tasks directory
+  log.info("⚡️ background task worker started");
+  // rest of your code, starting http server, etc.
 }
 
 serve();
@@ -59,6 +61,7 @@ import { Contact, contacts } from "app/config/schema";
 import { sendDoubleOptInEmail } from "app/services/contacts";
 
 export default defineDatabaseTask<Contact>(database, {
+  name: __filename,
   batchSize: 5,
   async process({ data }) {
     await sendDoubleOptInEmail(database, data);
@@ -74,6 +77,7 @@ export default defineDatabaseTask<Contact>(database, {
 
 In this example:
 
+- `name` is the name of the task type, this has to be unique. Use `__filename` to get the filename of the current file.
 - `batchSize: 5` means that 5 tasks are pulled from the database at a time for concurrent processing.
 - `process` defines the main task logic.
 - `success` defines actions to take after successful task completion.
@@ -84,29 +88,16 @@ To enqueue a task, use the `perform` function:
 
 ```typescript
 // app/services/contacts.ts
-import { perform } from "plainweb";
+import type { Database } from "app/config/database";
 import doubleOptIn from "app/tasks/double-opt-in";
+import { perform } from "plainweb";
 
-export async function enqueueDoubleOptIn(contact: Contact) {
-  const contact = await database.query.contacts.findFirst({
-    where: eq(contacts.email, email),
-  });
+export async function createContact(database: Database, email: string) {
+  const contact = // create contact
   if (contact) {
-    await perform(doubleOptIn, contact);
+    await perform(doubleOptIn, contact); // enqueue task
   }
 }
 ```
 
-**Important:** Always `await` the `perform` function. This ensures the task is successfully enqueued before proceeding.
-
-## Best Practices
-
-1. **Error Handling**: Implement robust error handling in your task definitions. The `defineDatabaseTask` function also accepts an optional `error` callback for handling task failures.
-
-2. **Idempotency**: Design your tasks to be idempotent whenever possible. This ensures that if a task is accidentally run multiple times, it doesn't cause unintended side effects.
-
-3. **Monitoring**: Implement logging or monitoring for your tasks to track their execution and any potential issues.
-
-4. **Task Priorities**: If you need to prioritize certain tasks, consider implementing a priority system using additional fields in your tasks table.
-
-5. **Long-running Tasks**: For tasks that might take a long time to complete, consider implementing a timeout mechanism or breaking them into smaller subtasks.
+**Important:** Always `await` the `perform` function. This ensures the task is successfully enqueued before proceeding. It doesn't mean that the task has been processed yet!

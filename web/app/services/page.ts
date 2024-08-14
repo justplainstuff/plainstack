@@ -2,7 +2,10 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { env } from "app/config/env";
 import MarkdownIt from "markdown-it";
+import { getLogger } from "plainweb";
 import slugify from "slugify";
+
+const log = getLogger("page");
 
 type Page = {
   title: string;
@@ -20,7 +23,10 @@ export function getHeadingId(heading: string) {
   return idPrefix + slugify(heading, { lower: true });
 }
 
+let renderer: MarkdownIt;
+
 export async function createMarkdownRenderer() {
+  if (renderer) return renderer;
   const { bundledLanguages, getHighlighter } = await import("shiki");
 
   const highlighter = await getHighlighter({
@@ -42,8 +48,8 @@ export async function createMarkdownRenderer() {
     permalinkSymbol: "#",
     slugify: (s: string) => getHeadingId(s),
   });
-
-  return md;
+  renderer = md;
+  return renderer;
 }
 
 export async function renderPage(
@@ -100,7 +106,7 @@ export async function renderPage(
 
 export async function getDocumentationPages(): Promise<Page[]> {
   if (cache.length && env.NODE_ENV === "production") {
-    console.log("Using cached documentation pages");
+    log.info("Using cached documentation pages");
     return cache;
   }
   const docsDirectory = join(process.cwd(), "documentation");

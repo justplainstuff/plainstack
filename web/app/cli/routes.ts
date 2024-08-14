@@ -1,11 +1,4 @@
-import { app } from "app/config/http";
 import { printRoutes } from "plainweb";
+import config from "plainweb.config";
 
-/**
- * Print all express routes to the console.
- */
-async function routes() {
-  printRoutes(await app());
-}
-
-void routes();
+void printRoutes(config);

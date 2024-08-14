@@ -1,14 +1,17 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import express, { type Router } from "express";
+import { getLogger } from "log";
 import { type Handler, handleResponse } from "./handler";
+
+const log = getLogger("router");
 
 interface FileRouteHandler {
   GET?: Handler;
   POST?: Handler;
 }
 
-export type FileRoute = { filePath: string; routePath: string };
+type FileRoute = { filePath: string; routePath: string };
 
 export type LoadedFileRoute = {
   filePath: string;
@@ -19,7 +22,6 @@ export type LoadedFileRoute = {
 async function readRoutesFromFs(opts: {
   baseDir: string;
   ignorePatterns?: string[];
-  verbose?: number;
   currentDir?: string;
 }): Promise<FileRoute[]> {
   const { baseDir, currentDir } = opts;
@@ -29,8 +31,8 @@ async function readRoutesFromFs(opts: {
   try {
     files = await fs.readdir(currentDir || baseDir);
   } catch (e) {
-    console.error(`[router] Error reading directory: ${currentDir || baseDir}`);
-    console.error("[router] see the error below");
+    log.error(`error reading directory: ${currentDir || baseDir}`);
+    log.error("see the error below");
     throw e;
   }
 
@@ -39,7 +41,7 @@ async function readRoutesFromFs(opts: {
     const stat = await fs.stat(fullFilePath);
 
     if (stat.isDirectory()) {
-      opts.verbose && console.log(`[router] Found directory: ${fullFilePath}`);
+      log.debug(`found directory: ${fullFilePath}`);
       const subRoutes = await readRoutesFromFs({
         baseDir,
         currentDir: fullFilePath,
@@ -47,8 +49,7 @@ async function readRoutesFromFs(opts: {
       routes.push(...subRoutes);
     } else if (stat.isFile() && file.endsWith(".tsx")) {
       const relativePath = path.relative(baseDir, fullFilePath);
-      opts.verbose &&
-        console.log(`[router] Discovered file route: ${relativePath}`);
+      log.debug(`discovered file route: ${relativePath}`);
       routes.push({ filePath: fullFilePath, routePath: relativePath });
     }
   }
@@ -70,18 +71,14 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
         : (module as FileRouteHandler);
       if (handler?.GET) {
         if (typeof handler.GET !== "function") {
-          throw new Error(
-            `[router] GET export in route ${filePath} is not a function`,
-          );
+          throw new Error(`GET export in route ${filePath} is not a function`);
         }
         loadedFileRoute = { filePath, GET: handler.GET };
       }
 
       if (handler?.POST) {
         if (typeof handler.POST !== "function") {
-          throw new Error(
-            `[router] POST export in route ${filePath} is not a function`,
-          );
+          throw new Error(`POST export in route ${filePath} is not a function`);
         }
         if (loadedFileRoute) {
           loadedFileRoute.POST = handler.POST;
@@ -91,16 +88,14 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
       }
 
       if (!loadedFileRoute) {
-        console.error(
-          `[router] No exported GET or POST functions found in ${filePath}`,
-        );
+        log.error(`no exported GET or POST functions found in ${filePath}`);
       } else {
         loadedRoutes.push(loadedFileRoute);
       }
     } catch (e) {
-      console.error(e);
+      log.error(e);
       throw new Error(
-        `[router] Double check the route at ${filePath}. Make sure to export a GET or POST function.`,
+        `double check the route at ${filePath}. Make sure to export a GET or POST function.`,
       );
     }
   }
@@ -111,11 +106,9 @@ async function loadFileRoutes(routes: FileRoute[]): Promise<LoadedFileRoute[]> {
 export function getExpressRoutePath({
   dir,
   filePath,
-  verbose = 0,
 }: {
   dir: string;
   filePath: string;
-  verbose?: number;
 }): string {
   if (filePath === `${dir}/index.tsx`) return "/";
   let relativeFilePath = filePath.replace(dir, "");
@@ -137,21 +130,16 @@ export function getExpressRoutePath({
       return part;
     })
     .join("/");
-  verbose > 2 &&
-    console.log(
-      `[router] with dir ${dir} mapping ${relativeFilePath} -> ${expressPath}`,
-    );
+  log.debug(`"${dir}": ${relativeFilePath} -> ${expressPath}`);
   return expressPath;
 }
 
 export function expressRouter({
   loadedFileRoutes,
   dir,
-  verbose = 0,
 }: {
   loadedFileRoutes: LoadedFileRoute[];
   dir: string;
-  verbose?: number;
 }): Router {
   const router = express.Router();
 
@@ -159,7 +147,6 @@ export function expressRouter({
     const routePath = getExpressRoutePath({
       dir,
       filePath: route.filePath,
-      verbose,
     });
     if (route.GET) {
       router.get(routePath, async (req, res, next) => {
@@ -196,16 +183,17 @@ type FileRouterOpts = {
   ignorePatterns?: string[];
   fileRoutes?: FileRoute[];
   loadedFileRoutes?: LoadedFileRoute[];
-  verbose?: number;
 };
 
-export async function fileRouter(opts: FileRouterOpts): Promise<Router> {
-  const dir = path.resolve(process.cwd(), opts.dir);
+/** Return an express router that serves files as routes form the given directory. */
+export async function fileRouter(
+  opts: FileRouterOpts,
+): Promise<express.RequestHandler> {
+  const dir = opts.dir;
   if (opts.loadedFileRoutes?.length) {
     return expressRouter({
       loadedFileRoutes: opts.loadedFileRoutes,
       dir,
-      verbose: opts.verbose,
     });
   }
   if (opts.fileRoutes?.length) {
@@ -213,14 +201,12 @@ export async function fileRouter(opts: FileRouterOpts): Promise<Router> {
     return expressRouter({
       loadedFileRoutes: loadedFileRoutes,
       dir,
-      verbose: opts.verbose,
     });
   }
   const fileRoutes = await readRoutesFromFs({
     baseDir: dir,
     ignorePatterns: opts.ignorePatterns,
-    verbose: opts.verbose,
   });
   const loadedFileRoutes = await loadFileRoutes(fileRoutes);
-  return expressRouter({ loadedFileRoutes, dir, verbose: opts.verbose });
+  return expressRouter({ loadedFileRoutes, dir });
 }

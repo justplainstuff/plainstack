@@ -9,7 +9,7 @@ function Message(props: PropsWithChildren) {
   return (
     <Layout>
       <div class="mx-auto max-w-4xl pb-24 py-10 sm:pb-32 px-8">
-        <h2 class="text-4xl font-bold tracking-tight text-neutral">
+        <h2 class="text-4xl font-bold tracking-tight text-base-content">
           {props.children}
         </h2>
       </div>

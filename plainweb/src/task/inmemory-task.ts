@@ -1,18 +1,17 @@
 import {
   type DefineTaskOpts,
-  type PersistedTask,
-  type Task,
-  type TaskStorage,
-  composePersistedTask,
-  defineTaskWithAdapter,
-} from "./task";
+  defineTaskWithStorageAdapter,
+} from "./define-task";
+import { type PersistedTask, createPersistedTask } from "./persisted-task";
+import type { Task } from "./task";
+import type { TaskStorage } from "./task-storage";
 
 // only used for testing
 export const inmemoryTasks = new Map<string, PersistedTask<unknown>>();
 
 const InmemoryAdapter: TaskStorage<unknown> = {
   async enqueue({ data, name }) {
-    const persistedTask = composePersistedTask({ data, name });
+    const persistedTask = createPersistedTask({ data, name });
     inmemoryTasks.set(persistedTask.id, persistedTask);
   },
   async fetch({ name, batchSize, maxRetries, retryIntervall }) {
@@ -43,8 +42,9 @@ const InmemoryAdapter: TaskStorage<unknown> = {
   },
 };
 
+/** Define an inmemory task, DOES NOT survive server restarts. */
 export function defineInmemoryTask<T>(opts: DefineTaskOpts<T>): Task<T> {
-  return defineTaskWithAdapter(
+  return defineTaskWithStorageAdapter(
     InmemoryAdapter,
     opts as DefineTaskOpts<unknown>,
   );

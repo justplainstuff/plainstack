@@ -8,15 +8,15 @@ Running `npx create-plainweb` will create a starter project with the following s
 │   ├── cli
 │   ├── components
 │   ├── config
-│   ├── env.ts
 │   ├── root.tsx
 │   ├── routes
+│   ├── schema.ts
 │   ├── services
 │   └── styles.css
-├── drizzle.config.ts
 ├── fly.toml
 ├── migrations
 ├── package.json
+├── plainweb.config.ts
 ├── public
 │   └── output.css
 ├── tailwind.config.ts
@@ -29,7 +29,7 @@ This directory contains the main application code and everything that doesn't ne
 
 ### `cli`
 
-One-off scripts that are aliased in `package.json`. This provides a low-overhead, simple convention for adding CLI entrypoints such as `pnpm db:gen`, `pnpm run start`, or `pnpm run dev`.
+One-off scripts that are aliased in `package.json`. This provides a low-overhead, simple convention for adding CLI entry points such as `pnpm db:gen`, `pnpm run start`, or `pnpm run dev`.
 
 ### `components`
 
@@ -51,6 +51,10 @@ The root layout used for all pages. It's a simple wrapper around the `<html>` ta
 
 plainweb uses file-based routing with a convention similar to Next.js Pages Router. Routes are defined in `.tsx` files and are converted to express routes at startup.
 
+### `schema.ts`
+
+Type-safe drizzle database schema definitions.
+
 ### `services`
 
 This directory is for your business logic. Often called `features` or `utils` in other frameworks, feel free to rename it as you see fit.
@@ -67,9 +71,48 @@ Defines background tasks that are stored in the simple SQLite-based task queue.
 
 Running `pnpm db:gen` creates new migration files in this directory. Use `pnpm db:apply` to apply all migrations stored here.
 
-## `drizzle.config.ts`
+## `plainweb.config.ts`
 
-Contains the drizzle-kit configuration for generating and running migrations.
+Contains the central plainweb configuration for the project.
+
+```typescript
+import { env } from "app/config/env";
+import middleware from "app/config/middleware";
+import * as schema from "app/schema";
+import { defineConfig } from "plainweb";
+
+export default defineConfig({
+  nodeEnv: env.NODE_ENV,
+  http: {
+    port: 3000,
+    redirects: {
+      "/docs/environmet-variables": "/docs/environment-variables",
+      "/docs": "/docs/getting-started",
+    },
+    staticPath: "/public",
+    middleware,
+  },
+  database: {
+    dbUrl: env.DB_URL,
+    testDbUrl: ":memory:",
+    schema: schema,
+    pragma: {
+      journal_mode: "WAL",
+    },
+  },
+  mail: {
+    default: {
+      host: env.SMTP_HOST,
+      port: 587,
+      secure: false,
+      auth: {
+        user: env.SMTP_USER,
+        pass: env.SMTP_PASS,
+      },
+    },
+  },
+});
+```
 
 ## `public`
 

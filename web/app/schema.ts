@@ -13,7 +13,8 @@ export const tasks = sqliteTable("tasks", {
 export type Task = typeof tasks.$inferSelect;
 
 export const contacts = sqliteTable("contacts", {
-  email: text("email").primaryKey(),
+  id: text("id").primaryKey(),
+  email: text("email").unique().notNull(),
   created: int("created").notNull(),
   doubleOptInSent: int("double_opt_in_sent"),
   doubleOptInConfirmed: int("double_opt_in_confirmed"),

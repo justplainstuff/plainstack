@@ -2,11 +2,11 @@ import express from "express";
 import supertest from "supertest";
 import { describe, test } from "vitest";
 import { expect } from "vitest";
-import { redirectWWW } from "./middleware";
+import { forceWWW } from "./middleware";
 
 function app() {
   const app = express();
-  app.use(redirectWWW);
+  app.use(forceWWW({ nodeEnv: "test" }));
   return app;
 }
 

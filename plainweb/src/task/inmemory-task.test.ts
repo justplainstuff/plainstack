@@ -1,32 +1,27 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { defineInmemoryTask, inmemoryTasks } from "./inmemory";
-import {
-  type PersistedTask,
-  type Task,
-  _runTasks,
-  composeStartableTask,
-  perform,
-} from "./task";
+import { getLogger } from "../log";
+import { defineInmemoryTask, inmemoryTasks } from "./inmemory-task";
+import type { PersistedTask } from "./persisted-task";
+import type { Task } from "./task";
+import { perform, workLoadedTasks } from "./work-tasks";
+
+const log = getLogger("test");
 
 async function processUntil(
   tasks: Task<unknown>[],
   {
     f,
     until = (i) => i.size === 0,
-    debug = false,
   }: {
     f: () => Promise<void>;
     until?: (inmemoryTasks: Map<string, PersistedTask<unknown>>) => boolean;
-    debug?: boolean;
   },
 ): Promise<void> {
-  const runnableTasks = tasks.map((task, idx) =>
-    composeStartableTask(task, `task-${idx}`, { debug: true }),
-  );
-  const timeouts = _runTasks(runnableTasks, { debug: true });
+  const runnableTasks = tasks;
+  const timeouts = workLoadedTasks(runnableTasks);
   await f();
   while (!until(inmemoryTasks)) {
-    debug && console.log(inmemoryTasks);
+    log.info(inmemoryTasks);
     await new Promise((resolve) => setTimeout(resolve, 1));
   }
   for (const timeout of Object.values(timeouts)) {
@@ -42,6 +37,7 @@ describe("inmemory task", () => {
   it("process task", async () => {
     let success = false;
     const task = defineInmemoryTask<{ doesItWork: boolean }>({
+      name: "task",
       process: async ({ data }) => {
         success = data.doesItWork;
       },
@@ -58,6 +54,7 @@ describe("inmemory task", () => {
   it("process 2 task instances", async () => {
     let total = 0;
     const task = defineInmemoryTask<{ add: number }>({
+      name: "task",
       process: async ({ data }) => {
         total = data.add + total;
       },
@@ -75,12 +72,14 @@ describe("inmemory task", () => {
   it("process 2 task instances with different tasks", async () => {
     let total = 0;
     const task1 = defineInmemoryTask<{ add: number }>({
+      name: "task1",
       process: async ({ data }) => {
         total = data.add + total;
       },
       pollIntervall: 1,
     });
     const task2 = defineInmemoryTask<{ add: number }>({
+      name: "task2",
       process: async ({ data }) => {
         total = data.add + total;
       },
@@ -98,13 +97,14 @@ describe("inmemory task", () => {
   it("process task with failure", async () => {
     let failure = false;
     const task = defineInmemoryTask<{ fail: boolean }>({
+      name: "task",
       process: async ({ data }) => {
         if (data.fail) {
           throw new Error("Task failed");
         }
       },
       failure: async () => {
-        console.log("Task failed");
+        log.info("Task failed");
         failure = true;
       },
       pollIntervall: 1,
@@ -124,6 +124,7 @@ describe("inmemory task", () => {
   it("process task with failure and retry", async () => {
     let tries = 0;
     const task = defineInmemoryTask({
+      name: "task",
       process: async () => {
         tries = tries + 1;
         if (tries === 6) return; // finally succeed
@@ -145,6 +146,7 @@ describe("inmemory task", () => {
   it("process task with batch size 2", async () => {
     let total = 0;
     const task = defineInmemoryTask<{ add: number }>({
+      name: "task",
       process: async ({ data }) => {
         total = data.add + total;
       },

@@ -1,10 +1,11 @@
 import { database } from "app/config/database";
 import { createUser } from "app/services/users";
 import { isolate, migrate } from "plainweb";
+import config from "plainweb.config";
 import { beforeAll, describe, expect, test } from "vitest";
 
 describe("users", async () => {
-  beforeAll(() => migrate(database));
+  beforeAll(() => migrate(config));
 
   test("createUser", async () => {
     await isolate(database, async (tx) => {

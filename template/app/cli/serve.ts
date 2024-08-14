@@ -1,12 +1,13 @@
-import { debug, env } from "app/config/env";
-import { app } from "app/config/http";
+import { getApp, getWorker, log } from "plainweb";
+import config from "plainweb.config";
 
-/**
- * Start the HTTP server.
- */
 async function serve() {
-  (await app()).listen(env.PORT);
-  debug && console.log(`⚡️ http://localhost:${env.PORT}`);
+  const worker = getWorker(config);
+  await worker.start();
+  log.info("⚡️ background task worker started");
+  const app = await getApp(config);
+  app.listen(config.http.port);
+  log.info(`⚡️ http://localhost:${config.http.port}`);
 }
 
 serve();

@@ -7,7 +7,7 @@ import {
   sendPlainResponse,
 } from "./plain-response";
 
-export interface HandlerArgs {
+interface HandlerArgs {
   req: express.Request;
   res: express.Response;
 }
@@ -25,7 +25,7 @@ export type Handler = (
 ) => Promise<ExpressResponse | PlainResponse | JSX.Element | JSONSerializable>;
 
 // escape hatch so users can use the express.Response API directly
-export type ExpressResponse = () => void;
+type ExpressResponse = () => void;
 
 export async function handleResponse(
   res: express.Response,

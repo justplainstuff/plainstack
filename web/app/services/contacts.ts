@@ -1,9 +1,12 @@
 import type { Database } from "app/config/database";
 import { env } from "app/config/env";
-import { type Contact, contacts } from "app/config/schema";
+import { type Contact, contacts } from "app/schema";
 import doubleOptIn from "app/tasks/double-opt-in";
 import { eq } from "drizzle-orm";
-import { perform, sendMail } from "plainweb";
+import { getLogger, perform, randomId, sendMail } from "plainweb";
+import config from "plainweb.config";
+
+const log = getLogger("contacts");
 
 function getBaseUrl() {
   return env.NODE_ENV === "production"
@@ -15,10 +18,10 @@ export async function sendDoubleOptInEmail(
   database: Database,
   contact: Contact,
 ) {
-  console.log(
+  log.info(
     `Sending double opt-in email to ${contact.email} using base url ${getBaseUrl()}`,
   );
-  await sendMail({
+  await sendMail(config.mail.default, {
     from: "josef@plainweb.dev",
     to: contact.email,
     subject: "plainweb.dev",
@@ -44,11 +47,16 @@ export async function createContact(database: Database, email: string) {
   if (!found) {
     const inserted = await database
       .insert(contacts)
-      .values({ email, created: Date.now(), doubleOptInToken: token })
+      .values({
+        id: randomId("con"),
+        email,
+        created: Date.now(),
+        doubleOptInToken: token,
+      })
       .returning();
     await perform(doubleOptIn, inserted[0]);
   } else {
-    console.log("Contact already exists, sending new email", found.email);
+    log.info("Contact already exists, sending new email", found.email);
     await perform(doubleOptIn, found);
   }
 }
@@ -72,7 +80,7 @@ export async function verifyDoubleOptIn(
     .update(contacts)
     .set({ doubleOptInConfirmed: Date.now() })
     .where(eq(contacts.email, email));
-  await sendMail({
+  await sendMail(config.mail.default, {
     from: "josef@plainweb.dev",
     to: email,
     subject: "plainweb.dev",

@@ -40,7 +40,7 @@ export const GET: Handler = async ({ req, res }) => {
       label: (
         <span class="flex justify-between items-center w-full">
           <span safe>{tableName}</span>
-          <span class="ml-2 text-xs text-neutral-content">{count}</span>
+          <span class="ml-2 text-xs text-base-content">{count}</span>
         </span>
       ),
     }),
