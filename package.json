@@ -12,7 +12,7 @@
     "manypkg": "manypkg check",
     "manypkg:fix": "manypkg fix",
     "check": "turbo build test && biome check --write . && pnpm knip && pnpm manypkg",
-    "changelog": "changelogen"
+    "changelog": "changelogen --output CHANGELOG.md"
   },
   "packageManager": "pnpm@9.5.0",
   "engineStrict": true,
@@ -20,7 +20,7 @@
     "pnpm": ">=9.5.0",
     "node": ">=20.10.0"
   },
-  "devDependencies": {
+  "dependencies": {
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.3",
     "@manypkg/cli": "^0.21.4",

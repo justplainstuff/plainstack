@@ -7,7 +7,7 @@ settings:
 importers:
 
   .:
-    devDependencies:
+    dependencies:
       '@biomejs/biome':
         specifier: ^1.8.3
         version: 1.8.3
@@ -137,11 +137,11 @@ importers:
         version: 3.13.1
     devDependencies:
       '@kitajs/html':
-        specifier: ^4.1.0
-        version: 4.1.0
+        specifier: ^4.2.1
+        version: 4.2.1
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
-        version: 4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)
+        version: 4.0.2(@kitajs/html@4.2.1)(typescript@5.5.4)
       '@types/better-sqlite3':
         specifier: ^7.6.10
         version: 7.6.11
@@ -209,7 +209,7 @@ importers:
   template:
     dependencies:
       '@kitajs/html':
-        specifier: ^4.1.0
+        specifier: ^4.2.1
         version: 4.2.1
       dotenv:
         specifier: ^16.4.5
@@ -258,7 +258,7 @@ importers:
   web:
     dependencies:
       '@kitajs/html':
-        specifier: 4.2.1
+        specifier: ^4.2.1
         version: 4.2.1
       better-sqlite3:
         specifier: ^11.0.0
@@ -1140,10 +1140,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
-
-  '@kitajs/html@4.1.0':
-    resolution: {integrity: sha512-uB2HnIR7SYgLkIYdtEyTLc08MzukKh9BXRW6Qs3U9vRHG/LMeTpzuPHrkssfPjFAXHAoM4TukxV+rggJ57l5+A==}
-    engines: {node: '>=12'}
 
   '@kitajs/html@4.2.1':
     resolution: {integrity: sha512-27hFMvMnzw9wp0Htn7zSSTkUOEbLfwSE4+tsOHh90pumVrSS3V3zg0LnazwNnvTOfQyKtpWCxNuWkmEMy+S4OA==}
@@ -4780,21 +4776,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@kitajs/html@4.1.0':
-    dependencies:
-      csstype: 3.1.3
-
   '@kitajs/html@4.2.1':
     dependencies:
       csstype: 3.1.3
-
-  '@kitajs/ts-html-plugin@4.0.2(@kitajs/html@4.1.0)(typescript@5.5.4)':
-    dependencies:
-      '@kitajs/html': 4.1.0
-      chalk: 4.1.2
-      tslib: 2.6.3
-      typescript: 5.5.4
-      yargs: 17.7.2
 
   '@kitajs/ts-html-plugin@4.0.2(@kitajs/html@4.2.1)(typescript@5.5.4)':
     dependencies:

@@ -1,5 +1,17 @@
 # create-plainweb
 
+## 0.0.27
+
+### Patch Changes
+
+- use latest version
+
+## 0.0.26
+
+### Patch Changes
+
+- use recent plainweb version
+
 ## 0.0.25
 
 ### Patch Changes

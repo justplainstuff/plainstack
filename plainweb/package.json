@@ -1,6 +1,6 @@
 {
   "name": "plainweb",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
   "type": "commonjs",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
   "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "peerDependencies": {
-    "@kitajs/html": "^4.1.0",
+    "@kitajs/html": "^4.2.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.32.0",
     "tsx": "^4.10.3",
@@ -44,7 +44,7 @@
     "winston": "^3.13.1"
   },
   "devDependencies": {
-    "@kitajs/html": "^4.1.0",
+    "@kitajs/html": "^4.2.1",
     "@kitajs/ts-html-plugin": "^4.0.1",
     "@types/better-sqlite3": "^7.6.10",
     "@types/errorhandler": "^1.5.3",

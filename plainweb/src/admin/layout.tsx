@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from "@kitajs/html";
 import { config } from "admin/config";
 
 function DatabaseIcon() {
@@ -122,7 +123,7 @@ export type NavigationItem = {
 };
 
 export function AdminLayout(
-  props: Html.PropsWithChildren<{
+  props: PropsWithChildren<{
     active: "database" | "media" | "users";
     path: string;
     subNavigation: NavigationItem[];

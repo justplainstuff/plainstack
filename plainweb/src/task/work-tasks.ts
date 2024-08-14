@@ -5,7 +5,7 @@ import type { ExpandedPlainwebConfig } from "config";
 import { directoryExists } from "plainweb-fs";
 import { type ErrorHandler, type Task, isTask, log } from "./task";
 
-export async function loadTasks(tasksDir: string): Promise<Task<unknown>[]> {
+async function loadTasks(tasksDir: string): Promise<Task<unknown>[]> {
   log.verbose(`loading tasks from ${tasksDir}`);
 
   if (!(await directoryExists(tasksDir))) {

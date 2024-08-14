@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.12
+
+### Patch Changes
+
+- centralized config architecture
+
 ## 0.0.11
 
 ### Patch Changes
