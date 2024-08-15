@@ -1,7 +1,7 @@
 import type { KnipConfig } from "knip";
 
 const config: KnipConfig = {
-  ignoreBinaries: ["routes"],
+  ignoreBinaries: ["routes", "serve"],
   workspaces: {
     web: {
       entry: ["app/cli/**/*.ts", "app/routes/**/*.tsx", "public/**/*.js"],

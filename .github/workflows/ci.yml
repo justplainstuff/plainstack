@@ -34,9 +34,17 @@ jobs:
           ADMIN_PASSWORD: test
           DB_URL: ":memory:"
       - name: create-plainweb local 🪨
-        run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug
+        run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug --no-install
         env:
           npm_config_user_agent: ${{ github.actor }}
+      - name: ensure local plainweb version
+        run: |
+          echo "  - \"my-plainweb-project\"" >> pnpm-workspace.yaml
+          sed -i 's/"plainweb": "[^"]*"/"plainweb": "workspace:*"/' my-plainweb-project/package.json
+      - name: install dependencies 🔧
+        run: |
+          cd my-plainweb-project 
+          pnpm install --frozen-lockfile=false
       - name: run build, test, and check 🚀
         run: |
           cd my-plainweb-project
@@ -47,7 +55,7 @@ jobs:
       - name: start server and check response 🌐
         run: |
           cd my-plainweb-project
-          pnpm start &
+          pnpm serve &
           sleep 5  # Wait for the server to start
           if curl -s http://localhost:3000 | grep -q "Let's go"; then
             echo "Server started successfully and contains 'Let's go'"
@@ -57,7 +65,7 @@ jobs:
           fi
           kill $!  # Stop the server
           rm -rf node_modules
-      - name: Upload project artifact
+      - name: upload project artifact
         uses: actions/upload-artifact@v4
         with:
           name: plainweb-project
@@ -101,10 +109,6 @@ jobs:
         with:
           node-version: "20.10.0"
           cache: "pnpm"
-      - name: install dependencies 🔧
-        run: pnpm install
-      - name: run check ✅
-        run: pnpm check
       - name: create plainweb project 🪨
         run: pnp dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
         env:
@@ -119,7 +123,7 @@ jobs:
       - name: start server and check response 🌐
         run: |
           cd my-plainweb-project
-          pnpm start &
+          pnpm serve &
           sleep 5  # Wait for the server to start
           if curl -s http://localhost:3000 | grep -q "Let's go"; then
             echo "Server started successfully and contains 'Let's go'"
@@ -129,8 +133,3 @@ jobs:
           fi
           kill $!  # Stop the server
           rm -rf node_modules
-      - name: Upload project artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: plainweb-project
-          path: my-plainweb-project

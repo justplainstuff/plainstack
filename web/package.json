@@ -13,7 +13,7 @@
     "tw": "tailwindcss -i ./app/styles.css -o ./public/output.css --minify",
     "tw:dev": "tailwindcss -i ./app/styles.css -o ./public/output.css --watch",
     "build": "tsc --noEmit && pnpm tw",
-    "serve": "pnpm db:apply && pnpm serve",
+    "serve": "pnpm db:apply && tsx app/cli/serve.ts",
     "check": "biome check . && xss-scan",
     "fix": "biome check --fix .",
     "fly": "fly deploy .. --config web/fly.toml --dockerfile web/Dockerfile"

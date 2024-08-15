@@ -30,10 +30,8 @@ These are the most important commands for development:
 
 - `pnpm run dev` runs the development server in watch mode
 - `pnpm run test` runs tests with the built-in Node test runner (Node 22 is recommended)
-- `pnpm run db:push` pushes the `schema.ts` to the database without going through the migration process, useful for development
 - `pnpm run db:gen` generates the migration files
 - `pnpm run db:apply` applies the migrations
-- `pnpm run db:studio` starts drizzle studio, a GUI for managing the database
 - `pnpm run build` type checks your app and minifies the CSS
 - `pnpm run routes` prints all express routes to the console
 - `pnpm run check` runs the linter, formatter and scans .tsx files for cross-site scripting
