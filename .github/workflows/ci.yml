@@ -26,7 +26,12 @@ jobs:
       - name: run check ✅
         run: pnpm check
         env:
-          PORT: 3000
+          SMTP_HOST: localhost
+          SMTP_USER: test
+          SMTP_PASS: test
+          CF_TURNSTILE_SECRET: test
+          CF_TURNSTILE_SITEKEY: test
+          ADMIN_PASSWORD: test
           DB_URL: ":memory:"
       - name: create plainweb project 🪨
         run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug
