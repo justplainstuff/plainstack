@@ -6,12 +6,12 @@ import { defineConfig } from "plainweb";
 export default defineConfig({
   nodeEnv: env.NODE_ENV,
   http: {
-    port: 3000,
+    port: env.PORT ?? 3000,
     staticPath: "/public",
     middleware,
   },
   database: {
-    dbUrl: env.DB_URL,
+    dbUrl: env.DB_URL ?? "db.sqlite3",
     schema: schema,
     pragma: {
       journal_mode: "WAL",

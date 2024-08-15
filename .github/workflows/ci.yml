@@ -26,7 +26,7 @@ jobs:
       - name: run check ✅
         run: pnpm check
         env:
-          NODE_ENV: test
+          PORT: 3000
           DB_URL: ":memory:"
       - name: create plainweb project 🪨
         run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug
