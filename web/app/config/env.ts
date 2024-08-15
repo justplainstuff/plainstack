@@ -6,11 +6,11 @@ dotenv.config({ path: ".env.test" });
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]),
-  PORT: z.coerce.number().optional(),
+  PORT: z.coerce.number().default(3000),
   LOG_LEVEL: z
     .enum(["silly", "debug", "verbose", "http", "info", "warn", "error"])
-    .optional(),
-  DB_URL: z.string().optional(),
+    .default("info"),
+  DB_URL: z.string(),
   SMTP_HOST: z.string(),
   SMTP_USER: z.string(),
   SMTP_PASS: z.string(),

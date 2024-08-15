@@ -2,9 +2,7 @@
   "name": "create-plainweb",
   "version": "0.0.28",
   "description": "Create a new plainweb.dev project",
-  "files": [
-    "dist/"
-  ],
+  "files": ["dist/"],
   "bin": {
     "create-plainweb": "dist/cli.js"
   },

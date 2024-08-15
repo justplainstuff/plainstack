@@ -29,15 +29,12 @@ type Config = ExpandedPlainwebConfig<Record<string, unknown>>;
 function flyHeaders(): express.RequestHandler {
   return function flyHeaders(req, res, next) {
     if (process.env.FLY_APP_NAME == null) return next();
-    log.info("this is a fly app, setting fly headers");
-
+    log.debug("setting fly headers");
     req.app.set("trust proxy", true);
-
     preferHeader(req, "Fly-Client-IP", "X-Forwarded-For");
     preferHeader(req, "Fly-Forwarded-Port", "X-Forwarded-Port");
     preferHeader(req, "Fly-Forwarded-Proto", "X-Forwarded-Protocol");
     preferHeader(req, "Fly-Forwarded-Ssl", "X-Forwarded-Ssl");
-
     return next();
   };
 }
@@ -171,7 +168,7 @@ function database<T extends Record<string, unknown>>({
   database: BetterSQLite3Database<T>;
 }): express.RequestHandler {
   return (req, res, next) => {
-    log.info("attach database to request");
+    log.debug("attach database to request");
     res.locals.database = database;
     next();
   };

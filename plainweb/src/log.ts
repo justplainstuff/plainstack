@@ -30,6 +30,7 @@ const consoleFormat = winston.format.combine(
   winston.format.timestamp({
     format: "hh:mm:ss.SSS A",
   }),
+  winston.format.splat(),
   paddingFormat,
   printFormat,
 );

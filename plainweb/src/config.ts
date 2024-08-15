@@ -150,7 +150,7 @@ function expandConfig<
     nodeEnv: config.nodeEnv,
     paths: absolutePaths,
     http: { ...(config.http ?? {}), ...defaultConfigHttp },
-    // TODO fix deep merge
+    // TODO use deep merge
     logger: { ...(config.logger ?? {}), ...defaultConfigLogger },
     database: { ...(config.database ?? {}), ...defaultConfigDatabase },
     mail: config.mail as ExpandedPlainwebConfig<T, M>["mail"],

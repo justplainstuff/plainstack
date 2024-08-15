@@ -6,7 +6,7 @@ import { defineConfig } from "plainweb";
 export default defineConfig({
   nodeEnv: env.NODE_ENV,
   http: {
-    port: env.PORT ?? 3000,
+    port: env.PORT,
     redirects: {
       "/docs/environmet-variables": "/docs/environment-variables",
       "/docs": "/docs/getting-started",
@@ -15,10 +15,10 @@ export default defineConfig({
     middleware,
   },
   logger: {
-    level: env.LOG_LEVEL ?? "info",
+    level: env.LOG_LEVEL,
   },
   database: {
-    dbUrl: env.DB_URL ?? "db.sqlite3",
+    dbUrl: env.DB_URL,
     schema: schema,
     pragma: {
       journal_mode: "WAL",

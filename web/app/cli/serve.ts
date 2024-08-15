@@ -47,7 +47,7 @@ async function serve() {
   const server = http.createServer(app);
   const wss = new WebSocket.Server({ server });
   listenWebsocket(wss);
-  server.listen(env.PORT);
+  server.listen(config.http.port);
   const worker = getWorker(config);
   await worker.start();
   log.info(`⚡️ background workers & http://localhost:${config.http.port}`);

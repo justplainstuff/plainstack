@@ -24,7 +24,9 @@ export function getDatabase<T extends Record<string, unknown>>(
 ): BetterSQLite3Database<T> {
   if (database) return database as BetterSQLite3Database<T>;
   const dbUrl = config.database.dbUrl;
-  log.info("db url", dbUrl);
+  if (!dbUrl || dbUrl === "")
+    throw new Error("no database URL found, make sure DB_URL is set");
+  log.info(`db url ${dbUrl}`);
   const connection = new BetterSqlite3Database(dbUrl);
   for (const [key, value] of Object.entries(config.database.pragma)) {
     connection.pragma(`${key} = ${value}`);
