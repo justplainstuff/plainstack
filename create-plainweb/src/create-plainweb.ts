@@ -10,7 +10,6 @@ import sortPackageJSON from "sort-package-json";
 import stripAnsi from "strip-ansi";
 
 import { confirm, input } from "@inquirer/prompts";
-import { version as thisPlainwebVersion } from "../../plainweb/package.json";
 import { CopyTemplateError, copyTemplate } from "./copy-template";
 import { renderLoadingIndicator } from "./loading-indicator";
 import {
@@ -29,6 +28,8 @@ import {
   stripDirectoryFromPath,
   toValidProjectName,
 } from "./utils";
+
+const thisPlainwebVersion = "latest";
 
 async function getContext(argv: string[]): Promise<Context> {
   const flags = arg(
@@ -547,7 +548,9 @@ async function updatePackageJSON(ctx: Context) {
         dependencies[dependency] = semver.prerelease(ctx.plainwebVersion)
           ? // Templates created from prereleases should pin to a specific version
             ctx.plainwebVersion
-          : `^${ctx.plainwebVersion}`;
+          : ctx.plainwebVersion === "latest"
+            ? ctx.plainwebVersion
+            : `^${ctx.plainwebVersion}`;
       }
     }
   }
