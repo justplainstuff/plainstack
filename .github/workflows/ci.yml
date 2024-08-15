@@ -74,6 +74,13 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9.5.0
+      - name: setup node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+          cache: "pnpm"
+      - name: install dependencies 🔧
+        run: pnpm install
       - name: create-plainweb 🪨
         run: pnpm dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
         env:
