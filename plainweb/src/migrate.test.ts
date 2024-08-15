@@ -197,7 +197,6 @@ describe("migrate", () => {
       database: {
         dbUrl: dbFile,
         schema: {},
-        testDbUrl: dbFile,
         pragma: { journal_mode: "WAL" },
         migrationsTable: "__drizzle_migrations",
       },

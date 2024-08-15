@@ -23,16 +23,7 @@ export function getDatabase<T extends Record<string, unknown>>(
   config: Pick<ExpandedPlainwebConfig<T>, "database" | "nodeEnv">,
 ): BetterSQLite3Database<T> {
   if (database) return database as BetterSQLite3Database<T>;
-  if (config.nodeEnv !== "test" && !config.database.dbUrl) {
-    throw new Error("config.database.dbUrl is required");
-  }
-  if (config.nodeEnv === "test" && !config.database.testDbUrl) {
-    throw new Error("config.database.testDbUrl is required");
-  }
-  const dbUrl =
-    config.nodeEnv === "test"
-      ? config.database.testDbUrl
-      : config.database.dbUrl;
+  const dbUrl = config.database.dbUrl;
   log.info("db url", dbUrl);
   const connection = new BetterSqlite3Database(dbUrl);
   for (const [key, value] of Object.entries(config.database.pragma)) {

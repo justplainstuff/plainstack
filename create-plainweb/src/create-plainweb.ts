@@ -408,7 +408,34 @@ async function createEnvStep(ctx: Context) {
     start: "Creating .env file...",
     end: ".env file created",
     while: async () => {
-      await fs.promises.writeFile(envPath, "NODE_ENV=development", "utf-8");
+      await fs.promises.writeFile(
+        envPath,
+        "NODE_ENV=development\nDB_URL=db.sqlite3\nPORT=3000",
+        "utf-8",
+      );
+    },
+    ctx,
+  });
+}
+
+async function createEnvTestStep(ctx: Context) {
+  const envPath = path.join(ctx.cwd, ".env.test");
+  if (fs.existsSync(envPath)) {
+    log("");
+    info("Nice!", "An .env.test file already exists");
+    return;
+  }
+
+  log("");
+  await loadingIndicator({
+    start: "Creating .env.test file...",
+    end: ".env.test file created",
+    while: async () => {
+      await fs.promises.writeFile(
+        envPath,
+        "NODE_ENV=test\nDB_URL=:memory:",
+        "utf-8",
+      );
     },
     ctx,
   });
@@ -621,6 +648,7 @@ export async function createPlainweb(argv: string[]) {
     installDependenciesStep,
     gitInitStep,
     createEnvStep,
+    createEnvTestStep,
     doneStep,
   ];
 

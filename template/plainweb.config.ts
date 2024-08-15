@@ -12,7 +12,6 @@ export default defineConfig({
   },
   database: {
     dbUrl: env.DB_URL,
-    testDbUrl: ":memory:",
     schema: schema,
     pragma: {
       journal_mode: "WAL",

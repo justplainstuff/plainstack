@@ -37,7 +37,6 @@ export type MailConfig = {
 
 type DatabaseConfig<T extends Record<string, unknown>> = {
   dbUrl: string;
-  testDbUrl: string;
   pragma: Record<string, string>;
   schema: T;
   migrationsTable?: string;
