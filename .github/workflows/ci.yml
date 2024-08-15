@@ -65,21 +65,6 @@ jobs:
           fi
           kill $!  # Stop the server
           rm -rf node_modules
-      - name: upload project artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: plainweb-project
-          path: .
-  deploy:
-    needs: check
-    runs-on: ubuntu-latest
-    concurrency: deploy
-    steps:
-      - name: download project artifact 📥
-        uses: actions/download-artifact@v4
-        with:
-          name: plainweb-project
-          path: my-plainweb-project
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy to fly cli 🚀
         run: |
