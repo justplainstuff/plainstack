@@ -7,12 +7,11 @@
     "test": "NODE_ENV=test turbo test",
     "cs": "changeset",
     "pub": "pnpm check && changeset version && changeset publish",
-    "knip": "NODE_ENV=test knip",
+    "knip": "knip",
     "lint": "biome check .",
     "manypkg": "manypkg check",
     "manypkg:fix": "manypkg fix",
-    "check": "turbo build test && biome check --write . && pnpm knip && pnpm manypkg",
-    "changelog": "changelogen --output CHANGELOG.md"
+    "check": "turbo build test && biome check --write . && pnpm knip && manypkg check"
   },
   "packageManager": "pnpm@9.5.0",
   "engineStrict": true,
@@ -24,7 +23,6 @@
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.3",
     "@manypkg/cli": "^0.21.4",
-    "changelogen": "^0.5.5",
     "knip": "^5.25.1",
     "turbo": "2.0.12",
     "typescript": "^5.3.3"
