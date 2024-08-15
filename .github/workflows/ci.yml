@@ -23,13 +23,11 @@ jobs:
           cache: "pnpm"
       - name: install dependencies 🔧
         run: pnpm install
-      - name: create .env.test file 📄
-        run: |
-          echo "NODE_ENV=test" > .env.test
-          echo "PORT=3000" >> .env.test
-          echo "DB_URL=:memory:" >> .env.test
       - name: run check ✅
         run: pnpm check
+        env:
+          NODE_ENV: test
+          DB_URL: ":memory:"
       - name: create plainweb project 🪨
         run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug
         env:
