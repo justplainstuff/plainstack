@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel serve:dev tw:dev",

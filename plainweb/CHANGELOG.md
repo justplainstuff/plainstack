@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.13
+
+### Patch Changes
+
+- smaller fixes regarding deployment
+
 ## 0.0.12
 
 ### Patch Changes

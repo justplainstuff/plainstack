@@ -1,5 +1,11 @@
 # create-plainweb
 
+## 0.0.28
+
+### Patch Changes
+
+- use plainweb@0.0.13
+
 ## 0.0.27
 
 ### Patch Changes
