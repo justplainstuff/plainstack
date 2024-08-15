@@ -65,20 +65,6 @@ jobs:
           fi
           kill $!  # Stop the server
           rm -rf node_modules
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: deploy to fly cli 🚀
-        run: |
-          cd my-plainweb-project
-          sed -i 's/app = '"'"'my-app'"'"'/app = '"'"'plainweb-template'"'"'/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/auto_stop_machines = false/auto_stop_machines = true/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/auto_start_machines = false/auto_start_machines = true/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/min_machines_running = 1/min_machines_running = 0/' fly.toml
-          cat fly.toml
-          flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - name: check fly deployment ⬆️
-        run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
 
   create-plainweb-latest:
     runs-on: ubuntu-latest
@@ -104,7 +90,7 @@ jobs:
           pnpm test
           pnpm check
           pnpm routes
-      - name: start server and check response 🌐
+      - name: start server and check health 🌐
         run: |
           cd my-plainweb-project
           pnpm serve &
@@ -116,4 +102,17 @@ jobs:
             exit 1
           fi
           kill $!  # Stop the server
-          rm -rf node_modules
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: deploy to fly 🚀
+        run: |
+          cd my-plainweb-project
+          sed -i 's/app = '"'"'my-app'"'"'/app = '"'"'plainweb-template'"'"'/' fly.toml
+          sed -i '/\[http_service\]/,/\[/ s/auto_stop_machines = false/auto_stop_machines = true/' fly.toml
+          sed -i '/\[http_service\]/,/\[/ s/auto_start_machines = false/auto_start_machines = true/' fly.toml
+          sed -i '/\[http_service\]/,/\[/ s/min_machines_running = 1/min_machines_running = 0/' fly.toml
+          cat fly.toml
+          flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: check fly deployment ⬆️
+        run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
