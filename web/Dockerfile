@@ -26,9 +26,6 @@ RUN npm install -g pnpm@9.5.0
 
 RUN pnpm install --prod false 
 
-RUN pnpm check
-# Final stage for app image
-
 FROM base
 
 RUN npm install -g pnpm@9.5.0

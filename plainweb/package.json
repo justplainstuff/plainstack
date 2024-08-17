@@ -37,7 +37,6 @@
     "express": "^4.19.2",
     "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
-    "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",

@@ -29,8 +29,6 @@ export default defineMiddleware(async ({ app, config }) => {
     }),
   );
   app.use(middleware.rateLimit({ nodeEnv }));
-  // TODO fix this
-  // app.use(middleware.security({ nodeEnv }));
   app.use(middleware.json());
   app.use(middleware.urlencoded());
   app.use(middleware.database({ database }));

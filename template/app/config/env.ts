@@ -8,6 +8,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]),
   PORT: z.coerce.number().optional(),
   DB_URL: z.string().optional(),
+  LOG_LEVEL: z
+    .enum(["silly", "debug", "verbose", "http", "info", "warn", "error"])
+    .optional(),
 });
 
 type Env = z.infer<typeof envSchema>;

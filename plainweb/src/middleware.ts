@@ -3,7 +3,6 @@ import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import errorHandler from "errorhandler";
 import express from "express";
 import expressRateLimit from "express-rate-limit";
-import helmet from "helmet";
 import { randomId } from "id";
 import { getLogger } from "log";
 import morgan from "morgan";
@@ -103,13 +102,6 @@ function error(config: Pick<Config, "nodeEnv">): express.ErrorRequestHandler {
   };
 }
 
-function security(config: Pick<Config, "nodeEnv">): express.RequestHandler {
-  return (req, res, next) => {
-    if (config.nodeEnv === "development") return next();
-    return helmet();
-  };
-}
-
 function staticFiles({
   nodeEnv,
   dir,
@@ -199,7 +191,6 @@ export const middleware = {
   redirect,
   staticFiles,
   rateLimit,
-  security,
   json,
   urlencoded,
   database,

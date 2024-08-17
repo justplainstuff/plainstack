@@ -1,3 +1,4 @@
+import { prototype } from "node:events";
 import path from "node:path";
 import type express from "express";
 import type nodemailer from "nodemailer";
@@ -12,7 +13,7 @@ export type MiddlewareStackArgs = {
 };
 
 type HttpConfig<T> = {
-  port: number;
+  port?: number;
   redirects?: Record<string, string>;
   staticPath: string;
   middleware: (opts: MiddlewareStackArgs) => Promise<void> | void;
@@ -98,6 +99,7 @@ export const defaultConfigPaths: Required<PathsConfig> = {
 };
 
 const defaultConfigHttp = {
+  port: 3000,
   redirects: {},
 };
 
