@@ -283,7 +283,7 @@ importers:
         version: link:../plainweb
       shiki:
         specifier: ^1.7.0
-        version: 1.13.0
+        version: 1.14.0
       slugify:
         specifier: ^1.6.6
         version: 1.6.6
@@ -1303,8 +1303,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@shikijs/core@1.13.0':
-    resolution: {integrity: sha512-Mj5NVfbAXcD1GnwOTSPl8hBn/T8UDpfFQTptp+p41n/CbUcJtOq98WaRD7Lz3hCglYotUTHUWtzu3JhK6XlkAA==}
+  '@shikijs/core@1.14.0':
+    resolution: {integrity: sha512-fqDTSjszMvIe8Pjs3FA8xwFeH4XyUj6jJPHCI+orRxsySivm6mU4Ef7kqoyUudz6ei6U/EdhqtSho8IpuR9YYA==}
 
   '@sindresorhus/is@5.6.0':
     resolution: {integrity: sha512-TV7t8GKYaJWsn00tFDqBw8+Uqmr8A0fRU1tvTQhyZzGv0sJCGRQL3JGMI3ucuKo3XIZdUP+Lx7/gh2t3lewy7g==}
@@ -3336,8 +3336,8 @@ packages:
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
-  shiki@1.13.0:
-    resolution: {integrity: sha512-e0dWfnONbEv6xl7FJy3XIhsVHQ/65XHDZl92+6H9+4xWjfdo7pmkqG7Kg47KWtDiEtzM5Z+oEfb4vtRvoZ/X9w==}
+  shiki@1.14.0:
+    resolution: {integrity: sha512-ggQlEp56aE3mOSujzDvHfjbkWQ7rpJuC3ZqLKazCGLAZavsYTmcwBjnye3w65PLpOroAoU+rOy2atD76KPAHRw==}
 
   side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
@@ -4750,7 +4750,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.20.0':
     optional: true
 
-  '@shikijs/core@1.13.0':
+  '@shikijs/core@1.14.0':
     dependencies:
       '@types/hast': 3.0.4
 
@@ -6873,9 +6873,9 @@ snapshots:
 
   shell-quote@1.8.1: {}
 
-  shiki@1.13.0:
+  shiki@1.14.0:
     dependencies:
-      '@shikijs/core': 1.13.0
+      '@shikijs/core': 1.14.0
       '@types/hast': 3.0.4
 
   side-channel@1.0.6:
