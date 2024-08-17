@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.16
+
+### Patch Changes
+
+- fix: remove security middleware
+
 ## 0.0.15
 
 ### Patch Changes
