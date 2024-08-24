@@ -22,7 +22,7 @@
     "@kitajs/html": "^4.2.1",
     "better-sqlite3": "^11.0.0",
     "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.23.0",
+    "drizzle-kit": "^0.24.0",
     "drizzle-orm": "^0.32.0",
     "express": "^4.19.2",
     "express-basic-auth": "^1.2.1",
