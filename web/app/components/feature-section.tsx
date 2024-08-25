@@ -3,6 +3,10 @@ const features: {
   content: string;
 }[] = [
   {
+    title: "Velocity is everything 🏎️",
+    content: "Every design decision prioritizes your ability to ship fast.",
+  },
+  {
     title: "Server-side rendering 🖥️",
     content: "Compose and render JSX on the server. Fully type-safe.",
   },
@@ -18,10 +22,10 @@ const features: {
   {
     title: "File-based routing 📁",
     content:
-      "The file system determines the URL paths. No more need to name your routes.",
+      "The file system determines the URL paths. No more naming routes twice.",
   },
   {
-    title: "Simple deployment 🔌",
+    title: "Easy deployment 🔌",
     content: "A single process to deploy and manage.",
   },
   {
@@ -36,11 +40,6 @@ const features: {
   {
     title: "Testable 🧪",
     content: "Test services, components, routes, emails and tasks with ease.",
-  },
-  {
-    title: "Minimal lock-in 🔓",
-    content:
-      "plainweb = SQLite + drizzle + Node.js + express + zod + nodemailer + HTMX",
   },
 ];
 
