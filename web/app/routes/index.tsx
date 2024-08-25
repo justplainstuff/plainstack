@@ -7,7 +7,7 @@ import { env } from "app/config/env";
 import Layout from "app/layout";
 import { createContact } from "app/services/contacts";
 import type { Request } from "express";
-import type { Handler } from "plainweb";
+import { defineHandler } from "plainweb";
 import { zfd } from "zod-form-data";
 
 async function validateTurnstile(req: Request, token: string) {
@@ -30,7 +30,7 @@ async function validateTurnstile(req: Request, token: string) {
   return true;
 }
 
-export const POST: Handler = async ({ req, res }) => {
+export const POST = defineHandler(async ({ req, res }) => {
   const database = res.locals.database as Database;
   const parsed = zfd
     .formData({
@@ -72,9 +72,9 @@ export const POST: Handler = async ({ req, res }) => {
       </div>
     );
   }
-};
+});
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return (
     <Layout
       head={
@@ -93,4 +93,4 @@ export const GET: Handler = async () => {
       <FooterSection />
     </Layout>
   );
-};
+});

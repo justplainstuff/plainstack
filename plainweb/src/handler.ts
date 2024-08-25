@@ -12,6 +12,18 @@ interface HandlerArgs {
   res: express.Response;
 }
 
+/**
+ * Defines a handler function with proper typing.
+ * 
+ * @param handler The handler function to be defined
+ * @returns The typed handler function
+ */
+export function defineHandler(
+  handler: (args: HandlerArgs) => Promise<ExpressResponse | PlainResponse | JSX.Element | JSONSerializable>
+): Handler {
+  return handler;
+}
+
 export type JSONSerializable =
   | string
   | number
