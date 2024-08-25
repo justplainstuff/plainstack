@@ -132,6 +132,6 @@ jobs:
         run: pnpm install
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy web to fly 🚀
-        run: pnpm -C web fly
+        run: flyctl deploy --config web/fly.toml --dockerfile web/Dockerfile
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
