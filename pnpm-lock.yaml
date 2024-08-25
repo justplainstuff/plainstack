@@ -167,8 +167,8 @@ importers:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.32.0
-        version: 0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
+        specifier: ^0.33.0
+        version: 0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
       npm-run-all2:
         specifier: ^6.0.0
         version: 6.2.2
@@ -209,8 +209,8 @@ importers:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.32.0
-        version: 0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
+        specifier: ^0.33.0
+        version: 0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
       plainweb:
         specifier: workspace:*
         version: link:../plainweb
@@ -264,8 +264,8 @@ importers:
         specifier: ^0.24.0
         version: 0.24.1
       drizzle-orm:
-        specifier: ^0.32.0
-        version: 0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
+        specifier: ^0.33.0
+        version: 0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -1931,8 +1931,8 @@ packages:
     resolution: {integrity: sha512-y47ZuFpy3ZEz5v2P4Q4m7CZpC9infdmFAVP8klfl92hyBBvgWlyFnriDkycK2HXqB1PrYWNTck2p5TfFY5+EWw==}
     hasBin: true
 
-  drizzle-orm@0.32.2:
-    resolution: {integrity: sha512-3fXKzPzrgZIcnWCSLiERKN5Opf9Iagrag75snfFlKeKSYB1nlgPBshzW3Zn6dQymkyiib+xc4nIz0t8U+Xdpuw==}
+  drizzle-orm@0.33.0:
+    resolution: {integrity: sha512-SHy72R2Rdkz0LEq0PSG/IdvnT3nGiWuRk+2tXZQ90GVq/XQhpCzu/EFT3V2rox+w8MlkBQxifF8pCStNYnERfA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -5413,7 +5413,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1):
+  drizzle-orm@0.33.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1):
     optionalDependencies:
       '@types/better-sqlite3': 7.6.11
       better-sqlite3: 11.2.1

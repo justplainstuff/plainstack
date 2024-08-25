@@ -20,7 +20,7 @@
   "dependencies": {
     "@kitajs/html": "^4.2.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.0",
+    "drizzle-orm": "^0.33.0",
     "plainweb": "workspace:*",
     "tsx": "^4.16.2",
     "zod": "^3.23.8"
