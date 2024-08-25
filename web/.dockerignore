@@ -1,3 +1,7 @@
 sqlite.db*
+db.sqlite3*
 output.css
 node_modules
+.turbo
+coverage
+

@@ -1,4 +1,9 @@
 node_modules
-db.sqlite3
+db.sqlite3*
 dist
 .env
+sqlite.db*
+output.css
+node_modules
+.turbo
+coverage

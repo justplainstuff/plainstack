@@ -132,6 +132,8 @@ jobs:
         run: pnpm install
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: deploy plainweb.dev 🚀
-        run: flyctl deploy --remote-only --config web/fly.toml --dockerfile web/Dockerfile
+        run: |
+          cd web
+          flyctl deploy .. --remote-only --config web/fly.toml --dockerfile web/Dockerfile
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_PLAINWEB_DEPLOY_TOKEN }}
