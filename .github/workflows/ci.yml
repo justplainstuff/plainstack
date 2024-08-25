@@ -112,3 +112,26 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: check fly deployment ⬆️
         run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
+
+  web:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout code 📥
+      - name: install pnpm 📦
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+      - name: setup node 🟢
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+          cache: "pnpm"
+      - name: install dependencies 🔧
+        run: pnpm install
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: deploy web to fly 🚀
+        run: pnpm -C web fly
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
