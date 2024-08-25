@@ -1,6 +1,6 @@
 # plainweb
 
-A framework using HTMX, SQLite and TypeScript for less complexity and more joy 🎉
+The all-in-one web framework using TypeScript and SQLite.
 
 ## Getting Started
 

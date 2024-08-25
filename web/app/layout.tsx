@@ -25,7 +25,7 @@ export default function Layout(
             name="description"
             content={
               props.description ||
-              "plainweb is a framework combining HTMX, SQLite and TypeScript for less complexity and more joy."
+              "All-in-one web framework using TypeScript and SQLite."
             }
           />
           <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />

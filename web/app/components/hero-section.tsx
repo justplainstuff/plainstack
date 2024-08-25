@@ -13,7 +13,7 @@ export async function HeroSection() {
           x-data="{}"
           class="mt-10 text-2xl leading-8 text-base-content text-center"
         >
-          plainweb is a framework combining HTMX, SQLite and TypeScript for less
+          An all-in-one web framework using TypeScript and SQLite for less
           complexity and more{" "}
           <span
             class="underline cursor-pointer confetti-trigger"
