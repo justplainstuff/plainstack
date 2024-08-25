@@ -1,6 +1,6 @@
 # plainweb
 
-The all-in-one web framework using TypeScript and SQLite.
+The all-in-one web framework obsessing about velocity 🏎️.
 
 ## Getting Started
 

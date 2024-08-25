@@ -25,7 +25,7 @@ export default function Layout(
             name="description"
             content={
               props.description ||
-              "All-in-one web framework using TypeScript and SQLite."
+              "The all-in-one web framework obsessing about velocity 🏎️"
             }
           />
           <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />

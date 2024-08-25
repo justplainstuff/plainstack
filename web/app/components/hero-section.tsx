@@ -13,17 +13,21 @@ export async function HeroSection() {
           x-data="{}"
           class="mt-10 text-2xl leading-8 text-base-content text-center"
         >
-          An all-in-one web framework using TypeScript and SQLite for less
-          complexity and more{" "}
+          The all-in-one web framework obsessing
+          <br />
+          about{" "}
           <span
             class="underline cursor-pointer confetti-trigger"
             x-on:click="confetti({particleCount: 100, spread: 70, origin: { y: 0.6 }});"
           >
-            joy
+            velocity
           </span>{" "}
-          🎉
+          🏎️
           <div class="mt-2 text-xs text-neutral-500">
-            <span id="joy-counter">{nrOfSparks}</span> sparks
+            <span safe id="joy-counter">
+              {nrOfSparks}
+            </span>{" "}
+            sparks
           </div>
         </h2>
       </div>
