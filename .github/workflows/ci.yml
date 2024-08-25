@@ -109,7 +109,7 @@ jobs:
           cat fly.toml
           flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_PLAINWEB_TEMPLATE_DEPLOY_TOKEN }}
       - name: check fly deployment ⬆️
         run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
 
@@ -131,7 +131,7 @@ jobs:
       - name: install dependencies 🔧
         run: pnpm install
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: deploy web to fly 🚀
-        run: flyctl deploy --config web/fly.toml --dockerfile web/Dockerfile
+      - name: deploy plainweb.dev 🚀
+        run: flyctl deploy --remote-only --config web/fly.toml --dockerfile web/Dockerfile
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_PLAINWEB_DEPLOY_TOKEN }}
