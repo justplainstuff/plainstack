@@ -17,7 +17,7 @@ FROM base as build
 # Install packages needed to build node modules
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 sqlite3 curl
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 sqlite3
 
 # Install node modules
 COPY --link . .
@@ -28,6 +28,8 @@ RUN pnpm install --prod false
 
 FROM base
 
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl
 RUN npm install -g pnpm@9.5.0
 # Copy built application
 
