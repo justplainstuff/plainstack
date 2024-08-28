@@ -12,19 +12,16 @@ import basicAuth from "express-basic-auth";
 export default defineMiddleware(async ({ app, config }) => {
   const { nodeEnv } = config;
   const database = getDatabase({ nodeEnv, database: config.database });
-
-  app.use(middleware.flyHeaders());
-  // TODO needs more work
-  // app.use(middleware.forceWWW({ nodeEnv }));
+  app.use(middleware.forceWWW({ nodeEnv }));
   app.use(middleware.logging({ nodeEnv }));
   app.use(middleware.error({ nodeEnv }));
+  // TODO use built-in middleware
+  app.use(config.http.staticPath, express.static(config.paths.public));
   app.use(
     middleware.redirect({
       redirects: config.http.redirects,
     }),
   );
-  // TODO use built-in middleware
-  app.use(config.http.staticPath, express.static(config.paths.public));
   app.use(middleware.rateLimit({ nodeEnv }));
   app.use(middleware.json());
   app.use(middleware.urlencoded());
