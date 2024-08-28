@@ -13,7 +13,8 @@ export default defineMiddleware(async ({ app, config }) => {
   const database = getDatabase({ nodeEnv, database: config.database });
 
   app.use(middleware.flyHeaders());
-  app.use(middleware.forceWWW({ nodeEnv }));
+  // TODO needs more work
+  // app.use(middleware.forceWWW({ nodeEnv }));
   app.use(middleware.logging({ nodeEnv }));
   app.use(middleware.error({ nodeEnv }));
   app.use(
