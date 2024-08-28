@@ -1,4 +1,5 @@
 import { env } from "app/config/env";
+import express from "express";
 import {
   defineMiddleware,
   getDatabase,
@@ -22,13 +23,8 @@ export default defineMiddleware(async ({ app, config }) => {
       redirects: config.http.redirects,
     }),
   );
-  app.use(
-    config.http.staticPath,
-    middleware.staticFiles({
-      nodeEnv,
-      dir: config.paths.public,
-    }),
-  );
+  // TODO use built-in middleware
+  app.use(config.http.staticPath, express.static(config.paths.public));
   app.use(middleware.rateLimit({ nodeEnv }));
   app.use(middleware.json());
   app.use(middleware.urlencoded());
