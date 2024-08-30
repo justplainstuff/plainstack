@@ -1,0 +1,22 @@
+{
+  "name": "plainroutes",
+  "version": "0.0.2",
+  "description": "A file based router following Next.js routing conventions.",
+  "type": "commonjs",
+  "main": "dist/plainroutes.js",
+  "types": "dist/plainroutes.d.ts",
+  "scripts": {
+    "coverage": "vitest run --coverage",
+    "build": "tsc --noEmit src/plainroutes.ts && tsup"
+  },
+  "keywords": ["plainroutes", "plainstack", "router", "file-based", "routing"],
+  "author": "Josef Erben <josef@plainweb.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20",
+    "@vitest/coverage-v8": "^2.0.3",
+    "tsup": "^8.2.4",
+    "tsx": "^4.16.2",
+    "vitest": "^2.0.1"
+  }
+}

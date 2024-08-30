@@ -1,0 +1,30 @@
+{
+  "name": "plainstudio",
+  "version": "0.0.2",
+  "description": "A SQLite editor for express apps.",
+  "type": "commonjs",
+  "main": "dist/plainstudio.js",
+  "types": "dist/plainstudio.d.ts",
+  "scripts": {
+    "coverage": "vitest run --coverage",
+    "build": "tsc --noEmit src/plainstudio.ts && tsup"
+  },
+  "keywords": [
+    "plainstudio",
+    "plainstack",
+    "sqlite",
+    "editor",
+    "database",
+    "browser",
+    "studio"
+  ],
+  "author": "Josef Erben <josef@plainweb.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20",
+    "@vitest/coverage-v8": "^2.0.3",
+    "tsup": "^8.2.4",
+    "tsx": "^4.16.2",
+    "vitest": "^2.0.1"
+  }
+}

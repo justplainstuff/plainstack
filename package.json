@@ -1,5 +1,5 @@
 {
-  "name": "plainweb-project",
+  "name": "plainstack-project",
   "private": true,
   "scripts": {
     "build": "turbo build",

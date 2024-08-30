@@ -27,7 +27,7 @@ importers:
         specifier: ^5.3.3
         version: 5.5.4
 
-  create-plainweb:
+  packages/create-plainstack:
     dependencies:
       '@inquirer/prompts':
         specifier: ^5.0.4
@@ -97,7 +97,54 @@ importers:
         specifier: ^5.3.3
         version: 5.5.4
 
-  plainweb:
+  packages/plainjobs:
+    dependencies:
+      cron-parser:
+        specifier: ^4.9.0
+        version: 4.9.0
+    optionalDependencies:
+      better-sqlite3:
+        specifier: ^11.0.0
+        version: 11.2.1
+    devDependencies:
+      '@types/better-sqlite3':
+        specifier: ^7.6.10
+        version: 7.6.11
+      '@types/node':
+        specifier: ^20
+        version: 20.16.1
+      '@vitest/coverage-v8':
+        specifier: ^2.0.3
+        version: 2.0.5(vitest@2.0.5(@types/node@20.16.1))
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(jiti@1.21.6)(postcss@8.4.41)(tsx@4.18.0)(typescript@5.5.4)(yaml@2.5.0)
+      tsx:
+        specifier: ^4.16.2
+        version: 4.18.0
+      vitest:
+        specifier: ^2.0.1
+        version: 2.0.5(@types/node@20.16.1)
+
+  packages/plainrouter:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.16.1
+      '@vitest/coverage-v8':
+        specifier: ^2.0.3
+        version: 2.0.5(vitest@2.0.5(@types/node@20.16.1))
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(jiti@1.21.6)(postcss@8.4.41)(tsx@4.18.0)(typescript@5.5.4)(yaml@2.5.0)
+      tsx:
+        specifier: ^4.16.2
+        version: 4.18.0
+      vitest:
+        specifier: ^2.0.1
+        version: 2.0.5(@types/node@20.16.1)
+
+  packages/plainstack:
     dependencies:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
@@ -126,6 +173,9 @@ importers:
       nodemailer:
         specifier: ^6.9.13
         version: 6.9.14
+      plainjobs:
+        specifier: workspace:*
+        version: link:../plainjobs
       winston:
         specifier: ^3.13.1
         version: 3.14.2
@@ -200,7 +250,25 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
 
-  template:
+  packages/plainstudio:
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.16.1
+      '@vitest/coverage-v8':
+        specifier: ^2.0.3
+        version: 2.0.5(vitest@2.0.5(@types/node@20.16.1))
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(jiti@1.21.6)(postcss@8.4.41)(tsx@4.18.0)(typescript@5.5.4)(yaml@2.5.0)
+      tsx:
+        specifier: ^4.16.2
+        version: 4.18.0
+      vitest:
+        specifier: ^2.0.1
+        version: 2.0.5(@types/node@20.16.1)
+
+  packages/template:
     dependencies:
       '@kitajs/html':
         specifier: ^4.2.1
@@ -211,9 +279,9 @@ importers:
       drizzle-orm:
         specifier: ^0.32.0
         version: 0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)
-      plainweb:
+      plainstack:
         specifier: workspace:*
-        version: link:../plainweb
+        version: link:../plainstack
       tsx:
         specifier: ^4.16.2
         version: 4.18.0
@@ -249,7 +317,7 @@ importers:
         specifier: ^2.0.1
         version: 2.0.5(@types/node@20.16.1)
 
-  web:
+  packages/website:
     dependencies:
       '@kitajs/html':
         specifier: ^4.2.1
@@ -278,9 +346,9 @@ importers:
       markdown-it-anchor:
         specifier: ^9.0.1
         version: 9.1.0(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
-      plainweb:
+      plainstack:
         specifier: workspace:*
-        version: link:../plainweb
+        version: link:../plainstack
       shiki:
         specifier: ^1.7.0
         version: 1.14.1
@@ -1800,6 +1868,10 @@ packages:
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
 
+  cron-parser@4.9.0:
+    resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
+    engines: {node: '>=12.0.0'}
+
   cross-spawn@5.1.0:
     resolution: {integrity: sha512-pTgQJ5KC0d2hcY8eyL1IzlBPYjTkyH72XRZPnLyKus2mBfNjQs3klqbJU2VILqZryAZUt9JOb3h/mWMy23/f5A==}
 
@@ -2673,6 +2745,10 @@ packages:
 
   lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
+    engines: {node: '>=12'}
+
+  luxon@3.5.0:
+    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
   magic-string@0.30.11:
@@ -5308,6 +5384,10 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
+  cron-parser@4.9.0:
+    dependencies:
+      luxon: 3.5.0
+
   cross-spawn@5.1.0:
     dependencies:
       lru-cache: 4.1.5
@@ -6218,6 +6298,8 @@ snapshots:
       yallist: 2.1.2
 
   lru-cache@7.18.3: {}
+
+  luxon@3.5.0: {}
 
   magic-string@0.30.11:
     dependencies:

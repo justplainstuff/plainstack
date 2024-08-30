@@ -1,0 +1,31 @@
+{
+  "name": "plainjobs",
+  "version": "0.0.2",
+  "description": "A queue based on SQLite capable of processing 40k jobs/s.",
+  "type": "commonjs",
+  "main": "dist/plainjobs.js",
+  "types": "dist/plainjobs.d.ts",
+  "scripts": {
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "build": "tsc --noEmit src/plainjobs.ts && tsup",
+    "bench": "tsx tests/bench.ts"
+  },
+  "keywords": ["plainjob", "plainstack", "sqlite", "typescript", "queue"],
+  "author": "Josef Erben <josef@plainweb.dev>",
+  "license": "MIT",
+  "optionalDependencies": {
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.10",
+    "@types/node": "^20",
+    "@vitest/coverage-v8": "^2.0.3",
+    "tsup": "^8.2.4",
+    "tsx": "^4.16.2",
+    "vitest": "^2.0.1"
+  },
+  "dependencies": {
+    "cron-parser": "^4.9.0"
+  }
+}
