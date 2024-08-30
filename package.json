@@ -1,30 +1,48 @@
 {
-  "name": "plainweb-project",
-  "private": true,
+  "name": "plainstack",
+  "version": "0.0.36",
+  "description": "The single-file TypeScript web framework",
+  "type": "module",
+  "main": "dist/plainstack.js",
+  "exports": {
+    ".": "./dist/plainstack.js",
+    "./bun": "./dist/bun.js",
+    "./session": "./dist/middleware/session.js"
+  },
+  "types": "dist/plainstack.d.ts",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "test": "NODE_ENV=test turbo test",
-    "cs": "changeset",
-    "pub": "pnpm check && changeset version && changeset publish",
-    "knip": "knip",
-    "lint": "biome check .",
-    "manypkg": "manypkg check",
-    "manypkg:fix": "manypkg fix",
-    "check": "turbo build test && biome check --write . && pnpm knip && manypkg check"
+    "build": "tsc --noEmit && tsup",
+    "publish": "changelogen --release"
   },
-  "packageManager": "pnpm@9.5.0",
-  "engineStrict": true,
-  "engines": {
-    "pnpm": ">=9.5.0",
-    "node": ">=20.10.0"
-  },
+  "keywords": [
+    "plainstack",
+    "sqlite",
+    "bun",
+    "hono",
+    "htmx",
+    "typescript",
+    "kysely"
+  ],
+  "author": "Josef Erben <josef@plainweb.dev>",
+  "license": "MIT",
   "dependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "@changesets/cli": "^2.27.3",
-    "@manypkg/cli": "^0.21.4",
-    "knip": "^5.25.1",
-    "turbo": "2.1.0",
+    "@conform-to/zod": "^1.2.2",
+    "@hono/conform-validator": "^1.0.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "change-case": "^5.4.4",
+    "consola": "^3.2.3",
+    "hono": "^4.6.3",
+    "hono-sessions": "^0.5.8",
+    "kysely": "^0.27.4",
+    "kysely-bun-sqlite": "^0.3.2",
+    "kysely-codegen": "^0.16.5",
+    "plainjob": "^0.0.11",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "changelogen": "^0.5.7",
+    "tsup": "^8.2.4",
     "typescript": "^5.3.3"
   }
 }

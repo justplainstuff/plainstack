@@ -1,1 +1,0 @@
-ALTER TABLE `contacts` ADD `double_opt_in_token` text NOT NULL DEFAULT '';

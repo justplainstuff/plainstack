@@ -5,11 +5,11 @@
   },
   "files": {
     "ignore": [
+      "**/.env*",
+      "**/.out/**",
       "**/.git/**",
       "**/node_modules/**",
       "**/dist/**",
-      "**/.turbo/**",
-      "**/tsup.config.bundled*",
       "**/coverage/**"
     ]
   },

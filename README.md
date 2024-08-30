@@ -1,11 +1,11 @@
-# plainweb
+# plainstack
 
 The all-in-one web framework obsessing about velocity 🏎️.
 
 ## Getting Started
 
-`npx create-plainweb`
+`npm create plainstack`
 
 ## Documentation
 
-[https://www.plainweb.dev/docs/getting-started](https://www.plainweb.dev/docs/getting-started)
+[https://www.plainstack.dev/docs/getting-started](https://www.plainstack.dev/docs/getting-started)
