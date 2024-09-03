@@ -1,8 +1,19 @@
 import dotenv from "dotenv";
 import z from "zod";
 
-dotenv.config({ path: ".env" });
-dotenv.config({ path: ".env.test" });
+// TODO move to plainweb
+const dotEnv = dotenv.config({ path: ".env" });
+if (dotEnv.error) {
+  console.error("error loading .env", dotEnv.error);
+} else {
+  console.log("found .env");
+}
+const dotEnvTest = dotenv.config({ path: ".env.test" });
+if (dotEnvTest.error) {
+  console.error("error loading .env.test", dotEnvTest.error);
+} else {
+  console.log("found .env.test");
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]),

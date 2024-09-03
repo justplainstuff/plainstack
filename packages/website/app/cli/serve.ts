@@ -4,7 +4,7 @@ import { env } from "app/config/env";
 import { contacts, sparks } from "app/schema";
 import { listenWebsocket } from "app/services/confetti";
 import { getDocumentationPages } from "app/services/page";
-import { getApp, getLogger, getWorker, migrate, randomId } from "plainstack";
+import { getApp, getLogger, migrate, randomId } from "plainstack";
 import config from "plainweb.config";
 import WebSocket from "ws";
 
@@ -48,9 +48,7 @@ async function serve() {
   const wss = new WebSocket.Server({ server });
   listenWebsocket(wss);
   server.listen(config.http.port);
-  const worker = getWorker(config);
-  await worker.start();
-  log.info(`⚡️ background workers & http://localhost:${config.http.port}`);
+  log.info(`⚡️ http://localhost:${config.http.port}`);
 }
 
 serve();
