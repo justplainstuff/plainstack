@@ -28,8 +28,10 @@ module.exports = {
       repo: "git@github.com:joseferben/plainweb.git",
       path: "/var/www/plainweb",
       "pre-deploy-local": "",
+      "pre-setup": `curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - \&& 
+                    sudo apt install -y nodejs \&&
+                    npm install -g pnpm@9.5.0`,
       "post-deploy": "pm2 reload ecosystem.config.js --env production",
-      "pre-setup": "",
     },
   },
 };
