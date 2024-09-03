@@ -28,8 +28,7 @@ module.exports = {
       repo: "git@github.com:joseferben/plainweb.git",
       path: "/var/www/plainweb",
       "pre-deploy-local": "",
-      "post-deploy":
-        "npm install && pm2 reload ecosystem.config.js --env production",
+      "post-deploy": "pm2 reload ecosystem.config.js --env production",
       "pre-setup": "",
     },
   },
