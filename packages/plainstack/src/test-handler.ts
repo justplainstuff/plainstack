@@ -1,5 +1,5 @@
-import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import type { Request } from "express";
+import type { Kysely } from "kysely";
 import { createResponse } from "node-mocks-http";
 import { type Handler, handleResponse } from "./handler";
 
@@ -10,7 +10,7 @@ export async function testHandler(
   {
     database,
   }: {
-    database?: BetterSQLite3Database<Record<string, unknown>>;
+    database?: Kysely<unknown>;
   },
 ) {
   const res = createResponse();

@@ -1,12 +1,11 @@
-import type { ExpandedPlainwebConfig, MailConfig } from "config";
+import type { ExpandedPlainwebConfig } from "config";
+import type { Express } from "express";
 import expressListEndpoints from "express-list-endpoints";
-import { getApp } from "get-app";
 
 /** Print all express routes to the console. Useful for debugging. */
 export async function printRoutes<T extends Record<string, unknown>>(
-  config: ExpandedPlainwebConfig<T, MailConfig | undefined>,
+  app: Express.Application,
 ) {
-  const app = await getApp(config);
   const endpoints = expressListEndpoints(app);
   const sorted = endpoints.sort((a, b) => {
     if (a.path < b.path) return -1;

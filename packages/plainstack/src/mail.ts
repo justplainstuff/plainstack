@@ -1,4 +1,3 @@
-import type { MailerConfig } from "config";
 import { getLogger } from "log";
 import nodemailer from "nodemailer";
 import type JSONTransport from "nodemailer/lib/json-transport";
@@ -16,21 +15,21 @@ const devTransporter = nodemailer.createTransport({
  */
 export const outbox: JSONTransport.SentMessageInfo[] = [];
 
-function instantiateMailer(config: MailerConfig): nodemailer.Transporter {
-  if (
-    "host" in config &&
-    "port" in config &&
-    "secure" in config &&
-    "auth" in config
-  ) {
-    return nodemailer.createTransport(config);
-  }
-  return config as nodemailer.Transporter;
+export function defineMailer(config: {
+  host: string;
+  port: number;
+  secure: boolean;
+  auth: {
+    user: string;
+    pass: string;
+  };
+}): nodemailer.Transporter {
+  return nodemailer.createTransport(config);
 }
 
 /** Send an email using the configured mailer. */
 export async function sendMail(
-  config: MailerConfig,
+  mailer: nodemailer.Transporter,
   mailOptions: Mail.Options,
 ): Promise<void> {
   if (
@@ -44,5 +43,5 @@ export async function sendMail(
     log.info(result.message);
     return;
   }
-  await instantiateMailer(config).sendMail(mailOptions);
+  await mailer.sendMail(mailOptions);
 }

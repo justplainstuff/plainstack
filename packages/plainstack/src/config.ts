@@ -1,47 +1,5 @@
-import { prototype } from "node:events";
 import path from "node:path";
-import type express from "express";
-import type nodemailer from "nodemailer";
 import type winston from "winston";
-
-export type MiddlewareStackArgs = {
-  app: express.Express;
-  config: ExpandedPlainwebConfig<
-    Record<string, unknown>,
-    MailConfig | undefined
-  >;
-};
-
-type HttpConfig<T> = {
-  port?: number;
-  redirects?: Record<string, string>;
-  staticPath: string;
-  middleware: (opts: MiddlewareStackArgs) => Promise<void> | void;
-};
-
-type SmtpMailConfig = {
-  host: string;
-  port: number;
-  secure: boolean;
-  auth: {
-    user: string;
-    pass: string;
-  };
-};
-
-export type MailerConfig = SmtpMailConfig | nodemailer.Transporter;
-
-export type MailConfig = {
-  default: MailerConfig;
-  [key: string]: MailerConfig;
-};
-
-type DatabaseConfig<T extends Record<string, unknown>> = {
-  dbUrl: string;
-  pragma: Record<string, string>;
-  schema: T;
-  migrationsTable?: string;
-};
 
 type PathsConfig = {
   routes?: string;
@@ -59,33 +17,18 @@ type LoggerConfig = {
   logger?: winston.Logger;
 };
 
-type PlainWebConfig<
-  S extends Record<string, unknown>,
-  M extends MailConfig | undefined = undefined,
-> = {
+export type PlainWebConfig = {
   nodeEnv: "development" | "production" | "test";
-  http: HttpConfig<S>;
-  database: DatabaseConfig<S>;
   logger?: LoggerConfig;
   paths?: PathsConfig;
-  mail?: M;
 };
 
-export type Config = ExpandedPlainwebConfig<
-  Record<string, unknown>,
-  MailConfig | undefined
->;
+export type Config = ExpandedPlainwebConfig;
 
-export type ExpandedPlainwebConfig<
-  S extends Record<string, unknown>,
-  M extends MailConfig | undefined = undefined,
-> = {
+export type ExpandedPlainwebConfig = {
   nodeEnv: "development" | "production" | "test";
-  http: Required<HttpConfig<S>>;
-  database: Required<DatabaseConfig<S>>;
   logger: Omit<Required<LoggerConfig>, "logger"> & { logger?: winston.Logger };
   paths: Required<PathsConfig>;
-  mail: M extends undefined ? Record<string, never> : M;
 };
 
 export const defaultConfigPaths: Required<PathsConfig> = {
@@ -96,15 +39,6 @@ export const defaultConfigPaths: Required<PathsConfig> = {
   public: "public",
   migrations: "migrations",
   schema: "app/schema.ts",
-};
-
-const defaultConfigHttp = {
-  port: 3000,
-  redirects: {},
-};
-
-const defaultConfigDatabase = {
-  migrationsTable: "__drizzle_migrations",
 };
 
 function parseProcessEnvLogLevel(): Config["logger"]["level"] | undefined {
@@ -130,14 +64,11 @@ export const defaultConfigLogger = {
   logger: undefined,
 };
 
-export let expandedConfig:
-  | ExpandedPlainwebConfig<Record<string, unknown>, MailConfig | undefined>
-  | undefined;
+export let expandedConfig: ExpandedPlainwebConfig | undefined;
 
-function expandConfig<
-  T extends Record<string, unknown>,
-  M extends MailConfig | undefined,
->(config: PlainWebConfig<T, M>): ExpandedPlainwebConfig<T, M> {
+function expandConfig<T extends Record<string, unknown>>(
+  config: PlainWebConfig,
+): ExpandedPlainwebConfig {
   const paths = { ...(config.paths ?? {}), ...defaultConfigPaths };
   const absolutePaths = {
     routes: path.resolve(process.cwd(), paths.routes),
@@ -151,20 +82,16 @@ function expandConfig<
   const expanded = {
     nodeEnv: config.nodeEnv,
     paths: absolutePaths,
-    http: { ...(config.http ?? {}), ...defaultConfigHttp },
     // TODO use deep merge
     logger: { ...(config.logger ?? {}), ...defaultConfigLogger },
-    database: { ...(config.database ?? {}), ...defaultConfigDatabase },
-    mail: config.mail as ExpandedPlainwebConfig<T, M>["mail"],
-  } satisfies ExpandedPlainwebConfig<T, M>;
+  } satisfies ExpandedPlainwebConfig;
   expandedConfig = expanded;
   return expanded;
 }
 
 /** Define a plainweb configuration */
-export function defineConfig<
-  T extends Record<string, unknown>,
-  M extends MailConfig | undefined = undefined,
->(config: PlainWebConfig<T, M>): ExpandedPlainwebConfig<T, M> {
+export function defineConfig<T extends Record<string, unknown>>(
+  config: PlainWebConfig,
+): ExpandedPlainwebConfig {
   return expandConfig(config);
 }

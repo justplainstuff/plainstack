@@ -31,7 +31,7 @@ module.exports = {
       curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - \&& 
       sudo apt install -y nodejs \&&
       npm install -g pnpm@9.5.0 pm2`,
-      "post-deploy": "pm2 reload ecosystem.config.js --env production",
+      "post-deploy": "pm2 startOrRestart ecosystem.config.js --env production",
     },
   },
 };

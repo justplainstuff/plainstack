@@ -1,4 +1,5 @@
-import { printRoutes } from "plainstack";
-import config from "plainweb.config";
+import { defineCommand, printRoutes } from "plainstack";
 
-void printRoutes(config);
+export default defineCommand(printRoutes, {
+  help: "Print all express routes to the console",
+});

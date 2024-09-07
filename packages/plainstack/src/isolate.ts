@@ -1,14 +1,15 @@
-import { sql } from "drizzle-orm";
-import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import { type Kysely, sql } from "kysely";
 
 /**
  * Run a a function in a database transaction.
  * The transaction is automatically rolled back, even if the function doesn't throw an error.
- * ONLY USE during testing, to keep test cases isolated from each other.
+ * Use during testing, to keep test cases isolated from each other.
  * */
-export async function isolate<Schema extends Record<string, unknown>>(
-  db: BetterSQLite3Database<Schema>,
-  fn: (db: BetterSQLite3Database<Schema>) => Promise<void>,
+export async function isolate(
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  db: Kysely<any>,
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  fn: (db: Kysely<any>) => Promise<void>,
 ) {
   if (process.env.NODE_ENV !== "test") {
     throw new Error("Make sure NODE_ENV=test is set when running tests");
@@ -18,14 +19,14 @@ export async function isolate<Schema extends Record<string, unknown>>(
 
   try {
     // Begin the transaction
-    db.run(sql.raw("BEGIN"));
+    await sql.raw("BEGIN").execute(db);
     try {
       await fn(db);
     } catch (e) {
       err = e as Error;
     }
   } finally {
-    db.run(sql.raw("ROLLBACK"));
+    await sql.raw("ROLLBACK").execute(db);
   }
 
   if (err) {

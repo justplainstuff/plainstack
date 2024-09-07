@@ -4,6 +4,7 @@
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
   "type": "commonjs",
   "main": "dist/plainstack.js",
+  "bin": "dist/bin.js",
   "types": "dist/plainstack.d.ts",
   "scripts": {
     "test": "NODE_ENV=test vitest run",
@@ -26,14 +27,16 @@
   "peerDependencies": {
     "@kitajs/html": "^4.2.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.0",
+    "better-sqlite3": "^11.0.0",
     "tsx": "^4.10.3",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "vitest": "^2.0.1",
+    "kysely": "^0.27.4",
+    "tailwindcss": "^3.4.3"
   },
   "dependencies": {
-    "plainjobs": "workspace:*",
+    "plainjobs": "0.0.4",
     "@paralleldrive/cuid2": "^2.2.2",
-    "better-sqlite3": "^11.0.0",
     "errorhandler": "^1.5.1",
     "express": "^4.19.2",
     "express-list-endpoints": "^7.1.0",
@@ -41,7 +44,10 @@
     "morgan": "^1.10.0",
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",
-    "winston": "^3.13.1"
+    "winston": "^3.13.1",
+    "kysely-codegen": "^0.16.5",
+    "kysely-ctl": "^0.9.0",
+    "npm-run-all2": "^6.0.0"
   },
   "devDependencies": {
     "@kitajs/html": "^4.2.1",
@@ -56,7 +62,7 @@
     "@vitest/coverage-v8": "^2.0.3",
     "daisyui": "^4.11.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.0",
+    "kysely": "^0.27.4",
     "npm-run-all2": "^6.0.0",
     "supertest": "^7.0.0",
     "tailwindcss": "^3.4.3",

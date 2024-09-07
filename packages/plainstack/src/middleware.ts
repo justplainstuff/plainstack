@@ -1,66 +1,20 @@
-import type { ExpandedPlainwebConfig, MiddlewareStackArgs } from "config";
-import type { BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import errorHandler from "errorhandler";
-import express from "express";
+import type { Config } from "config";
+import type express from "express";
 import expressRateLimit from "express-rate-limit";
 import { randomId } from "id";
+import type { Kysely } from "kysely";
 import { getLogger } from "log";
 import morgan from "morgan";
 import { fileRouter as plainFileRouter } from "./file-router";
-import { hasPendingMigrations, migrate } from "./migrate";
 
 const log = getLogger("middleware");
 
-function preferHeader(
-  request: express.Request,
-  from: string,
-  to: string,
-): void {
-  const preferredValue = request.get(from.toLowerCase());
-  if (preferredValue == null) return;
-
-  delete request.headers[to];
-  request.headers[to.toLowerCase()] = preferredValue;
-}
-
-type Config = ExpandedPlainwebConfig<Record<string, unknown>>;
-
-function flyHeaders(): express.RequestHandler {
-  return function flyHeaders(req, res, next) {
-    if (process.env.FLY_APP_NAME == null) return next();
-    log.debug("setting fly headers");
-    req.app.set("trust proxy", true);
-    preferHeader(req, "Fly-Client-IP", "X-Forwarded-For");
-    preferHeader(req, "Fly-Forwarded-Port", "X-Forwarded-Port");
-    preferHeader(req, "Fly-Forwarded-Proto", "X-Forwarded-Protocol");
-    preferHeader(req, "Fly-Forwarded-Ssl", "X-Forwarded-Ssl");
-    return next();
-  };
-}
-
-function migrations(
-  config: Pick<Config, "database" | "paths" | "nodeEnv">,
-): express.RequestHandler {
-  return async (req, res, next) => {
-    if (config.nodeEnv === "production") return next();
-    log.info("checking for pending migrations");
-    const pendingMigrations = await hasPendingMigrations(config);
-    if (!pendingMigrations) return next();
-    log.info("pending migrations found");
-    await migrate(config);
-    next();
-  };
-}
-
-export function forceWWW(
-  config: Pick<Config, "nodeEnv">,
-): express.RequestHandler {
+export function forceWWW(): express.RequestHandler {
   return function forceWWW(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,
   ) {
-    if (config.nodeEnv === "development") return next();
     const host = req.header("host");
 
     if (host) {
@@ -82,7 +36,7 @@ export function forceWWW(
   };
 }
 
-function logging(config: Pick<Config, "nodeEnv">): express.RequestHandler {
+function logging(): express.RequestHandler {
   const logger = getLogger();
   return morgan(
     ":method :url :status :res[content-length] - :response-time ms",
@@ -94,33 +48,10 @@ function logging(config: Pick<Config, "nodeEnv">): express.RequestHandler {
   );
 }
 
-function error(config: Pick<Config, "nodeEnv">): express.ErrorRequestHandler {
-  if (config.nodeEnv === "development") return errorHandler();
-  return (err, req, res, next) => {
-    log.error(err);
-    next(err);
-  };
-}
-
-function staticFiles({
-  nodeEnv,
-  dir,
-}: {
-  nodeEnv: "development" | "production" | "test";
-  dir: string;
-}): express.RequestHandler {
-  if (nodeEnv === "development") return express.static(dir);
-  return (req, res, next) => next();
-}
-
-function rateLimit({
-  nodeEnv,
-  rateLimit,
-}: {
-  nodeEnv: "development" | "production" | "test";
+function rateLimit(opts?: {
   rateLimit?: { windowMs?: number; limit?: number; message?: string };
 }): express.RequestHandler {
-  if (nodeEnv !== "development") return (req, res, next) => next();
+  const rateLimit = opts?.rateLimit;
   return expressRateLimit({
     windowMs: rateLimit?.windowMs ?? 60 * 1000,
     limit: rateLimit?.limit ?? 60,
@@ -130,34 +61,11 @@ function rateLimit({
   });
 }
 
-function redirect({
-  redirects,
-}: {
-  redirects: Record<string, string>;
-}): express.RequestHandler {
-  return (req, res, next) => {
-    const target = redirects[req.path];
-    if (target) {
-      log.info("redirecting to", target);
-      res.redirect(target);
-    } else {
-      next();
-    }
-  };
-}
-
-function json(): express.RequestHandler {
-  return express.json();
-}
-
-function urlencoded(): express.RequestHandler {
-  return express.urlencoded({ extended: true });
-}
-
-function database<T extends Record<string, unknown>>({
+function database({
   database,
 }: {
-  database: BetterSQLite3Database<T>;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  database: Kysely<any>;
 }): express.RequestHandler {
   return (req, res, next) => {
     log.debug("attach database to request");
@@ -184,27 +92,10 @@ function id(): express.RequestHandler {
 
 /** A collection of built-in express middleware. */
 export const middleware = {
-  flyHeaders,
   forceWWW,
   logging,
-  error,
-  redirect,
-  staticFiles,
   rateLimit,
-  json,
-  urlencoded,
   database,
   fileRouter,
-  migrations,
   id,
 };
-
-/**
- * Define a middleware stack.
- * The order of middleware matters, the first middleware in the stack will be executed first.
- * */
-export function defineMiddleware(
-  stack: (opts: MiddlewareStackArgs) => Promise<void> | void,
-) {
-  return stack;
-}

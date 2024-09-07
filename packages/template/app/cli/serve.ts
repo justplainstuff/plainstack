@@ -1,13 +1,14 @@
-import { getApp, getWorker, log } from "plainstack";
-import config from "plainweb.config";
+import { env } from "app/config/env";
+import { http } from "app/config/http";
+import { defineCommand, log } from "plainstack";
 
-async function serve() {
-  const worker = getWorker(config);
-  await worker.start();
-  log.info("⚡️ background task worker started");
-  const app = await getApp(config);
-  app.listen(config.http.port);
-  log.info(`⚡️ http://localhost:${config.http.port}`);
-}
-
-serve();
+export default defineCommand(
+  async (config) => {
+    const app = await http(config);
+    app.listen(env.PORT);
+    log.info(`⚡️ http://localhost:${env.PORT}`);
+  },
+  {
+    help: "Start the HTTP server",
+  },
+);

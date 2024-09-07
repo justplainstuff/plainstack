@@ -6,7 +6,7 @@ import { forceWWW } from "./middleware";
 
 function app() {
   const app = express();
-  app.use(forceWWW({ nodeEnv: "test" }));
+  app.use(forceWWW());
   return app;
 }
 

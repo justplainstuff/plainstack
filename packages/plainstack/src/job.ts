@@ -1,30 +1,29 @@
-import type { Config } from "config";
+import type BetterSqlite3Database from "better-sqlite3";
+
+export type Job<T> = {
+  name: string;
+  process: ({ data }: { data: T }) => Promise<void>;
+};
 
 export interface DefineJobOpts<T> {
   name: string;
   process: ({ data }: { data: T }) => Promise<void>;
-  success?: ({ data }: { data: T }) => Promise<void>;
-  failure?: ({ data, err }: { data: T; err: unknown }) => Promise<void>;
   pollIntervall?: number;
   batchSize?: number;
   maxRetries?: number;
   retryIntervall?: number;
 }
 
-export type Job<T> = {
-  name: string;
-  process: ({ data }: { data: T }) => Promise<void>;
-  success?: ({ data }: { data: T }) => Promise<void>;
-  failure?: ({ data, err }: { data: T; err: unknown }) => Promise<void>;
-};
-
-export function defineJob<T>(opts: DefineJobOpts<T>): Job<T> {
+export function defineJob<T>(
+  connection: BetterSqlite3Database.Database,
+  opts: DefineJobOpts<T>,
+): Job<T> {
   return {
     name: opts.name,
     process: opts.process,
-    success: opts.success,
-    failure: opts.failure,
   };
 }
 
-export function work(config: Pick<Config, "database"> | "paths" | "nodeEnv") {}
+export async function work() {
+  return Promise.reject(new Error("Not implemented"));
+}
