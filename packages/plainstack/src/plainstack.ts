@@ -2,9 +2,8 @@
 export { type Config } from "./config";
 export { log, getLogger } from "./log";
 export { randomId } from "./id";
-export { run } from "./run";
 export { dev, prod, test } from "./node-env";
-export { defineCommand } from "./command";
+export { run, defineCommand } from "./command";
 
 // http & web
 export { fileRouter } from "./file-router";

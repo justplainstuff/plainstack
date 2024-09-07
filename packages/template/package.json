@@ -3,11 +3,11 @@
   "version": "1.0.17",
   "private": true,
   "scripts": {
-    "dev": "pnpm dev",
-    "test": "pnpm test",
-    "migrate": "pnpm migrate",
-    "generate": "pnpm pls generate",
-    "pls": "tsx bin.ts",
+    "dev": "pnpm p dev",
+    "test": "pnpm p test",
+    "migrate": "pnpm p migrate",
+    "generate": "pnpm p generate",
+    "p": "tsx bin.ts",
     "check": "tsc --noEmit && biome check --fix . && xss-scan"
   },
   "dependencies": {

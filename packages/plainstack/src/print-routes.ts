@@ -1,11 +1,7 @@
-import type { ExpandedPlainwebConfig } from "config";
-import type { Express } from "express";
 import expressListEndpoints from "express-list-endpoints";
 
 /** Print all express routes to the console. Useful for debugging. */
-export async function printRoutes<T extends Record<string, unknown>>(
-  app: Express.Application,
-) {
+export async function printRoutes(app: Express.Application) {
   const endpoints = expressListEndpoints(app);
   const sorted = endpoints.sort((a, b) => {
     if (a.path < b.path) return -1;
