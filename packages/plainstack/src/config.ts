@@ -1,4 +1,6 @@
 import path from "node:path";
+import type express from "express";
+import type { Kysely, QueryExecutorProvider, Sql } from "kysely";
 import type winston from "winston";
 
 type PathsConfig = {
@@ -19,14 +21,22 @@ type LoggerConfig = {
 
 export type PlainWebConfig = {
   nodeEnv: "development" | "production" | "test";
+  app: (config: HttpConfig) => Promise<express.Application>;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  database: Kysely<any>;
   logger?: LoggerConfig;
   paths?: PathsConfig;
 };
 
 export type Config = ExpandedPlainwebConfig;
 
+export type HttpConfig = Pick<Config, "nodeEnv" | "logger" | "paths">;
+
 export type ExpandedPlainwebConfig = {
   nodeEnv: "development" | "production" | "test";
+  app: express.Application;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  database: Kysely<any>;
   logger: Omit<Required<LoggerConfig>, "logger"> & { logger?: winston.Logger };
   paths: Required<PathsConfig>;
 };
@@ -66,9 +76,9 @@ export const defaultConfigLogger = {
 
 export let expandedConfig: ExpandedPlainwebConfig | undefined;
 
-function expandConfig<T extends Record<string, unknown>>(
+export async function expandConfig(
   config: PlainWebConfig,
-): ExpandedPlainwebConfig {
+): Promise<ExpandedPlainwebConfig> {
   const paths = { ...(config.paths ?? {}), ...defaultConfigPaths };
   const absolutePaths = {
     routes: path.resolve(process.cwd(), paths.routes),
@@ -79,19 +89,19 @@ function expandConfig<T extends Record<string, unknown>>(
     migrations: path.resolve(process.cwd(), paths.migrations),
     schema: path.resolve(process.cwd(), paths.schema),
   };
+  // TODO use deep merge
+  const logger = { ...(config.logger ?? {}), ...defaultConfigLogger };
   const expanded = {
     nodeEnv: config.nodeEnv,
+    app: await config.app({
+      nodeEnv: config.nodeEnv,
+      paths: absolutePaths,
+      logger,
+    }),
+    database: config.database,
     paths: absolutePaths,
-    // TODO use deep merge
-    logger: { ...(config.logger ?? {}), ...defaultConfigLogger },
+    logger,
   } satisfies ExpandedPlainwebConfig;
   expandedConfig = expanded;
   return expanded;
-}
-
-/** Define a plainweb configuration */
-export function defineConfig<T extends Record<string, unknown>>(
-  config: PlainWebConfig,
-): ExpandedPlainwebConfig {
-  return expandConfig(config);
 }

@@ -13,7 +13,7 @@ function loadStyles() {
 export default defineConfig({
   target: "node20",
   format: ["cjs"],
-  entry: ["src/plainstack.ts", "src/bin.ts"],
+  entry: ["src/plainstack.ts"],
   external: ["esbuild", "dotenv", "drizzle-orm", "zod", "tsx", "@kitajs/html"],
   env: {
     ADMIN_STYLES: loadStyles(),

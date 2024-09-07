@@ -8,7 +8,8 @@
     "migrate": "pnpm p migrate",
     "generate": "pnpm p generate",
     "p": "tsx bin.ts",
-    "check": "tsc --noEmit && biome check --fix . && xss-scan"
+    "build": "tsc --noEmit",
+    "check": "biome check --fix . && xss-scan"
   },
   "dependencies": {
     "@kitajs/html": "^4.2.1",

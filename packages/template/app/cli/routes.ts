@@ -1,9 +1,7 @@
-import { http } from "app/config/http";
 import { defineCommand, printRoutes } from "plainstack";
 
 export default defineCommand(
-  async (config) => {
-    const app = await http(config);
+  async ({ app }) => {
     await printRoutes(app);
   },
   {

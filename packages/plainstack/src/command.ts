@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig } from "config";
-import type { Config, ExpandedPlainwebConfig, PlainWebConfig } from "./config";
+import type { Config, ExpandedPlainwebConfig } from "./config";
 import { log } from "./log";
 
 export type Command = {
@@ -25,8 +24,7 @@ export function defineCommand(
 export async function loadCommands(
   config: ExpandedPlainwebConfig,
 ): Promise<Command[]> {
-  const expandedConfig = defineConfig(config);
-  const cliPath = expandedConfig.paths.cli;
+  const cliPath = config.paths.cli;
 
   if (!fs.existsSync(cliPath)) {
     console.error(`CLI directory not found: ${cliPath}`);
@@ -105,7 +103,7 @@ export async function runCommand(
   }
 }
 
-function printHelp(commands: Command[]) {
+export function printHelp(commands: Command[]) {
   console.log("Available commands:");
   const maxNameLength = Math.max(...commands.map((cmd) => cmd.name.length));
 
@@ -114,10 +112,4 @@ function printHelp(commands: Command[]) {
       console.log(`  ${cmd.name.padEnd(maxNameLength)}  ${cmd.help}`);
     }
   }
-}
-
-export async function run(config: PlainWebConfig) {
-  const expandedConfig = defineConfig(config);
-  const commands = await loadCommands(expandedConfig);
-  await runCommand(expandedConfig, commands);
 }

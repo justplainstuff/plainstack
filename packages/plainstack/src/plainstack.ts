@@ -3,7 +3,8 @@ export { type Config } from "./config";
 export { log, getLogger } from "./log";
 export { randomId } from "./id";
 export { dev, prod, test } from "./node-env";
-export { run, defineCommand } from "./command";
+export { defineCommand } from "./command";
+export { run } from "./run";
 
 // http & web
 export { fileRouter } from "./file-router";
@@ -12,6 +13,7 @@ export { html, json, redirect, stream, notFound } from "./plain-response";
 export { printRoutes } from "./print-routes";
 export { middleware } from "./middleware";
 export { testHandler } from "./test-handler";
+export { defineHttp } from "./http";
 
 export { outbox, sendMail, defineMailer } from "./mail";
 
