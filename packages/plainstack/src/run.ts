@@ -1,12 +1,7 @@
+import { execSync } from "node:child_process";
 import { defineCommand, loadCommands, runCommand } from "./command";
 import { type PlainWebConfig, expandConfig } from "./config";
 import { printRoutes } from "./print-routes";
-
-async function ensureBinaryExists(binary: string) {
-  // TODO
-  // check in cwd() node_modules/.bin and if not found, print: "${binary} is not installed. Please install it with `pnpm i ${binary}`"
-  // and throw error
-}
 
 const printRoutesCommand = {
   ...defineCommand(
@@ -22,10 +17,11 @@ const printRoutesCommand = {
 
 const assetsCommand = {
   ...defineCommand(
-    async ({ app }) => {
-      await ensureBinaryExists("tailwindcss");
-      // TODO implement
-      // execute `node_modules/.bin/tailwindcss -i ${app.locals.config.paths.styles} -o ${app.locals.config.paths.out}/public/styles.css --minify`,
+    async ({ app, paths }) => {
+      execSync(
+        `npx -p tailwindcss -i ${paths.styles} -o ${paths.out}/public/styles.css --minify`,
+        { stdio: "inherit" },
+      );
     },
     {
       help: "Compile and minify CSS",
@@ -37,9 +33,10 @@ const assetsCommand = {
 const assetsWatchCommand = {
   ...defineCommand(
     async ({ app }) => {
-      await ensureBinaryExists("tailwindcss");
-      // TODO implement
-      // execute `node_modules/.bin/tailwindcss -i ${app.locals.config.paths.styles} -o ${app.locals.config.paths.out}/public/styles.css --watch`,
+      execSync(
+        `npx -p tailwindcss -i ${app.locals.config.paths.styles} -o ${app.locals.config.paths.out}/public/styles.css --watch`,
+        { stdio: "inherit" },
+      );
     },
     {
       help: "Compile and watch for changes in CSS",
@@ -51,11 +48,11 @@ const assetsWatchCommand = {
 const migrateCommand = {
   ...defineCommand(
     async ({ app, dbUrl, paths }) => {
-      await ensureBinaryExists("kysely-ctl");
-      await ensureBinaryExists("kysely-codegen");
-      // TODO implement
-      // execute `node_modules/.bin/kysely-ctl migrate`,
-      // execute DATABASE_URL=${dbUrl} kysely-codegen --dialect sqlite --out-file ${paths.schema},
+      execSync("npx -p kysely-ctl migrate", { stdio: "inherit" });
+      execSync(
+        `DATABASE_URL=${dbUrl} npx -p kysely-codegen --dialect sqlite --out-file ${paths.schema}`,
+        { stdio: "inherit" },
+      );
     },
     {
       help: "Run migrations using kysely-ctl",
@@ -67,9 +64,7 @@ const migrateCommand = {
 const migrationsMakeCommand = {
   ...defineCommand(
     async ({ app }) => {
-      await ensureBinaryExists("kysely-codegen");
-      // TODO implement
-      // execute `node_modules/.bin/kysely-codegen` migrations:make,
+      execSync("npx -p kysely-ctl migrations:make", { stdio: "inherit" });
     },
     {
       help: "Create new migration file",

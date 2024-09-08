@@ -11,6 +11,8 @@ type PathsConfig = {
   forms?: string;
   public?: string;
   schema?: string;
+  out?: string;
+  styles?: string;
 };
 
 type LoggerConfig = {
@@ -51,6 +53,8 @@ export const defaultConfigPaths: Required<PathsConfig> = {
   public: "public",
   migrations: "migrations",
   schema: "app/schema.ts",
+  out: ".out",
+  styles: "assets/styles.css",
 };
 
 function parseProcessEnvLogLevel(): Config["logger"]["level"] | undefined {
@@ -90,6 +94,8 @@ export async function expandConfig(
     public: path.resolve(process.cwd(), paths.public),
     migrations: path.resolve(process.cwd(), paths.migrations),
     schema: path.resolve(process.cwd(), paths.schema),
+    out: path.resolve(process.cwd(), paths.out),
+    styles: path.resolve(process.cwd(), paths.styles),
   };
   // TODO use deep merge
   const logger = { ...(config.logger ?? {}), ...defaultConfigLogger };

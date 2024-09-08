@@ -302,6 +302,9 @@ importers:
       kysely-ctl:
         specifier: ^0.9.0
         version: 0.9.0(kysely@0.27.4)(magicast@0.3.4)
+      npm-run-all2:
+        specifier: ^6.0.0
+        version: 6.2.2
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.10

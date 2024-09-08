@@ -4,6 +4,7 @@ import express from "express";
 import { defineHttp, dev, middleware, prod } from "plainstack";
 
 export default defineHttp(async (config) => {
+  console.log("prod", prod());
   const app = express();
   app.use(middleware.id());
   app.use(errorHandler());
