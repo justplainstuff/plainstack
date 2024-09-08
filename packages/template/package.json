@@ -3,13 +3,17 @@
   "version": "1.0.17",
   "private": true,
   "scripts": {
-    "dev": "pnpm p dev",
-    "test": "pnpm p test",
+    "dev": "run-p dev:*",
+    "dev:assets": "pnpm p assets --watch",
+    "dev:serve": "pnpm p serve --watch",
+    "dev:build": "tsc --noEmit --watch",
     "migrate": "pnpm p migrate",
-    "generate": "pnpm p generate",
-    "p": "tsx bin.ts",
+    "migrations:make": "pnpm p migrations:make",
+    "test": "vitest run",
     "build": "tsc --noEmit",
-    "check": "biome check --fix . && xss-scan"
+    "check": "biome check --fix . && xss-scan",
+    "tables": "DATABASE_URL=db.sqlite3 kysely-codegen --dialect sqlite --out-file app/config/tables.ts",
+    "p": "tsx bin.ts"
   },
   "dependencies": {
     "@kitajs/html": "^4.2.1",

@@ -1,6 +1,6 @@
 import path from "node:path";
 import type express from "express";
-import type { Kysely, QueryExecutorProvider, Sql } from "kysely";
+import type { Kysely } from "kysely";
 import type winston from "winston";
 
 type PathsConfig = {
@@ -24,6 +24,7 @@ export type PlainWebConfig = {
   app: (config: HttpConfig) => Promise<express.Application>;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   database: Kysely<any>;
+  dbUrl: string;
   logger?: LoggerConfig;
   paths?: PathsConfig;
 };
@@ -37,6 +38,7 @@ export type ExpandedPlainwebConfig = {
   app: express.Application;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   database: Kysely<any>;
+  dbUrl: string;
   logger: Omit<Required<LoggerConfig>, "logger"> & { logger?: winston.Logger };
   paths: Required<PathsConfig>;
 };
@@ -99,6 +101,7 @@ export async function expandConfig(
       logger,
     }),
     database: config.database,
+    dbUrl: config.dbUrl,
     paths: absolutePaths,
     logger,
   } satisfies ExpandedPlainwebConfig;

@@ -5,8 +5,10 @@ import { run } from "plainstack";
 
 void run({
   nodeEnv: env.NODE_ENV,
+  paths: {},
   app: http,
   database,
+  dbUrl: env.DB_URL,
   logger: {
     level: env.LOG_LEVEL,
   },
