@@ -1,4 +1,4 @@
-import { database } from "app/config/database";
+import database from "app/config/database";
 import { type Handler, json } from "plainstack";
 
 export const GET: Handler = async () => {

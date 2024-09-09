@@ -1,4 +1,4 @@
-import { database } from "app/config/database";
+import database from "app/config/database";
 import { createUser } from "app/services/users";
 import { isolate } from "plainstack";
 import { describe, expect, test } from "vitest";

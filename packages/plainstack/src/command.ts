@@ -1,10 +1,14 @@
+import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { type CommandDef, defineCommand, runMain } from "citty";
 import type { AppConfig } from "./app-config";
 import type { Config } from "./config";
 import { log } from "./log";
 import { printRoutes } from "./print-routes";
+
+const execAsync = promisify(exec);
 
 function getBuiltInCommands({
   config,
@@ -27,7 +31,25 @@ function getBuiltInCommands({
 
   const build = defineCommand({
     run: async () => {
-      console.log("running build");
+      console.log("build start");
+
+      const now = Date.now();
+      try {
+        const tasks = [
+          execAsync("npx biome check --fix ."),
+          execAsync("tsc --noEmit"),
+        ];
+
+        const [biomeCheck, tsCheck] = await Promise.all(tasks);
+
+        biomeCheck?.stdout && console.log(biomeCheck.stdout);
+        tsCheck?.stdout && console.log(tsCheck.stdout);
+        console.log("build took", Date.now() - now, "ms");
+      } catch (error) {
+        console.error("build failed:");
+        console.error((error as { stdout: string }).stdout);
+        process.exit(1);
+      }
     },
   });
 

@@ -5,7 +5,7 @@ export type InputConfig = {
   nodeEnv: "development" | "production" | "test";
   dbUrl: string;
   logger: {
-    level: LogLevel;
+    level?: LogLevel;
     transports?: winston.transport[];
     logger?: winston.Logger;
   };

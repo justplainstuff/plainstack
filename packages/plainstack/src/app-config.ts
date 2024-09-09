@@ -26,13 +26,14 @@ export async function loadAppConfig({
   log.debug("checking database module for valid default export");
   if (
     !databaseModule?.default?.default ||
-    typeof databaseModule.default.default !== "function"
+    typeof databaseModule.default.default !== "object" ||
+    !("selectFrom" in databaseModule.default.default)
   ) {
     throw new Error(
       `Invalid database config: expected a function as default export at ${databaseConfigPath}`,
     );
   }
-  const database = await databaseModule.default.default(config);
+  const database = databaseModule.default.default;
 
   log.debug("loading http config module");
   const httpConfigPath = join(cwd(), config.paths.httpConfig);
@@ -58,10 +59,8 @@ export async function loadAppConfig({
   };
 }
 
-export function defineDatabase<T>(
-  f: (config: Config) => Kysely<T>,
-): (config: Config) => Kysely<T> {
-  return f;
+export function defineDatabase<T>(db: Kysely<T>): Kysely<T> {
+  return db;
 }
 
 export type Zod = typeof z;
