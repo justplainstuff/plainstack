@@ -15,6 +15,10 @@ const log = getLogger("command");
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getBuiltInCommands(): Record<string, CommandDef<any>> {
   const build = defineCommand({
+    meta: {
+      name: "build",
+      description: "Type-check, lint and bundle assets",
+    },
     run: async () => {
       log.info("build start");
 
@@ -38,6 +42,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const test = defineCommand({
+    meta: {
+      name: "test",
+      description: "Run tests",
+    },
     args: {
       watch: {
         type: "boolean",
@@ -56,6 +64,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const dev = defineCommand({
+    meta: {
+      name: "dev",
+      description: "Start the local development server",
+    },
     run: async () => {
       const config = await loadAndGetConfig();
       await Promise.all([
@@ -76,6 +88,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const serve = defineCommand({
+    meta: {
+      name: "serve",
+      description: "Start the production web server",
+    },
     run: async () => {
       const config = await loadAndGetConfig();
       const appConfig = await loadAndGetAppConfig({ config });
@@ -85,6 +101,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const work = defineCommand({
+    meta: {
+      name: "work",
+      description: "Start the background worker",
+    },
     run: async () => {
       const config = await loadAndGetConfig();
       const appConfig = await loadAndGetAppConfig({ config });
@@ -93,6 +113,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const routes = defineCommand({
+    meta: {
+      name: "routes",
+      description: "Print all file routes",
+    },
     run: async () => {
       const config = await loadAndGetConfig();
       const { app } = await loadAndGetAppConfig({ config });
@@ -101,6 +125,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const migrate = defineCommand({
+    meta: {
+      name: "migrate",
+      description: "Apply all pending migrations",
+    },
     args: {
       name: {
         type: "positional",
@@ -143,6 +171,10 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const seed = defineCommand({
+    meta: {
+      name: "seed",
+      description: "Run the seeds in seed.ts",
+    },
     run: async () => {
       await runSeed();
     },
