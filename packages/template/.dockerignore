@@ -1,3 +1,8 @@
+data.db*
 sqlite.db*
+.out
+coverage
+.env
+.env.test
 output.css
 node_modules

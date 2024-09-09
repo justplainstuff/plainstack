@@ -1,18 +1,19 @@
 import SQLite from "better-sqlite3";
-import { Kysely, SqliteDialect } from "kysely";
-import { log } from "plainstack";
-import { env } from "./env";
+import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
+import { defineDatabase, log } from "plainstack";
 import type { DB } from "./schema";
 
-export const connection = new SqliteDialect({
-  database: new SQLite(env.DB_URL),
-});
+export default defineDatabase(
+  ({ dbUrl }) =>
+    new Kysely<DB>({
+      dialect: new SqliteDialect({
+        database: new SQLite(dbUrl),
+      }),
+      plugins: [new CamelCasePlugin()],
+      log: (event: unknown) => {
+        log.info(event);
+      },
+    }),
+);
 
-export const database = new Kysely<DB>({
-  dialect: connection,
-  log: (event: unknown) => {
-    log.info(event);
-  },
-});
-
-export type Database = typeof database;
+export type Database = Kysely<DB>;

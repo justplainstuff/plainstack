@@ -35,6 +35,8 @@ yarn-error.log*
 .DS_Store
 *.pem
 
+data.db*
+test-data.db*
 db.sqlite3*
 test-db.sqlite3*
 output.css

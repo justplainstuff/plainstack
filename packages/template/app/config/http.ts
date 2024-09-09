@@ -1,10 +1,9 @@
-import { database } from "app/config/database";
+import database from "app/config/database";
 import errorHandler from "errorhandler";
 import express from "express";
 import { defineHttp, dev, middleware, prod } from "plainstack";
 
-export default defineHttp(async (config) => {
-  console.log("prod", prod());
+export default defineHttp(async ({ paths }) => {
   const app = express();
   app.use(middleware.id());
   app.use(errorHandler());
@@ -12,9 +11,9 @@ export default defineHttp(async (config) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(middleware.database({ database }));
-  if (dev()) app.use("/public", express.static(config.paths.public));
+  if (dev()) app.use("/public", express.static(paths.public));
   if (prod()) app.use(middleware.forceWWW());
   if (prod()) app.use(middleware.rateLimit());
-  app.use(await middleware.fileRouter({ dir: config.paths.routes }));
+  app.use(await middleware.fileRouter({ dir: paths.routes }));
   return app;
 });

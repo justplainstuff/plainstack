@@ -5,16 +5,14 @@
   "type": "commonjs",
   "main": "dist/plainstack.js",
   "types": "dist/plainstack.d.ts",
+  "bin": "dist/bin.js",
   "scripts": {
-    "test": "NODE_ENV=test vitest run",
-    "build": "tsc --noEmit && pnpm build:tw && tsup",
-    "build:tw": "tailwindcss -i ./styles.css -o ./output.css --minify",
-    "dev:tw": "tailwindcss -i ./styles.css -o ./output.css --watch",
-    "dev:admin": "tsx --watch bin/admin.ts",
-    "dev": "npm-run-all --parallel dev:admin dev:tw"
+    "test": "vitest run",
+    "build": "tsc --noEmit && tsup"
   },
   "keywords": [
     "plainweb",
+    "plainstack",
     "sqlite",
     "typescript",
     "htmx",
@@ -25,19 +23,15 @@
   "license": "MIT",
   "peerDependencies": {
     "@kitajs/html": "^4.2.1",
-    "better-sqlite3": "^11.0.0",
-    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "kysely": "^0.27.4",
-    "tailwindcss": "^3.4.3",
-    "tsx": "^4.10.3",
-    "vitest": "^2.0.1",
-    "zod": "^3.23.8"
+    "tsx": "^4.16.2"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
     "autoprefixer": "^10.4.20",
-    "errorhandler": "^1.5.1",
-    "express": "^4.19.2",
+    "c12": "^1.11.2",
+    "citty": "^0.1.6",
     "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
     "kysely-codegen": "^0.16.5",
@@ -45,33 +39,29 @@
     "morgan": "^1.10.0",
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",
-    "npm-run-all2": "^6.0.0",
     "plainjobs": "0.0.4",
-    "winston": "^3.13.1"
+    "winston": "^3.13.1",
+    "tailwindcss": "^3.4.3",
+    "dotenv": "^16.4.5",
+    "vitest": "^2.0.1"
   },
   "devDependencies": {
     "@kitajs/html": "^4.2.1",
     "@kitajs/ts-html-plugin": "^4.0.1",
-    "@types/better-sqlite3": "^7.6.10",
-    "@types/errorhandler": "^1.5.3",
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.24",
     "@types/nodemailer": "^6.4.15",
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-v8": "^2.0.3",
-    "daisyui": "^4.11.1",
     "dotenv": "^16.4.5",
-    "kysely": "^0.27.4",
-    "npm-run-all2": "^6.0.0",
     "supertest": "^7.0.0",
     "tailwindcss": "^3.4.10",
     "tempy": "^3.1.0",
     "tsup": "^8.0.2",
-    "tsx": "^4.16.2",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.0.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "tsx": "^4.16.2"
   }
 }

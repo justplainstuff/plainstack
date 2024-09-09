@@ -123,12 +123,15 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.45)
-      better-sqlite3:
-        specifier: ^11.0.0
-        version: 11.2.1
-      errorhandler:
-        specifier: ^1.5.1
-        version: 1.5.1
+      c12:
+        specifier: ^1.11.2
+        version: 1.11.2(magicast@0.3.4)
+      citty:
+        specifier: ^0.1.6
+        version: 0.1.6
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -138,6 +141,9 @@ importers:
       express-rate-limit:
         specifier: ^7.3.1
         version: 7.4.0(express@4.19.2)
+      kysely:
+        specifier: ^0.27.4
+        version: 0.27.4
       kysely-codegen:
         specifier: ^0.16.5
         version: 0.16.5(better-sqlite3@11.2.1)(kysely@0.27.4)
@@ -153,12 +159,15 @@ importers:
       nodemailer:
         specifier: ^6.9.13
         version: 6.9.14
-      npm-run-all2:
-        specifier: ^6.0.0
-        version: 6.2.2
       plainjobs:
         specifier: 0.0.4
         version: 0.0.4(better-sqlite3@11.2.1)
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.10
+      vitest:
+        specifier: ^2.0.1
+        version: 2.0.5(@types/node@20.16.1)
       winston:
         specifier: ^3.13.1
         version: 3.14.2
@@ -169,12 +178,6 @@ importers:
       '@kitajs/ts-html-plugin':
         specifier: ^4.0.1
         version: 4.0.2(@kitajs/html@4.2.1)(typescript@5.5.4)
-      '@types/better-sqlite3':
-        specifier: ^7.6.10
-        version: 7.6.11
-      '@types/errorhandler':
-        specifier: ^1.5.3
-        version: 1.5.3
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
@@ -193,21 +196,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^2.0.3
         version: 2.0.5(vitest@2.0.5(@types/node@20.16.1))
-      daisyui:
-        specifier: ^4.11.1
-        version: 4.12.10(postcss@8.4.45)
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
-      kysely:
-        specifier: ^0.27.4
-        version: 0.27.4
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
-      tailwindcss:
-        specifier: ^3.4.10
-        version: 3.4.10
       tempy:
         specifier: ^3.1.0
         version: 3.1.0
@@ -223,9 +214,6 @@ importers:
       vite-tsconfig-paths:
         specifier: ^4.3.2
         version: 4.3.2(typescript@5.5.4)(vite@5.4.2(@types/node@20.16.1))
-      vitest:
-        specifier: ^2.0.1
-        version: 2.0.5(@types/node@20.16.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -256,9 +244,12 @@ importers:
       better-sqlite3:
         specifier: ^11.0.0
         version: 11.2.1
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
+      errorhandler:
+        specifier: ^1.5.1
+        version: 1.5.1
+      express:
+        specifier: ^4.19.2
+        version: 4.19.2
       kysely:
         specifier: ^0.27.4
         version: 0.27.4
@@ -268,9 +259,6 @@ importers:
       tsx:
         specifier: ^4.16.2
         version: 4.18.0
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.8.3
@@ -293,27 +281,9 @@ importers:
       '@types/node':
         specifier: ^20.11.24
         version: 20.16.1
-      errorhandler:
-        specifier: ^1.5.1
-        version: 1.5.1
-      express:
-        specifier: ^4.19.2
-        version: 4.19.2
-      kysely-ctl:
-        specifier: ^0.9.0
-        version: 0.9.0(kysely@0.27.4)(magicast@0.3.4)
-      npm-run-all2:
-        specifier: ^6.0.0
-        version: 6.2.2
-      tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.10
       typescript:
         specifier: ^5.3.3
         version: 5.5.4
-      vitest:
-        specifier: ^2.0.1
-        version: 2.0.5(@types/node@20.16.1)
 
   packages/website:
     dependencies:

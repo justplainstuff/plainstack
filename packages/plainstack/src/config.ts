@@ -1,116 +1,99 @@
-import path from "node:path";
-import type express from "express";
-import type { Kysely } from "kysely";
 import type winston from "winston";
+import type { LogLevel } from "./log";
 
-type PathsConfig = {
-  routes?: string;
-  cli?: string;
-  tasks?: string;
-  migrations?: string;
-  forms?: string;
-  public?: string;
-  schema?: string;
-  out?: string;
-  styles?: string;
-};
-
-type LoggerConfig = {
-  level?: "silly" | "debug" | "verbose" | "http" | "info" | "warn" | "error";
-  transports?: winston.transport[];
-  logger?: winston.Logger;
-};
-
-export type PlainWebConfig = {
+export type InputConfig = {
   nodeEnv: "development" | "production" | "test";
-  app: (config: HttpConfig) => Promise<express.Application>;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  database: Kysely<any>;
   dbUrl: string;
-  logger?: LoggerConfig;
-  paths?: PathsConfig;
+  logger: {
+    level: LogLevel;
+    transports?: winston.transport[];
+    logger?: winston.Logger;
+  };
+  paths?: {
+    routes?: string;
+    cli?: string;
+    jobs?: string;
+    forms?: string;
+    public?: string;
+    schema?: string;
+    out?: string;
+    styles?: string;
+    seed?: string;
+    migrations?: string;
+    databaseConfig?: string;
+    httpConfig?: string;
+  };
 };
 
-export type Config = ExpandedPlainwebConfig;
-
-export type HttpConfig = Pick<Config, "nodeEnv" | "logger" | "paths">;
-
-export type ExpandedPlainwebConfig = {
+export type Config = {
   nodeEnv: "development" | "production" | "test";
-  app: express.Application;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  database: Kysely<any>;
   dbUrl: string;
-  logger: Omit<Required<LoggerConfig>, "logger"> & { logger?: winston.Logger };
-  paths: Required<PathsConfig>;
+  logger: {
+    level: LogLevel;
+    transports: winston.transport[];
+    logger: winston.Logger | undefined;
+  };
+  paths: {
+    routes: string;
+    cli: string;
+    jobs: string;
+    forms: string;
+    public: string;
+    schema: string;
+    out: string;
+    styles: string;
+    seed: string;
+    migrations: string;
+    databaseConfig: string;
+    httpConfig: string;
+  };
 };
 
-export const defaultConfigPaths: Required<PathsConfig> = {
-  routes: "app/routes",
-  cli: "app/cli",
-  tasks: "app/tasks",
-  forms: "app/forms",
-  public: "public",
-  migrations: "migrations",
-  schema: "app/schema.ts",
-  out: ".out",
-  styles: "assets/styles.css",
-};
-
-function parseProcessEnvLogLevel(): Config["logger"]["level"] | undefined {
-  const level = process.env.LOG_LEVEL;
-  const allowedLevels = [
-    "silly",
-    "debug",
-    "verbose",
-    "http",
-    "info",
-    "warn",
-    "error",
-  ];
-  if (level && allowedLevels.includes(level.toLocaleLowerCase())) {
-    return level as Config["logger"]["level"];
-  }
-  return undefined;
+export function defineConfig(config: InputConfig) {
+  return config;
 }
 
-export const defaultConfigLogger = {
-  level: parseProcessEnvLogLevel() ?? ("http" as const),
-  transports: [],
-  logger: undefined,
-};
+let config: Config | undefined;
 
-export let expandedConfig: ExpandedPlainwebConfig | undefined;
+export async function loadConfig() {
+  const c12LoadConfig = (await import("c12")).loadConfig;
+  const resolvedConfig = await c12LoadConfig<InputConfig>({
+    name: "plainstack",
+    defaults: {
+      nodeEnv: "production",
+      dbUrl: "data.db",
+      logger: {
+        level: "debug",
+        transports: [],
+        logger: undefined,
+      } satisfies Config["logger"],
+      paths: {
+        routes: "app/routes",
+        cli: "app/cli",
+        jobs: "app/jobs",
+        forms: "app/forms",
+        public: ".out/public",
+        schema: "app/schema.ts",
+        out: ".out",
+        styles: "assets/styles.css",
+        seed: "database/seed.ts",
+        migrations: "database/migrations",
+        databaseConfig: "app/config/database.ts",
+        httpConfig: "app/config/http.ts",
+      } satisfies Config["paths"],
+    },
+  });
+  console.debug("loaded config", resolvedConfig.config);
+  config = resolvedConfig.config as Config;
+}
 
-export async function expandConfig(
-  config: PlainWebConfig,
-): Promise<ExpandedPlainwebConfig> {
-  const paths = { ...(config.paths ?? {}), ...defaultConfigPaths };
-  const absolutePaths = {
-    routes: path.resolve(process.cwd(), paths.routes),
-    cli: path.resolve(process.cwd(), paths.cli),
-    tasks: path.resolve(process.cwd(), paths.tasks),
-    forms: path.resolve(process.cwd(), paths.forms),
-    public: path.resolve(process.cwd(), paths.public),
-    migrations: path.resolve(process.cwd(), paths.migrations),
-    schema: path.resolve(process.cwd(), paths.schema),
-    out: path.resolve(process.cwd(), paths.out),
-    styles: path.resolve(process.cwd(), paths.styles),
-  };
-  // TODO use deep merge
-  const logger = { ...(config.logger ?? {}), ...defaultConfigLogger };
-  const expanded = {
-    nodeEnv: config.nodeEnv,
-    app: await config.app({
-      nodeEnv: config.nodeEnv,
-      paths: absolutePaths,
-      logger,
-    }),
-    database: config.database,
-    dbUrl: config.dbUrl,
-    paths: absolutePaths,
-    logger,
-  } satisfies ExpandedPlainwebConfig;
-  expandedConfig = expanded;
-  return expanded;
+export function getConfig() {
+  if (!config) {
+    console.error("make sure to call loadConfig() before getConfig()");
+    console.error(
+      "this happens if you try to run code without implementing your own cli command",
+    );
+    throw new Error("config not loaded");
+  }
+  return config;
 }

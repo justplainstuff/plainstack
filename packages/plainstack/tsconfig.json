@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/bin.mts"],
   "exclude": ["node_modules", "dist", "vitest.config.ts"],
   "compilerOptions": {
     "declaration": true,
@@ -8,9 +8,9 @@
     "incremental": false,
     "isolatedModules": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "NodeNext",
+    "module": "ESNext",
     "moduleDetection": "force",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -18,7 +18,6 @@
     "target": "ES2022",
     "jsx": "react-jsx",
     "jsxImportSource": "@kitajs/html",
-    "baseUrl": "./src",
     "plugins": [{ "name": "@kitajs/ts-html-plugin" }],
     "types": ["@kitajs/html/htmx.d.ts", "@kitajs/html/alpine.d.ts"]
   }

@@ -1,10 +1,13 @@
 // core
-export { type Config } from "./config";
+export {
+  type Config,
+  defineConfig,
+  getConfig,
+} from "./config";
 export { log, getLogger } from "./log";
 export { randomId } from "./id";
 export { dev, prod, test } from "./node-env";
-export { defineCommand } from "./command";
-export { run } from "./run";
+export { defineEnv, defineHttp, defineDatabase } from "./app-config";
 
 // http & web
 export { fileRouter } from "./file-router";
@@ -13,7 +16,6 @@ export { html, json, redirect, stream, notFound } from "./plain-response";
 export { printRoutes } from "./print-routes";
 export { middleware } from "./middleware";
 export { testHandler } from "./test-handler";
-export { defineHttp } from "./http";
 
 export { outbox, sendMail, defineMailer } from "./mail";
 

@@ -1,4 +1,4 @@
-import type BetterSqlite3Database from "better-sqlite3";
+import type { Kysely } from "kysely";
 
 export type Job<T> = {
   name: string;
@@ -15,7 +15,8 @@ export interface DefineJobOpts<T> {
 }
 
 export function defineJob<T>(
-  connection: BetterSqlite3Database.Database,
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  database: Kysely<any>,
   opts: DefineJobOpts<T>,
 ): Job<T> {
   return {

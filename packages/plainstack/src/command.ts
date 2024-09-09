@@ -1,34 +1,65 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { Config, ExpandedPlainwebConfig } from "./config";
+import { type CommandDef, defineCommand, runMain } from "citty";
+import type { AppConfig } from "./app-config";
+import type { Config } from "./config";
 import { log } from "./log";
+import { printRoutes } from "./print-routes";
 
-export type Command = {
-  handler: (args: Config) => Promise<void>;
-  name: string;
-  help?: string;
-};
+function getBuiltInCommands({
+  config,
+  appConfig,
+}: {
+  config: Config;
+  appConfig: AppConfig;
+}): Record<string, CommandDef> {
+  const migrate = defineCommand({
+    run: async () => {
+      console.log("running migrate");
+    },
+  });
 
-export function defineCommand(
-  handler: (args: Config) => Promise<void>,
-  opts: {
-    help?: string;
-  },
-) {
-  return {
-    help: opts.help,
-    handler,
-  };
+  const generate = defineCommand({
+    run: async () => {
+      console.log("running generate");
+    },
+  });
+
+  const build = defineCommand({
+    run: async () => {
+      console.log("running build");
+    },
+  });
+
+  const test = defineCommand({
+    run: async () => {
+      console.log("running test");
+    },
+  });
+
+  const dev = defineCommand({
+    run: async () => {
+      console.log("running dev");
+    },
+  });
+
+  const routes = defineCommand({
+    run: async () => {
+      await printRoutes(appConfig.app);
+    },
+  });
+
+  return { dev, build, test, migrate, generate, routes };
 }
 
-export async function loadCommands(
-  config: ExpandedPlainwebConfig,
-): Promise<Command[]> {
+export async function loadUserCommands({
+  config,
+}: { config: Config }): Promise<Record<string, CommandDef>> {
   const cliPath = config.paths.cli;
 
   if (!fs.existsSync(cliPath)) {
-    console.error(`CLI directory not found: ${cliPath}`);
-    return [];
+    console.debug(`CLI directory not found: ${cliPath}`);
+    return {};
   }
 
   const tsFiles = fs
@@ -36,7 +67,7 @@ export async function loadCommands(
     .filter((file) => file.endsWith(".ts"))
     .map((file) => path.parse(file).name);
 
-  const commands: Command[] = [];
+  const commands: Record<string, CommandDef> = {};
 
   for (const file of tsFiles) {
     const modulePath = path.join(cliPath, `${file}.ts`);
@@ -46,28 +77,20 @@ export async function loadCommands(
       const module = await import(moduleUrl);
       log.debug("module %s", file);
 
-      let commandModule = module.default?.default;
-      if (typeof commandModule === "function") {
-        commandModule = commandModule();
-      }
+      const commandModule = module.default?.default;
 
       log.debug("module %s command: %O", file, commandModule);
 
       if (
         typeof commandModule === "object" &&
         commandModule !== null &&
-        "handler" in commandModule &&
-        "help" in commandModule
+        "run" in commandModule
       ) {
-        commands.push({
-          name: file,
-          handler: commandModule.handler,
-          help: commandModule.help,
-        });
+        commands[file] = commandModule;
         log.debug("loaded command %s", file);
       } else {
         throw new Error(
-          `The ${file} module does not export a default object with a "handler" and "help" property.`,
+          `${file} should export a citty command with at least a "run" function`,
         );
       }
     } catch (error) {
@@ -78,38 +101,34 @@ export async function loadCommands(
   return commands;
 }
 
-export async function runCommand(
-  config: ExpandedPlainwebConfig,
-  commands: Command[],
-) {
-  const commandName = process.argv[2];
-
-  if (!commandName) {
-    printHelp(commands);
-    return;
-  }
-
-  const command = commands.find((cmd) => cmd.name === commandName);
-
-  if (command) {
-    try {
-      await command.handler(config);
-    } catch (error) {
-      console.error(`Error running the ${commandName} command:`, error);
-    }
-  } else {
-    console.log(`Command "${commandName}" not found.`);
-    printHelp(commands);
-  }
+function getRootCommand({
+  userCommands,
+  builtInCommands,
+}: {
+  userCommands: Record<string, CommandDef>;
+  builtInCommands: Record<string, CommandDef>;
+}) {
+  return defineCommand({
+    meta: {
+      name: "plainstack",
+      description: "The all-in-one web framework obsessing about velocity 🏎️",
+    },
+    subCommands: {
+      ...userCommands,
+      ...builtInCommands,
+    },
+  });
 }
 
-export function printHelp(commands: Command[]) {
-  console.log("Available commands:");
-  const maxNameLength = Math.max(...commands.map((cmd) => cmd.name.length));
-
-  for (const cmd of commands) {
-    if (cmd.help) {
-      console.log(`  ${cmd.name.padEnd(maxNameLength)}  ${cmd.help}`);
-    }
-  }
+export async function runCommand({
+  config,
+  appConfig,
+}: {
+  config: Config;
+  appConfig: AppConfig;
+}) {
+  const userCommands = await loadUserCommands({ config });
+  const builtInCommands = getBuiltInCommands({ config, appConfig });
+  const rootCommand = getRootCommand({ userCommands, builtInCommands });
+  await runMain(rootCommand);
 }

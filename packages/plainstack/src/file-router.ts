@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import express, { type Router } from "express";
-import { getLogger } from "log";
 import { type Handler, handleResponse } from "./handler";
+import { getLogger } from "./log";
 
 const log = getLogger("router");
 

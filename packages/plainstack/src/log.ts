@@ -1,7 +1,17 @@
-import { type Config, defaultConfigLogger, expandedConfig } from "config";
 import winston from "winston";
+import { type InputConfig, getConfig } from "./config";
+// TODO consider consola instead
 
 const LABEL_MAX_LENGTH = 12;
+
+export type LogLevel =
+  | "silly"
+  | "debug"
+  | "verbose"
+  | "http"
+  | "info"
+  | "warn"
+  | "error";
 
 function getLabel(info: winston.Logform.TransformableInfo) {
   let label = "";
@@ -35,7 +45,7 @@ const consoleFormat = winston.format.combine(
   printFormat,
 );
 
-function getProdLogger(logger: Config["logger"], name?: string) {
+function getProdLogger(logger: InputConfig["logger"], name?: string) {
   return winston.createLogger({
     level: logger.level,
     format: winston.format.combine(
@@ -49,13 +59,16 @@ function getProdLogger(logger: Config["logger"], name?: string) {
       new winston.transports.Console({
         format: consoleFormat,
       }),
-      ...logger.transports,
+      ...(logger.transports ?? []),
     ],
     defaultMeta: { name: name },
   });
 }
 
-function getDevLogger(logger: Pick<Config["logger"], "level">, name?: string) {
+function getDevLogger(
+  logger: Pick<InputConfig["logger"], "level">,
+  name?: string,
+) {
   return winston.createLogger({
     level: logger.level,
     format: consoleFormat,
@@ -66,15 +79,30 @@ function getDevLogger(logger: Pick<Config["logger"], "level">, name?: string) {
 
 /** Return a logger instances with an optional name. Return a prod logger if NODE_ENV=production, otherwise return a dev logger. */
 export function getLogger(name?: string) {
-  const { nodeEnv, logger } = expandedConfig || {
-    nodeEnv: "development",
-    logger: defaultConfigLogger,
-  };
-  if (logger?.logger) return logger.logger;
-  return nodeEnv === "production"
-    ? getProdLogger(logger, name)
-    : getDevLogger(logger, name);
+  // const { nodeEnv, logger } = getConfig();
+  // if (logger?.logger) return logger.logger;
+  // return nodeEnv === "production"
+  //   ? getProdLogger(logger, name)
+  // TODO fix
+  return getDevLogger({ level: "debug" }, name);
 }
 
 /** A pre-configured logger instance with the name "app". */
 export const log = getLogger("app");
+
+export function getDefaultLogLevel(): LogLevel {
+  const level = process.env.LOG_LEVEL;
+  const allowedLevels = [
+    "silly",
+    "debug",
+    "verbose",
+    "http",
+    "info",
+    "warn",
+    "error",
+  ];
+  if (level && allowedLevels.includes(level.toLocaleLowerCase())) {
+    return level as LogLevel;
+  }
+  return "http";
+}

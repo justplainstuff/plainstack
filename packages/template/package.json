@@ -3,26 +3,21 @@
   "version": "1.0.17",
   "private": true,
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:assets": "pnpm p assets --watch",
-    "dev:serve": "pnpm p serve --watch",
-    "dev:build": "tsc --noEmit --watch",
-    "migrate": "pnpm p migrate",
-    "migrations:make": "pnpm p migrations:make",
-    "test": "vitest run",
-    "build": "tsc --noEmit",
-    "check": "biome check --fix . && xss-scan",
-    "tables": "DATABASE_URL=db.sqlite3 kysely-codegen --dialect sqlite --out-file app/config/tables.ts",
-    "p": "tsx bin.ts"
+    "dev": "plainstack dev",
+    "migrate": "plainstack migrate",
+    "generate": "plainstack generate",
+    "build": "plainstack build",
+    "test": "plainstack test",
+    "pls": "plainstack"
   },
   "dependencies": {
+    "plainstack": "workspace:*",
     "@kitajs/html": "^4.2.1",
     "better-sqlite3": "^11.0.0",
-    "dotenv": "^16.4.5",
+    "errorhandler": "^1.5.1",
     "kysely": "^0.27.4",
-    "plainstack": "workspace:*",
-    "tsx": "^4.16.2",
-    "zod": "^3.23.8"
+    "express": "^4.19.2",
+    "tsx": "^4.16.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
@@ -32,13 +27,7 @@
     "@types/errorhandler": "^1.5.3",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.24",
-    "errorhandler": "^1.5.1",
-    "express": "^4.19.2",
-    "kysely-ctl": "^0.9.0",
-    "npm-run-all2": "^6.0.0",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.3.3",
-    "vitest": "^2.0.1"
+    "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@9.5.0",
   "engineStrict": true,

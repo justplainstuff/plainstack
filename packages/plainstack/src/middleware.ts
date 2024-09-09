@@ -1,11 +1,11 @@
-import type { Config } from "config";
 import type express from "express";
 import expressRateLimit from "express-rate-limit";
-import { randomId } from "id";
 import type { Kysely } from "kysely";
-import { getLogger } from "log";
 import morgan from "morgan";
+import type { InputConfig } from "./config";
 import { fileRouter as plainFileRouter } from "./file-router";
+import { randomId } from "./id";
+import { getLogger } from "./log";
 
 const log = getLogger("middleware");
 

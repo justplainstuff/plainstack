@@ -1,7 +1,7 @@
-import { getLogger } from "log";
 import nodemailer from "nodemailer";
 import type JSONTransport from "nodemailer/lib/json-transport";
 import type Mail from "nodemailer/lib/mailer";
+import { getLogger } from "./log";
 
 const log = getLogger("mail");
 
