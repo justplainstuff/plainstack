@@ -4,7 +4,7 @@ import { Migrator } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
 import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
-import { ensureDirectoryExists, fileExists } from "./plainweb-fs";
+import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
@@ -12,17 +12,18 @@ async function getMigrator() {
   return new Migrator({
     db: appConfig.database,
     provider: new TSFileMigrationProvider({
-      migrationFolder: config.paths.migrations,
+      migrationFolder: path.join(process.cwd(), config.paths.migrations),
     }),
   });
 }
 
 export async function migrateToLatest() {
   const migrator = await getMigrator();
-  await migrator.migrateToLatest();
+  const result = await migrator.migrateToLatest();
+  console.log(result);
 }
 
-const migrationTemplate = `
+const migrationFileTemplate = `
 import type { Kysely } from "kysely";
 
 // check https://kysely.dev/docs/migrations
@@ -58,7 +59,7 @@ export async function down(db: Kysely<unknown>): Promise<void> {
 }
 `;
 
-export async function generateMigration(name: string) {
+export async function writeMigrationFile(name: string) {
   const config = await loadAndGetConfig();
   const sanitizedName = name.toLowerCase().replace(/[^a-z0-9_]/g, "_");
   const timestamp = Date.now();
@@ -68,6 +69,6 @@ export async function generateMigration(name: string) {
   if (await fileExists(filePath)) {
     throw new Error(`Migration file ${fileName} already exists`);
   }
-  await fs.writeFile(filePath, migrationTemplate);
+  await fs.writeFile(filePath, migrationFileTemplate);
   console.log(`Generated migration: ${fileName}`);
 }

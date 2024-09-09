@@ -6,8 +6,9 @@ import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
 import { spawnWorkers } from "./job";
 import { log } from "./log";
-import { generateMigration, migrateToLatest } from "./migrations";
+import { migrateToLatest, writeMigrationFile } from "./migrations";
 import { printRoutes } from "./print-routes";
+import { runSeed } from "./seed";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getBuiltInCommands(): Record<string, CommandDef<any>> {
@@ -35,13 +36,20 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const test = defineCommand({
-    run: async () => {
+    args: {
+      watch: {
+        type: "boolean",
+        description: "Run tests in watch mode",
+        default: false,
+      },
+    },
+    run: async ({ args }) => {
       await $({
         all: true,
         preferLocal: true,
         stdout: "inherit",
         stderr: "inherit",
-      })`vitest run`;
+      })`vitest ${args.watch ? "watch" : "run"}`;
     },
   });
 
@@ -91,31 +99,63 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   });
 
   const migrate = defineCommand({
-    run: async () => {
-      await migrateToLatest();
-    },
-  });
-
-  const generate = defineCommand({
     args: {
       name: {
         type: "positional",
-        description: "The name of the migration",
-        required: true,
+        description: "If provided, create migration with the given name",
+        required: false,
+      },
+      schema: {
+        type: "boolean",
+        description:
+          "If provided, generate a new schema file based on the current database",
+        required: false,
       },
     },
     run: async ({ args }) => {
-      await generateMigration(args.name);
+      if (args.schema) {
+        const config = await loadAndGetConfig();
+        process.env.DATABASE_URL = config.dbUrl;
+        await $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`kysely-codegen --dialect sqlite --out-file ${config.paths.schema}`;
+      } else {
+        if (args.name) {
+          await writeMigrationFile(args.name);
+        } else {
+          await migrateToLatest();
+          const config = await loadAndGetConfig();
+          process.env.DATABASE_URL = config.dbUrl;
+          await $({
+            all: true,
+            preferLocal: true,
+            stdout: "inherit",
+            stderr: "inherit",
+          })`kysely-codegen --dialect sqlite --out-file ${config.paths.schema}`;
+        }
+      }
     },
   });
 
   const seed = defineCommand({
     run: async () => {
-      console.log("running seed");
+      await runSeed();
     },
   });
 
-  return { dev, build, test, serve, work, routes, migrate, generate, seed };
+  return {
+    dev,
+    build,
+    test,
+    serve,
+    work,
+    routes,
+    migrate,
+    seed,
+  };
 }
 
 export async function loadUserCommands(): Promise<Record<string, CommandDef>> {

@@ -4,7 +4,7 @@
  */
 
 export interface Users {
-  createdAt: number;
+  created_at: number;
   email: string;
   id: string | null;
 }
