@@ -2,28 +2,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { type CommandDef, defineCommand, runMain } from "citty";
 import { $ } from "execa";
-import {
-  type AppConfig,
-  loadAndGetAppConfig,
-  loadAppConfig,
-} from "./app-config";
-import { type Config, loadAndGetConfig } from "./config";
+import { loadAndGetAppConfig } from "./app-config";
+import { loadAndGetConfig } from "./config";
+import { spawnWorkers } from "./job";
 import { log } from "./log";
+import { generateMigration, migrateToLatest } from "./migrations";
 import { printRoutes } from "./print-routes";
 
-function getBuiltInCommands(): Record<string, CommandDef> {
-  const migrate = defineCommand({
-    run: async () => {
-      console.log("running migrate");
-    },
-  });
-
-  const generate = defineCommand({
-    run: async () => {
-      console.log("running generate");
-    },
-  });
-
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function getBuiltInCommands(): Record<string, CommandDef<any>> {
   const build = defineCommand({
     run: async () => {
       console.log("build start");
@@ -78,6 +65,23 @@ function getBuiltInCommands(): Record<string, CommandDef> {
     },
   });
 
+  const serve = defineCommand({
+    run: async () => {
+      const config = await loadAndGetConfig();
+      const appConfig = await loadAndGetAppConfig({ config });
+      appConfig.app.listen(config.port);
+      console.log(`⚡️ serving from port ${config.port}`);
+    },
+  });
+
+  const work = defineCommand({
+    run: async () => {
+      const config = await loadAndGetConfig();
+      const appConfig = await loadAndGetAppConfig({ config });
+      await spawnWorkers(appConfig.database);
+    },
+  });
+
   const routes = defineCommand({
     run: async () => {
       const config = await loadAndGetConfig();
@@ -86,7 +90,32 @@ function getBuiltInCommands(): Record<string, CommandDef> {
     },
   });
 
-  return { dev, build, test, migrate, generate, routes };
+  const migrate = defineCommand({
+    run: async () => {
+      await migrateToLatest();
+    },
+  });
+
+  const generate = defineCommand({
+    args: {
+      name: {
+        type: "positional",
+        description: "The name of the migration",
+        required: true,
+      },
+    },
+    run: async ({ args }) => {
+      await generateMigration(args.name);
+    },
+  });
+
+  const seed = defineCommand({
+    run: async () => {
+      console.log("running seed");
+    },
+  });
+
+  return { dev, build, test, serve, work, routes, migrate, generate, seed };
 }
 
 export async function loadUserCommands(): Promise<Record<string, CommandDef>> {

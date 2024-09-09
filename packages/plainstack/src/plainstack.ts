@@ -1,9 +1,5 @@
 // core
-export {
-  type Config,
-  defineConfig,
-  getConfig,
-} from "./config";
+export { type Config, defineConfig, getConfig } from "./config";
 export { log, getLogger } from "./log";
 export { randomId } from "./id";
 export { dev, prod, test } from "./node-env";
@@ -23,4 +19,4 @@ export { outbox, sendMail, defineMailer } from "./mail";
 export { isolate } from "./isolate";
 
 // jobs
-export { defineJob, type Job, work } from "./job";
+export { defineJob, type Job, spawnWorkers as work } from "./job";

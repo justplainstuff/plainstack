@@ -25,6 +25,6 @@ export function defineJob<T>(
   };
 }
 
-export async function work() {
+export async function spawnWorkers(database: Kysely<unknown>) {
   return Promise.reject(new Error("Not implemented"));
 }
