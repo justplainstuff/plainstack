@@ -4,9 +4,10 @@ import dotenv from "dotenv";
 import type express from "express";
 import type { Kysely } from "kysely";
 import z from "zod";
-import { type Config, getConfig } from "./config";
+import type { Config } from "./config";
+import { getLogger } from "./log";
 
-import { log } from "./log";
+const log = getLogger("config");
 
 export type AppConfig = {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>

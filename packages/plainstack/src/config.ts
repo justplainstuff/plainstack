@@ -1,11 +1,11 @@
+import { LogLevels } from "consola";
 import type winston from "winston";
-import type { LogLevel } from "./log";
 
 export type InputConfig = {
   nodeEnv: "development" | "production" | "test";
   dbUrl: string;
   logger: {
-    level?: LogLevel;
+    level?: number;
     transports?: winston.transport[];
     logger?: winston.Logger;
   };
@@ -30,7 +30,7 @@ export type Config = {
   nodeEnv: "development" | "production" | "test";
   dbUrl: string;
   logger: {
-    level: LogLevel;
+    level: number;
     transports: winston.transport[];
     logger: winston.Logger | undefined;
   };
@@ -55,7 +55,7 @@ export function defineConfig(config: InputConfig) {
   return config;
 }
 
-let config: Config | undefined;
+export let config: Config | undefined;
 
 export async function loadConfig() {
   const c12LoadConfig = (await import("c12")).loadConfig;
@@ -65,7 +65,7 @@ export async function loadConfig() {
       nodeEnv: "production",
       dbUrl: "data.db",
       logger: {
-        level: "info",
+        level: LogLevels.info,
         transports: [],
         logger: undefined,
       } satisfies Config["logger"],
@@ -76,7 +76,7 @@ export async function loadConfig() {
         jobs: "app/jobs",
         forms: "app/forms",
         public: ".out/public",
-        schema: "app/schema.ts",
+        schema: "app/config/schema.ts",
         out: ".out",
         styles: "assets/styles.css",
         seed: "database/seed.ts",

@@ -2,7 +2,6 @@ import type express from "express";
 import expressRateLimit from "express-rate-limit";
 import type { Kysely } from "kysely";
 import morgan from "morgan";
-import type { InputConfig } from "./config";
 import { fileRouter as plainFileRouter } from "./file-router";
 import { randomId } from "./id";
 import { getLogger } from "./log";
@@ -42,7 +41,7 @@ function logging(): express.RequestHandler {
     ":method :url :status :res[content-length] - :response-time ms",
     {
       stream: {
-        write: (message) => logger.http(message.trim()),
+        write: (message) => logger.info(message.trim()),
       },
     },
   );

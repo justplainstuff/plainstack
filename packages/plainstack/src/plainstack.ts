@@ -1,6 +1,6 @@
 // core
 export { type Config, defineConfig, getConfig } from "./config";
-export { log, getLogger } from "./log";
+export { getLogger } from "./log";
 export { randomId } from "./id";
 export { dev, prod, test } from "./node-env";
 export { defineEnv, defineHttp, defineDatabase } from "./app-config";

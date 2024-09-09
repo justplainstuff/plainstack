@@ -1,7 +1,10 @@
 import * as path from "node:path";
 import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
+import { getLogger } from "./log";
 import { fileExists } from "./plainstack-fs";
+
+const log = getLogger("seed");
 
 export async function runSeed() {
   const config = await loadAndGetConfig();
@@ -10,7 +13,7 @@ export async function runSeed() {
   const seedPath = path.join(process.cwd(), config.paths.seed);
 
   if (!(await fileExists(seedPath))) {
-    console.log("Seed file not found. Skipping seeding.");
+    log.info("Seed file not found. Skipping seeding.");
     return;
   }
 
@@ -22,9 +25,9 @@ export async function runSeed() {
     }
 
     await seedModule.seed(appConfig.database);
-    console.log("Seeding completed successfully.");
+    log.info("Seeding completed successfully.");
   } catch (error) {
-    console.error("Error during seeding:", error);
+    log.error("Error during seeding:", error);
     throw error;
   }
 }

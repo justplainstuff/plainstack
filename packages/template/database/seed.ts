@@ -1,7 +1,6 @@
-import type { DB } from "app/schema";
-import type { Kysely } from "kysely";
+import type { Database } from "app/config/database";
 
-export async function seed(db: Kysely<DB>): Promise<void> {
+export async function seed(db: Database): Promise<void> {
   await db
     .insertInto("users")
     .values({

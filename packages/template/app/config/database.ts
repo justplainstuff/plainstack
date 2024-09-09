@@ -1,8 +1,10 @@
 import env from "app/config/env";
 import SQLite from "better-sqlite3";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
-import { defineDatabase, log } from "plainstack";
+import { defineDatabase, getLogger } from "plainstack";
 import type { DB } from "./schema";
+
+const log = getLogger("database");
 
 export default defineDatabase(
   new Kysely<DB>({

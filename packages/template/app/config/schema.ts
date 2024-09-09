@@ -3,19 +3,12 @@
  * Please do not edit it manually.
  */
 
-export interface _DrizzleMigrations {
-  created_at: number | null;
-  hash: string;
+export interface Users {
+  createdAt: number;
+  email: string;
   id: string | null;
 }
 
-export interface Users {
-  created: number;
-  email: string;
-  id: string;
-}
-
 export interface DB {
-  __drizzle_migrations: _DrizzleMigrations;
   users: Users;
 }

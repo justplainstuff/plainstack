@@ -6,7 +6,7 @@ export async function createUser(db: Database, email: string) {
     await db.selectFrom("users").where("email", "=", email).executeTakeFirst()
   )
     throw new Error("User already exists");
-  const created = { id: randomId("usr"), email: email, created: Date.now() };
+  const created = { id: randomId("usr"), email: email, createdAt: Date.now() };
   await db.insertInto("users").values(created).execute();
   return created;
 }

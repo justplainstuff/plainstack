@@ -5,10 +5,12 @@ import { $ } from "execa";
 import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
 import { spawnWorkers } from "./job";
-import { log } from "./log";
+import { getLogger } from "./log";
 import { migrateToLatest, writeMigrationFile } from "./migrations";
 import { printRoutes } from "./print-routes";
 import { runSeed } from "./seed";
+
+const log = getLogger("command");
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function getBuiltInCommands(): Record<string, CommandDef<any>> {
@@ -121,7 +123,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`kysely-codegen --dialect sqlite --out-file ${config.paths.schema}`;
+        })`kysely-codegen --camel-case --dialect sqlite --out-file ${config.paths.schema}`;
       } else {
         if (args.name) {
           await writeMigrationFile(args.name);
@@ -134,7 +136,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
             preferLocal: true,
             stdout: "inherit",
             stderr: "inherit",
-          })`kysely-codegen --dialect sqlite --out-file ${config.paths.schema}`;
+          })`kysely-codegen --camel-case --dialect sqlite --out-file ${config.paths.schema}`;
         }
       }
     },
