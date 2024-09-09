@@ -14,16 +14,19 @@ export type AppConfig = {
   app: express.Application;
 };
 
+let appConfig: AppConfig | undefined;
+
 export async function loadAppConfig({
   config,
-}: { config: Config }): Promise<AppConfig> {
-  log.debug("starting to load app config");
+  silent = false,
+}: { config: Config; silent?: boolean }): Promise<void> {
+  !silent && log.debug("starting to load app config");
 
-  log.debug("loading database config module");
+  !silent && log.debug("loading database config module");
   const databaseConfigPath = join(cwd(), config.paths.databaseConfig);
   const databaseModule = await import(databaseConfigPath);
 
-  log.debug("checking database module for valid default export");
+  !silent && log.debug("checking database module for valid default export");
   if (
     !databaseModule?.default?.default ||
     typeof databaseModule.default.default !== "object" ||
@@ -35,11 +38,11 @@ export async function loadAppConfig({
   }
   const database = databaseModule.default.default;
 
-  log.debug("loading http config module");
+  !silent && log.debug("loading http config module");
   const httpConfigPath = join(cwd(), config.paths.httpConfig);
   const httpModule = await import(httpConfigPath);
 
-  log.debug("checking http module for valid default export");
+  !silent && log.debug("checking http module for valid default export");
   if (
     !httpModule?.default?.default ||
     typeof httpModule.default.default !== "function"
@@ -51,12 +54,30 @@ export async function loadAppConfig({
   const http = httpModule.default.default;
   const app = await http(config);
 
-  log.debug("app config loaded successfully");
+  !silent && log.debug("app config loaded successfully");
 
-  return {
-    database,
-    app,
-  };
+  appConfig = { app, database };
+}
+
+export function getAppConfig(): AppConfig {
+  if (!appConfig) {
+    console.error("make sure to call loadAppConfig() before getAppConfig()");
+    console.error(
+      "this happens if you try to run code without implementing your own cli command",
+    );
+    throw new Error("app config not loaded");
+  }
+  return appConfig;
+}
+
+export async function loadAndGetAppConfig({
+  config,
+}: {
+  config: Config;
+}): Promise<AppConfig> {
+  if (appConfig) return appConfig;
+  await loadAppConfig({ config });
+  return getAppConfig();
 }
 
 export function defineDatabase<T>(db: Kysely<T>): Kysely<T> {

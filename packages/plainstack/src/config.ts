@@ -9,6 +9,7 @@ export type InputConfig = {
     transports?: winston.transport[];
     logger?: winston.Logger;
   };
+  port?: number;
   paths?: {
     routes?: string;
     cli?: string;
@@ -33,6 +34,7 @@ export type Config = {
     transports: winston.transport[];
     logger: winston.Logger | undefined;
   };
+  port: number;
   paths: {
     routes: string;
     cli: string;
@@ -63,10 +65,11 @@ export async function loadConfig() {
       nodeEnv: "production",
       dbUrl: "data.db",
       logger: {
-        level: "debug",
+        level: "info",
         transports: [],
         logger: undefined,
       } satisfies Config["logger"],
+      port: 3000,
       paths: {
         routes: "app/routes",
         cli: "app/cli",
@@ -83,7 +86,6 @@ export async function loadConfig() {
       } satisfies Config["paths"],
     },
   });
-  console.debug("loaded config", resolvedConfig.config);
   config = resolvedConfig.config as Config;
 }
 
@@ -96,4 +98,10 @@ export function getConfig() {
     throw new Error("config not loaded");
   }
   return config;
+}
+
+export async function loadAndGetConfig() {
+  if (config) return config;
+  await loadConfig();
+  return getConfig();
 }

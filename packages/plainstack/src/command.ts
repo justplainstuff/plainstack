@@ -1,22 +1,17 @@
-import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { promisify } from "node:util";
 import { type CommandDef, defineCommand, runMain } from "citty";
-import type { AppConfig } from "./app-config";
-import type { Config } from "./config";
+import { $ } from "execa";
+import {
+  type AppConfig,
+  loadAndGetAppConfig,
+  loadAppConfig,
+} from "./app-config";
+import { type Config, loadAndGetConfig } from "./config";
 import { log } from "./log";
 import { printRoutes } from "./print-routes";
 
-const execAsync = promisify(exec);
-
-function getBuiltInCommands({
-  config,
-  appConfig,
-}: {
-  config: Config;
-  appConfig: AppConfig;
-}): Record<string, CommandDef> {
+function getBuiltInCommands(): Record<string, CommandDef> {
   const migrate = defineCommand({
     run: async () => {
       console.log("running migrate");
@@ -34,49 +29,68 @@ function getBuiltInCommands({
       console.log("build start");
 
       const now = Date.now();
-      try {
-        const tasks = [
-          execAsync("npx biome check --fix ."),
-          execAsync("tsc --noEmit"),
-        ];
-
-        const [biomeCheck, tsCheck] = await Promise.all(tasks);
-
-        biomeCheck?.stdout && console.log(biomeCheck.stdout);
-        tsCheck?.stdout && console.log(tsCheck.stdout);
-        console.log("build took", Date.now() - now, "ms");
-      } catch (error) {
-        console.error("build failed:");
-        console.error((error as { stdout: string }).stdout);
-        process.exit(1);
-      }
+      Promise.all([
+        await $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`biome check --fix .`,
+        await $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`tsc --noEmit`,
+      ]);
+      console.log("build took", Date.now() - now, "ms");
     },
   });
 
   const test = defineCommand({
     run: async () => {
-      console.log("running test");
+      await $({
+        all: true,
+        preferLocal: true,
+        stdout: "inherit",
+        stderr: "inherit",
+      })`vitest run`;
     },
   });
 
   const dev = defineCommand({
     run: async () => {
-      console.log("running dev");
+      const config = await loadAndGetConfig();
+      await Promise.all([
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`plainstack-dev`,
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/public/output.css --watch --content "./app/**/*.{tsx,html,ts}"`,
+      ]);
     },
   });
 
   const routes = defineCommand({
     run: async () => {
-      await printRoutes(appConfig.app);
+      const config = await loadAndGetConfig();
+      const { app } = await loadAndGetAppConfig({ config });
+      await printRoutes(app);
     },
   });
 
   return { dev, build, test, migrate, generate, routes };
 }
 
-export async function loadUserCommands({
-  config,
-}: { config: Config }): Promise<Record<string, CommandDef>> {
+export async function loadUserCommands(): Promise<Record<string, CommandDef>> {
+  const config = await loadAndGetConfig();
   const cliPath = config.paths.cli;
 
   if (!fs.existsSync(cliPath)) {
@@ -142,15 +156,9 @@ function getRootCommand({
   });
 }
 
-export async function runCommand({
-  config,
-  appConfig,
-}: {
-  config: Config;
-  appConfig: AppConfig;
-}) {
-  const userCommands = await loadUserCommands({ config });
-  const builtInCommands = getBuiltInCommands({ config, appConfig });
+export async function runCommand() {
+  const userCommands = await loadUserCommands();
+  const builtInCommands = getBuiltInCommands();
   const rootCommand = getRootCommand({ userCommands, builtInCommands });
   await runMain(rootCommand);
 }

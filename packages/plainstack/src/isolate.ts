@@ -11,9 +11,6 @@ export async function isolate(
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   fn: (db: Kysely<any>) => Promise<void>,
 ) {
-  if (process.env.NODE_ENV !== "test") {
-    throw new Error("Make sure NODE_ENV=test is set when running tests");
-  }
   // TODO check if pending migrations, and print warning if so
   let err: Error | null = null;
 

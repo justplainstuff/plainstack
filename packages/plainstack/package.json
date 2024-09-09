@@ -5,7 +5,10 @@
   "type": "commonjs",
   "main": "dist/plainstack.js",
   "types": "dist/plainstack.d.ts",
-  "bin": "dist/bin.js",
+  "bin": {
+    "plainstack": "dist/bin.js",
+    "plainstack-dev": "dist/dev.js"
+  },
   "scripts": {
     "test": "vitest run",
     "build": "tsc --noEmit && tsup"
@@ -32,6 +35,8 @@
     "autoprefixer": "^10.4.20",
     "c12": "^1.11.2",
     "citty": "^0.1.6",
+    "dotenv": "^16.4.5",
+    "execa": "9.3.1",
     "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",
     "kysely-codegen": "^0.16.5",
@@ -40,10 +45,9 @@
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",
     "plainjobs": "0.0.4",
-    "winston": "^3.13.1",
     "tailwindcss": "^3.4.3",
-    "dotenv": "^16.4.5",
-    "vitest": "^2.0.1"
+    "vitest": "^2.0.1",
+    "winston": "^3.13.1"
   },
   "devDependencies": {
     "@kitajs/html": "^4.2.1",
@@ -59,9 +63,9 @@
     "tailwindcss": "^3.4.10",
     "tempy": "^3.1.0",
     "tsup": "^8.0.2",
+    "tsx": "^4.16.2",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.3.2",
-    "zod": "^3.23.8",
-    "tsx": "^4.16.2"
+    "zod": "^3.23.8"
   }
 }
