@@ -1,4 +1,4 @@
-import { LogLevels } from "consola";
+import { type ConsolaReporter, LogLevels } from "consola";
 import type winston from "winston";
 
 export type InputConfig = {
@@ -6,8 +6,7 @@ export type InputConfig = {
   dbUrl: string;
   logger: {
     level?: number;
-    transports?: winston.transport[];
-    logger?: winston.Logger;
+    reporters?: ConsolaReporter[];
   };
   port?: number;
   paths?: {
@@ -31,8 +30,7 @@ export type Config = {
   dbUrl: string;
   logger: {
     level: number;
-    transports: winston.transport[];
-    logger: winston.Logger | undefined;
+    reporters: ConsolaReporter[];
   };
   port: number;
   paths: {
@@ -55,7 +53,7 @@ export function defineConfig(config: InputConfig) {
   return config;
 }
 
-export let config: Config | undefined;
+let config: Config | undefined;
 
 export async function loadConfig() {
   const c12LoadConfig = (await import("c12")).loadConfig;
@@ -66,8 +64,7 @@ export async function loadConfig() {
       dbUrl: "data.db",
       logger: {
         level: LogLevels.info,
-        transports: [],
-        logger: undefined,
+        reporters: [],
       } satisfies Config["logger"],
       port: 3000,
       paths: {
@@ -91,11 +88,7 @@ export async function loadConfig() {
 
 export function getConfig() {
   if (!config) {
-    console.error("make sure to call loadConfig() before getConfig()");
-    console.error(
-      "this happens if you try to run code without implementing your own cli command",
-    );
-    throw new Error("config not loaded");
+    throw new Error("config not loaded, make sure to call loadConfig() first");
   }
   return config;
 }

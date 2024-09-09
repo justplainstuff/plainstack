@@ -16,7 +16,7 @@ const log = getLogger("command");
 function getBuiltInCommands(): Record<string, CommandDef<any>> {
   const build = defineCommand({
     run: async () => {
-      console.log("build start");
+      log.info("build start");
 
       const now = Date.now();
       Promise.all([
@@ -33,7 +33,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
           stderr: "inherit",
         })`tsc --noEmit`,
       ]);
-      console.log("build took", Date.now() - now, "ms");
+      log.info("build took", Date.now() - now, "ms");
     },
   });
 
@@ -80,7 +80,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
       const config = await loadAndGetConfig();
       const appConfig = await loadAndGetAppConfig({ config });
       appConfig.app.listen(config.port);
-      console.log(`⚡️ serving from port ${config.port}`);
+      log.info(`⚡️ serving from port ${config.port}`);
     },
   });
 

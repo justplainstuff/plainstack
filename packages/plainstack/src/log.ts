@@ -1,10 +1,13 @@
-import { LogLevels, createConsola } from "consola";
-import { config } from "./config";
+import consola from "consola";
+import { type Config, getConfig } from "./config";
 
 export function getLogger(name?: string) {
-  const consola = createConsola({
-    level: config?.logger?.level ?? LogLevels.info,
-    reporters: [],
-  });
+  let config: Config | undefined;
+  try {
+    config = getConfig();
+  } catch (e) {}
+  for (const reporter of config?.logger?.reporters ?? []) {
+    consola.addReporter(reporter);
+  }
   return name ? consola.withTag(name) : consola;
 }

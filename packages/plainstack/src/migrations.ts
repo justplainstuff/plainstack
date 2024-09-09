@@ -4,7 +4,10 @@ import { Migrator } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
 import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
+import { getLogger } from "./log";
 import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
+
+const log = getLogger("migrations");
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
@@ -20,7 +23,7 @@ async function getMigrator() {
 export async function migrateToLatest() {
   const migrator = await getMigrator();
   const result = await migrator.migrateToLatest();
-  console.log(result);
+  log.info(result);
 }
 
 const migrationFileTemplate = `
@@ -70,5 +73,5 @@ export async function writeMigrationFile(name: string) {
     throw new Error(`Migration file ${fileName} already exists`);
   }
   await fs.writeFile(filePath, migrationFileTemplate);
-  console.log(`Generated migration: ${fileName}`);
+  log.info(`Generated migration: ${fileName}`);
 }
