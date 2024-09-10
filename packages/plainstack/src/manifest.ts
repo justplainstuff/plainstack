@@ -14,46 +14,55 @@ import { directoryExists } from "./plainstack-fs";
 
 const log = getLogger("manifest");
 
-async function importModule(filePath: string): Promise<unknown> {
-  const module = (await import(filePath)) as {
-    default?: { default?: unknown } | unknown;
+export async function loadModule<T>(
+  filePath: string,
+  load: (module: unknown) => Promise<T>,
+): Promise<{ defaultExport?: T; namedExports: Record<string, T> }> {
+  const module = await import(filePath);
+  const result: { defaultExport?: T; namedExports: Record<string, T> } = {
+    namedExports: {},
   };
-  if (
-    (module?.default as { default?: unknown })?.default &&
-    (typeof (module.default as { default: unknown }).default === "object" ||
-      typeof (module.default as { default: unknown }).default === "function")
-  )
-    return (module.default as { default: unknown }).default;
-  if (
-    module?.default &&
-    (typeof module.default === "object" || typeof module.default === "function")
-  )
-    return module.default;
-  throw new Error(
-    `tried to import ${filePath}, but it doesn't export a default`,
-  );
+
+  // handle default export
+  if ("default" in module) {
+    const defaultExport = module.default;
+    if (
+      defaultExport &&
+      typeof defaultExport === "object" &&
+      "default" in defaultExport
+    ) {
+      result.defaultExport = await load(defaultExport.default);
+    } else {
+      result.defaultExport = await load(defaultExport);
+    }
+  }
+
+  // handle named exports
+  for (const [key, value] of Object.entries(module)) {
+    if (key !== "default") {
+      result.namedExports[key] = await load(value);
+    }
+  }
+
+  return result;
 }
 
-export async function importModulesFromDir(
+type FileModule<T> = {
+  defaultExport?: T;
+  namedExports: Record<string, T>;
+  filename: string;
+  extension: string;
+  absolutePath: string;
+  relativePath: string;
+};
+
+export async function loadModulesfromDir<T>(
   baseDir: string,
+  load: (module: unknown) => Promise<T>,
   extensions: string[] = [".ts", ".tsx"],
   currentDir: string = baseDir,
-): Promise<
-  {
-    module: unknown;
-    filename: string;
-    extension: string;
-    absolutePath: string;
-    relativePath: string;
-  }[]
-> {
-  const modules: {
-    module: unknown;
-    filename: string;
-    extension: string;
-    absolutePath: string;
-    relativePath: string;
-  }[] = [];
+): Promise<FileModule<T>[]> {
+  const modules: FileModule<T>[] = [];
   if (!(await directoryExists(currentDir))) {
     log.debug(`directory ${currentDir} does not exist`);
     return [];
@@ -67,8 +76,9 @@ export async function importModulesFromDir(
 
     if (stat.isDirectory()) {
       log.debug(`found directory: ${absolutePath}`);
-      const subModules = await importModulesFromDir(
+      const subModules = await loadModulesfromDir(
         baseDir,
+        load,
         extensions,
         absolutePath,
       );
@@ -80,8 +90,13 @@ export async function importModulesFromDir(
         continue;
       }
       const relativePath = path.relative(baseDir, absolutePath);
+      const { defaultExport, namedExports } = await loadModule(
+        absolutePath,
+        load,
+      );
       modules.push({
-        module: await importModule(absolutePath),
+        defaultExport,
+        namedExports,
         filename: path.parse(file).name,
         extension: path.extname(file),
         absolutePath,
@@ -90,6 +105,48 @@ export async function importModulesFromDir(
     }
   }
   return modules;
+}
+
+function loadDatabase(path: string) {
+  return async (module: unknown): Promise<Kysely<Record<string, unknown>>> => {
+    if (!isDatabase(module))
+      throw new Error(
+        `Invalid database config: expected a function as default export at ${path}`,
+      );
+    return module as Kysely<Record<string, unknown>>;
+  };
+}
+
+function loadHttp(path: string) {
+  return async (
+    module: unknown,
+  ): Promise<(config: Config) => Promise<express.Application>> => {
+    if (typeof module !== "function")
+      throw new Error(
+        `Invalid http config: expected a function as default export at ${path}`,
+      );
+    return module as (config: Config) => Promise<express.Application>;
+  };
+}
+
+function loadCommand(path: string) {
+  return async (module: unknown): Promise<CommandDef> => {
+    if (!isCommand(module))
+      throw new Error(
+        `Invalid command module at ${path}: expected a function as default export`,
+      );
+    return module as CommandDef;
+  };
+}
+
+function loadJob(path: string) {
+  return async (module: unknown): Promise<Job<unknown>> => {
+    if (!isJob(module))
+      throw new Error(
+        `Invalid job module at ${path}: expected a function as default export`,
+      );
+    return module as Job<unknown>;
+  };
 }
 
 export type Manifest = {
@@ -109,50 +166,52 @@ export async function loadManifest({
 
   log.debug("loading database config module");
   const databaseConfigPath = join(cwd(), config.paths.databaseConfig);
-  const databaseModule = await importModule(databaseConfigPath);
-  log.debug("checking database module for valid default export");
-  if (!isDatabase(databaseModule))
+  const databaseModule = await loadModule(
+    databaseConfigPath,
+    loadDatabase(databaseConfigPath),
+  );
+  if (!databaseModule.defaultExport)
     throw new Error(
-      `Invalid database config: expected a function as default export at ${databaseConfigPath}`,
+      `no default export found in database config at ${databaseConfigPath}`,
     );
-  const database = databaseModule as Kysely<Record<string, unknown>>;
+  const database = databaseModule.defaultExport;
 
   log.debug("loading http config module");
   const httpConfigPath = join(cwd(), config.paths.httpConfig);
-  const httpModule = await importModule(httpConfigPath);
-  log.debug("checking http module for valid default export");
-  if (typeof httpModule !== "function") {
+  const httpModule = await loadModule(httpConfigPath, loadHttp(httpConfigPath));
+  if (!httpModule.defaultExport)
     throw new Error(
-      `Invalid http config: expected a function as default export at ${httpConfigPath}`,
+      `no default export found in http config at ${httpConfigPath}`,
     );
-  }
-  const http = httpModule;
-  const app: express.Application = await http(config);
+  const app: express.Application = await httpModule.defaultExport(config);
 
   log.debug("loading commands");
   const commandsPath = join(cwd(), config.paths.commands);
-  const commandsModules = await importModulesFromDir(commandsPath);
+  const commandsModules = await loadModulesfromDir(
+    commandsPath,
+    loadCommand(commandsPath),
+  );
   const commands: Record<string, CommandDef> = {};
   for (const commandModule of commandsModules) {
-    if (!isCommand(commandModule.module)) {
+    if (!commandModule.defaultExport) {
       throw new Error(
-        `Invalid command module at ${commandModule.filename}: expected a function as default export`,
+        `no default export found in command module at ${commandModule.filename}`,
       );
     }
-    commands[commandModule.filename] = commandModule.module;
+    commands[commandModule.filename] = commandModule.defaultExport;
   }
 
   log.debug("loading jobs");
   const jobsPath = join(cwd(), config.paths.jobs);
-  const jobsModules = await importModulesFromDir(jobsPath);
+  const jobsModules = await loadModulesfromDir(jobsPath, loadJob(jobsPath));
   const jobs: Record<string, Job<unknown>> = {};
   for (const jobModule of jobsModules) {
-    if (!isJob(jobModule.module)) {
+    if (!jobModule.defaultExport) {
       throw new Error(
-        `Invalid job module at ${jobModule.filename}: expected a function as default export`,
+        `no default export found in job module at ${jobModule.filename}`,
       );
     }
-    jobs[jobModule.filename] = jobModule.module;
+    jobs[jobModule.filename] = jobModule.defaultExport;
   }
 
   log.debug("app config loaded successfully");
