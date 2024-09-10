@@ -1,5 +1,6 @@
 #!/usr/bin/env -S npx tsx
 
+import { cwd } from "node:process";
 import { runCommand } from "./command";
 
-void runCommand();
+void runCommand({ cwd: cwd() });

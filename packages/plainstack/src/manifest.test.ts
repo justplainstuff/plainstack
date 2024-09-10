@@ -102,5 +102,7 @@ describe("load and get manifest", () => {
     expect(manifest.database).toBeDefined();
     expect(manifest.commands).toBeDefined();
     expect(manifest.jobs).toBeDefined();
+    expect(manifest.jobs["another-job"]).toBeDefined();
+    expect(manifest.jobs.hello).toBeDefined();
   });
 });

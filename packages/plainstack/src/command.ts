@@ -10,8 +10,10 @@ import { runSeed } from "./seed";
 
 const log = getLogger("command");
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function getBuiltInCommands(): Record<string, CommandDef<any>> {
+function getBuiltInCommands({
+  cwd,
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+}: { cwd: string }): Record<string, CommandDef<any>> {
   const build = defineCommand({
     meta: {
       name: "build",
@@ -92,7 +94,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const appConfig = await loadAndGetManifest({ config });
+      const appConfig = await loadAndGetManifest({ config, cwd });
       appConfig.app.listen(config.port);
       log.info(`⚡️ serving from port ${config.port}`);
     },
@@ -105,7 +107,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const manifest = await loadAndGetManifest({ config });
+      const manifest = await loadAndGetManifest({ config, cwd });
       await spawnWorkers(manifest.database);
     },
   });
@@ -117,7 +119,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await loadAndGetManifest({ config });
+      const { app } = await loadAndGetManifest({ config, cwd });
       await printRoutes(app);
     },
   });
@@ -209,10 +211,10 @@ function getRootCommand({
   });
 }
 
-export async function runCommand() {
-  const builtInCommands = getBuiltInCommands();
+export async function runCommand({ cwd }: { cwd: string }) {
+  const builtInCommands = getBuiltInCommands({ cwd });
   const config = await loadAndGetConfig();
-  const manifest = await loadAndGetManifest({ config });
+  const manifest = await loadAndGetManifest({ config, cwd });
   const rootCommand = getRootCommand({
     userCommands: manifest.commands,
     builtInCommands,
@@ -221,11 +223,5 @@ export async function runCommand() {
 }
 
 export function isCommand(cmd: unknown): cmd is CommandDef {
-  return (
-    typeof cmd === "object" &&
-    cmd !== null &&
-    "meta" in cmd &&
-    "name" in cmd &&
-    "run" in cmd
-  );
+  return typeof cmd === "object" && cmd !== null && "run" in cmd;
 }
