@@ -5,7 +5,7 @@ import { importModulesFromDir } from "./manifest";
 describe("import modules from dir", () => {
   const testDir = path.join(__dirname, "../test", "manifest");
 
-  it.only("should import modules from directory and subdirectories", async () => {
+  it("should import modules from directory and subdirectories", async () => {
     const modules = await importModulesFromDir(testDir);
 
     expect(modules).toHaveLength(3);
@@ -32,7 +32,7 @@ describe("import modules from dir", () => {
   });
 
   it("should not import files with unsupported extensions", async () => {
-    const modules = await importModulesFromDir(testDir, ["ts"]);
+    const modules = await importModulesFromDir(testDir, [".ts"]);
 
     expect(modules).toHaveLength(1);
     expect(modules[0].filename).toBe("module-a");

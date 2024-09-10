@@ -5,7 +5,6 @@ import { cwd } from "node:process";
 import type { CommandDef } from "citty";
 import type express from "express";
 import type { Kysely } from "kysely";
-import { unknown } from "zod";
 import { isCommand } from "./command";
 import type { Config } from "./config";
 import { isDatabase } from "./database";
@@ -21,14 +20,13 @@ async function importModule(filePath: string): Promise<unknown> {
   };
   if (
     (module?.default as { default?: unknown })?.default &&
-    typeof (module.default as { default: unknown }).default !== "object" &&
-    typeof (module.default as { default: unknown }).default !== "function"
+    (typeof (module.default as { default: unknown }).default === "object" ||
+      typeof (module.default as { default: unknown }).default === "function")
   )
     return (module.default as { default: unknown }).default;
   if (
     module?.default &&
-    typeof module.default !== "object" &&
-    typeof module.default !== "function"
+    (typeof module.default === "object" || typeof module.default === "function")
   )
     return module.default;
   throw new Error(

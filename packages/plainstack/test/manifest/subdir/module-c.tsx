@@ -1,1 +1,1 @@
-export default () => console.log("module c");
+export default { c: 3 };
