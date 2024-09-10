@@ -250,6 +250,9 @@ importers:
       better-sqlite3:
         specifier: ^11.0.0
         version: 11.2.1
+      citty:
+        specifier: ^0.1.6
+        version: 0.1.6
       errorhandler:
         specifier: ^1.5.1
         version: 1.5.1

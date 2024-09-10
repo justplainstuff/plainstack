@@ -2,6 +2,7 @@ import type express from "express";
 import expressRateLimit from "express-rate-limit";
 import type { Kysely } from "kysely";
 import morgan from "morgan";
+import type { Config } from "./config";
 import { fileRouter as plainFileRouter } from "./file-router";
 import { randomId } from "./id";
 import { getLogger } from "./log";
@@ -87,6 +88,12 @@ function id(): express.RequestHandler {
     res.locals.id = randomId("req");
     next();
   };
+}
+
+export function defineHttp(
+  handler: (config: Config) => Promise<express.Application>,
+) {
+  return handler;
 }
 
 /** A collection of built-in express middleware. */

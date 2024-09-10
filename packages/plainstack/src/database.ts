@@ -1,17 +1,17 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { Migrator } from "kysely";
+import { type Kysely, Migrator, sql } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
-import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
+import { loadAndGetManifest } from "./manifest";
 import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
 
-const log = getLogger("migrations");
+const log = getLogger("database");
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetAppConfig({ config });
+  const appConfig = await loadAndGetManifest({ config });
   return new Migrator({
     db: appConfig.database,
     provider: new TSFileMigrationProvider({
@@ -74,4 +74,51 @@ export async function writeMigrationFile(name: string) {
   }
   await fs.writeFile(filePath, migrationFileTemplate);
   log.info(`Generated migration: ${fileName}`);
+}
+
+/**
+ * Run a a function in a database transaction.
+ * The transaction is automatically rolled back, even if the function doesn't throw an error.
+ * Use during testing, to keep test cases isolated from each other.
+ * */
+export async function isolate(
+  db: Kysely<Record<string, unknown>>,
+  fn: (db: Kysely<Record<string, unknown>>) => Promise<void>,
+) {
+  // TODO check if pending migrations, and print warning if so
+  let err: Error | null = null;
+
+  try {
+    // Begin the transaction
+    await sql.raw("BEGIN").execute(db);
+    try {
+      await fn(db);
+    } catch (e) {
+      err = e as Error;
+    }
+  } finally {
+    await sql.raw("ROLLBACK").execute(db);
+  }
+
+  if (err) {
+    // rethrow the error with the original error attached
+    const e = new Error(`Rethrowing error: "${err.message}"`);
+    // @ts-ignore
+    e.original_error = err;
+    e.stack = err.stack;
+    throw e;
+  }
+}
+
+export function defineDatabase<T>(db: Kysely<T>): Kysely<T> {
+  return db;
+}
+
+export function isDatabase(db: unknown): db is Kysely<Record<string, unknown>> {
+  return (
+    typeof db === "object" &&
+    db !== null &&
+    "schema" in db &&
+    "selectFrom" in db
+  );
 }

@@ -1,14 +1,14 @@
 import * as path from "node:path";
-import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
+import { loadAndGetManifest } from "./manifest";
 import { fileExists } from "./plainstack-fs";
 
 const log = getLogger("seed");
 
 export async function runSeed() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetAppConfig({ config });
+  const appConfig = await loadAndGetManifest({ config });
 
   const seedPath = path.join(process.cwd(), config.paths.seed);
 

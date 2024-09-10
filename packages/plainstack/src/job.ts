@@ -2,29 +2,29 @@ import type { Kysely } from "kysely";
 
 export type Job<T> = {
   name: string;
-  process: ({ data }: { data: T }) => Promise<void>;
+  run: ({ data }: { data: T }) => Promise<void>;
 };
 
-export interface DefineJobOpts<T> {
-  name: string;
-  process: ({ data }: { data: T }) => Promise<void>;
-  pollIntervall?: number;
-  batchSize?: number;
-  maxRetries?: number;
-  retryIntervall?: number;
+export async function spawnWorkers(database: Kysely<Record<string, unknown>>) {
+  return Promise.reject(new Error("Not implemented"));
 }
 
-export function defineJob<T>(
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  database: Kysely<any>,
-  opts: DefineJobOpts<T>,
-): Job<T> {
+export function isJob<T>(job: unknown): job is Job<T> {
+  return (
+    typeof job === "object" &&
+    job !== null &&
+    "run" in job &&
+    "name" in job &&
+    typeof job.run === "function"
+  );
+}
+
+export function defineJob<T>(opts: {
+  name: string;
+  run: ({ data }: { data: T }) => Promise<void>;
+}): Job<T> {
   return {
     name: opts.name,
-    process: opts.process,
+    run: opts.run,
   };
-}
-
-export async function spawnWorkers(database: Kysely<unknown>) {
-  return Promise.reject(new Error("Not implemented"));
 }

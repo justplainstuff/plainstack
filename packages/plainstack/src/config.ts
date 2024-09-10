@@ -11,7 +11,7 @@ export type InputConfig = {
   port?: number;
   paths?: {
     routes?: string;
-    cli?: string;
+    commands?: string;
     jobs?: string;
     forms?: string;
     public?: string;
@@ -35,7 +35,7 @@ export type Config = {
   port: number;
   paths: {
     routes: string;
-    cli: string;
+    commands: string;
     jobs: string;
     forms: string;
     public: string;
@@ -69,7 +69,7 @@ export async function loadConfig() {
       port: 3000,
       paths: {
         routes: "app/routes",
-        cli: "app/cli",
+        commands: "app/commands",
         jobs: "app/jobs",
         forms: "app/forms",
         public: ".out/public",

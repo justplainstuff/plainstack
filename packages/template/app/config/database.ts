@@ -6,6 +6,8 @@ import type { DB } from "./schema";
 
 const log = getLogger("database");
 
+export type Database = Kysely<DB>;
+
 export default defineDatabase(
   new Kysely<DB>({
     dialect: new SqliteDialect({
@@ -17,5 +19,3 @@ export default defineDatabase(
     },
   }),
 );
-
-export type Database = Kysely<DB>;

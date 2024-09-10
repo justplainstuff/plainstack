@@ -1,12 +1,10 @@
-import fs from "node:fs";
-import path from "node:path";
 import { type CommandDef, defineCommand, runMain } from "citty";
 import { $ } from "execa";
-import { loadAndGetAppConfig } from "./app-config";
 import { loadAndGetConfig } from "./config";
+import { migrateToLatest, writeMigrationFile } from "./database";
 import { spawnWorkers } from "./job";
 import { getLogger } from "./log";
-import { migrateToLatest, writeMigrationFile } from "./migrations";
+import { loadAndGetManifest } from "./manifest";
 import { printRoutes } from "./print-routes";
 import { runSeed } from "./seed";
 
@@ -94,7 +92,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const appConfig = await loadAndGetAppConfig({ config });
+      const appConfig = await loadAndGetManifest({ config });
       appConfig.app.listen(config.port);
       log.info(`⚡️ serving from port ${config.port}`);
     },
@@ -107,8 +105,8 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const appConfig = await loadAndGetAppConfig({ config });
-      await spawnWorkers(appConfig.database);
+      const manifest = await loadAndGetManifest({ config });
+      await spawnWorkers(manifest.database);
     },
   });
 
@@ -119,7 +117,7 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await loadAndGetAppConfig({ config });
+      const { app } = await loadAndGetManifest({ config });
       await printRoutes(app);
     },
   });
@@ -192,54 +190,6 @@ function getBuiltInCommands(): Record<string, CommandDef<any>> {
   };
 }
 
-export async function loadUserCommands(): Promise<Record<string, CommandDef>> {
-  const config = await loadAndGetConfig();
-  const cliPath = config.paths.cli;
-
-  if (!fs.existsSync(cliPath)) {
-    console.debug(`CLI directory not found: ${cliPath}`);
-    return {};
-  }
-
-  const tsFiles = fs
-    .readdirSync(cliPath)
-    .filter((file) => file.endsWith(".ts"))
-    .map((file) => path.parse(file).name);
-
-  const commands: Record<string, CommandDef> = {};
-
-  for (const file of tsFiles) {
-    const modulePath = path.join(cliPath, `${file}.ts`);
-    const moduleUrl = `file://${modulePath}`;
-
-    try {
-      const module = await import(moduleUrl);
-      log.debug("module %s", file);
-
-      const commandModule = module.default?.default;
-
-      log.debug("module %s command: %O", file, commandModule);
-
-      if (
-        typeof commandModule === "object" &&
-        commandModule !== null &&
-        "run" in commandModule
-      ) {
-        commands[file] = commandModule;
-        log.debug("loaded command %s", file);
-      } else {
-        throw new Error(
-          `${file} should export a citty command with at least a "run" function`,
-        );
-      }
-    } catch (error) {
-      console.error(`Error importing the ${file} module:`, error);
-    }
-  }
-
-  return commands;
-}
-
 function getRootCommand({
   userCommands,
   builtInCommands,
@@ -260,8 +210,22 @@ function getRootCommand({
 }
 
 export async function runCommand() {
-  const userCommands = await loadUserCommands();
   const builtInCommands = getBuiltInCommands();
-  const rootCommand = getRootCommand({ userCommands, builtInCommands });
+  const config = await loadAndGetConfig();
+  const manifest = await loadAndGetManifest({ config });
+  const rootCommand = getRootCommand({
+    userCommands: manifest.commands,
+    builtInCommands,
+  });
   await runMain(rootCommand);
+}
+
+export function isCommand(cmd: unknown): cmd is CommandDef {
+  return (
+    typeof cmd === "object" &&
+    cmd !== null &&
+    "meta" in cmd &&
+    "name" in cmd &&
+    "run" in cmd
+  );
 }
