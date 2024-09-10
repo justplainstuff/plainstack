@@ -161,11 +161,12 @@ let manifest: Manifest | undefined;
 
 export async function loadManifest({
   config,
-}: { config: Config; silent?: boolean }): Promise<void> {
+  cwd,
+}: { config: Config; cwd: string }): Promise<void> {
   log.debug("starting to load app config");
 
   log.debug("loading database config module");
-  const databaseConfigPath = join(cwd(), config.paths.databaseConfig);
+  const databaseConfigPath = join(cwd, config.paths.databaseConfig);
   const databaseModule = await loadModule(
     databaseConfigPath,
     loadDatabase(databaseConfigPath),
@@ -177,7 +178,7 @@ export async function loadManifest({
   const database = databaseModule.defaultExport;
 
   log.debug("loading http config module");
-  const httpConfigPath = join(cwd(), config.paths.httpConfig);
+  const httpConfigPath = join(cwd, config.paths.httpConfig);
   const httpModule = await loadModule(httpConfigPath, loadHttp(httpConfigPath));
   if (!httpModule.defaultExport)
     throw new Error(
@@ -186,7 +187,7 @@ export async function loadManifest({
   const app: express.Application = await httpModule.defaultExport(config);
 
   log.debug("loading commands");
-  const commandsPath = join(cwd(), config.paths.commands);
+  const commandsPath = join(cwd, config.paths.commands);
   const commandsModules = await loadModulesfromDir(
     commandsPath,
     loadCommand(commandsPath),
@@ -202,7 +203,7 @@ export async function loadManifest({
   }
 
   log.debug("loading jobs");
-  const jobsPath = join(cwd(), config.paths.jobs);
+  const jobsPath = join(cwd, config.paths.jobs);
   const jobsModules = await loadModulesfromDir(jobsPath, loadJob(jobsPath));
   const jobs: Record<string, Job<unknown>> = {};
   for (const jobModule of jobsModules) {
@@ -231,10 +232,12 @@ export function getManifest(): Manifest {
 
 export async function loadAndGetManifest({
   config,
+  cwd,
 }: {
   config: Config;
+  cwd: string;
 }): Promise<Manifest> {
   if (manifest) return manifest;
-  await loadManifest({ config });
+  await loadManifest({ config, cwd });
   return getManifest();
 }
