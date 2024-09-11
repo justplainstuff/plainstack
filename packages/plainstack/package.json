@@ -2,7 +2,7 @@
   "name": "plainstack",
   "version": "0.0.17",
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/plainstack.js",
   "types": "dist/plainstack.d.ts",
   "bin": {
@@ -52,6 +52,7 @@
   "devDependencies": {
     "@kitajs/html": "^4.2.1",
     "@kitajs/ts-html-plugin": "^4.0.1",
+    "@tsconfig/node20": "^20.1.4",
     "@types/better-sqlite3": "^7.6.10",
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",

@@ -4,16 +4,16 @@ import { isolate } from "plainstack";
 import { describe, expect, test } from "vitest";
 
 describe("users", async () => {
-  test("createUser", async () => {
+  test("create user", async () => {
     await isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
       expect(
-        database.selectFrom("users").executeTakeFirstOrThrow(),
+        database.selectFrom("users").selectAll().executeTakeFirstOrThrow(),
       ).resolves.toBeDefined();
     });
   });
 
-  test("createUser already exists", async () =>
+  test("create user already exists", async () =>
     isolate(database, async (tx) => {
       await createUser(tx, "aang@example.org");
 

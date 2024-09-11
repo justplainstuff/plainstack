@@ -23,8 +23,10 @@ async function getMigrator() {
 
 export async function migrateToLatest() {
   const migrator = await getMigrator();
+  log.info("running migrations");
   const result = await migrator.migrateToLatest();
-  log.info(result);
+  log.info(`applied ${result?.results?.length} migrations`);
+  if (result?.error) log.error("migration error:", result.error);
 }
 
 const migrationFileTemplate = `
@@ -102,12 +104,7 @@ export async function isolate<T>(
   }
 
   if (err) {
-    // rethrow the error with the original error attached
-    const e = new Error(`Rethrowing error: "${err.message}"`);
-    // @ts-ignore
-    e.original_error = err;
-    e.stack = err.stack;
-    throw e;
+    throw err;
   }
 }
 

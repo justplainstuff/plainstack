@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   target: "node20",
-  format: ["cjs"],
+  format: ["esm"],
   entry: ["src/plainstack.ts", "src/bin.ts", "src/dev.ts"],
   external: ["esbuild", "zod", "tsx", "@kitajs/html"],
   dts: true,

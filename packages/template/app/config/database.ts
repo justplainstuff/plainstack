@@ -15,7 +15,7 @@ export default defineDatabase(
     }),
     plugins: [new CamelCasePlugin()],
     log: (event: unknown) => {
-      log.info(event);
+      log.debug(event);
     },
   }),
 );
