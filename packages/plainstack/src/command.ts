@@ -208,12 +208,18 @@ function getBuiltInCommands({
   };
 }
 
+async function getUserSubCommands({ cwd }: { cwd: string }) {
+  const config = await loadAndGetConfig();
+  const manifest = await loadAndGetManifest({ config, cwd });
+  return manifest.commands;
+}
+
 function getRootCommand({
-  userCommands,
   builtInCommands,
+  cwd,
 }: {
-  userCommands: Record<string, CommandDef>;
   builtInCommands: Record<string, CommandDef>;
+  cwd: string;
 }) {
   return defineCommand({
     meta: {
@@ -221,18 +227,22 @@ function getRootCommand({
       description: "The all-in-one web framework obsessing about velocity 🏎️",
     },
     subCommands: {
-      ...userCommands,
       ...builtInCommands,
+      custom: {
+        meta: {
+          name: "custom",
+          description: "Run a custom command",
+        },
+        subCommands: () => getUserSubCommands({ cwd }),
+      },
     },
   });
 }
 
 export async function runCommand({ cwd }: { cwd: string }) {
   const builtInCommands = getBuiltInCommands({ cwd });
-  const config = await loadAndGetConfig();
-  const manifest = await loadAndGetManifest({ config, cwd });
   const rootCommand = getRootCommand({
-    userCommands: manifest.commands,
+    cwd,
     builtInCommands,
   });
   await runMain(rootCommand);

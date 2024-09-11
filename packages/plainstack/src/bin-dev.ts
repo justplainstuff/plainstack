@@ -6,9 +6,8 @@ import { work } from "./job";
 import { getLogger } from "./log";
 import { loadAndGetManifest } from "./manifest";
 
-const log = getLogger("dev");
-
 async function main() {
+  const log = getLogger("dev");
   const config = await loadAndGetConfig();
   const { app, queue, jobs } = await loadAndGetManifest({ config, cwd: cwd() });
   app.listen(config.port);
