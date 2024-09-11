@@ -22,14 +22,16 @@ describe("import modules", () => {
 
     const result = await loadModule(testModulePath, load);
 
-    expect(result.defaultExport).toBeDefined();
-    expect(result.defaultExport).toEqual({ foobar: "I am the default export" });
+    expect(result?.defaultExport).toBeDefined();
+    expect(result?.defaultExport).toEqual({
+      foobar: "I am the default export",
+    });
 
-    expect(result.namedExports).toBeDefined();
-    expect(result.namedExports.namedExport1).toEqual({
+    expect(result?.namedExports).toBeDefined();
+    expect(result?.namedExports.namedExport1).toEqual({
       foobar: "I am a named export",
     });
-    expect(result.namedExports.namedExport2).toEqual({ foobar: "42" });
+    expect(result?.namedExports.namedExport2).toEqual({ foobar: "42" });
   });
 
   it("should import modules from directory and subdirectories", async () => {
@@ -89,6 +91,7 @@ describe("load and get manifest", () => {
         jobs: "app/jobs",
         databaseConfig: "app/config/database.ts",
         httpConfig: "app/config/http.ts",
+        queueConfig: "app/config/queue.ts",
         migrations: "-",
         schema: "-",
         public: "-",

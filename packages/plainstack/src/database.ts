@@ -84,7 +84,7 @@ export async function writeMigrationFile(name: string) {
  * The transaction is automatically rolled back, even if the function doesn't throw an error.
  * Use during testing, to keep test cases isolated from each other.
  * */
-export async function isolate<T>(
+export async function rollback<T>(
   db: Kysely<T>,
   fn: (db: Kysely<T>) => Promise<void>,
 ) {

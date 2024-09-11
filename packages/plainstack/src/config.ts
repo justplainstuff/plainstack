@@ -1,5 +1,4 @@
 import { type ConsolaReporter, LogLevels } from "consola";
-import type winston from "winston";
 
 export type InputConfig = {
   nodeEnv: "development" | "production" | "test";
@@ -22,6 +21,7 @@ export type InputConfig = {
     migrations?: string;
     databaseConfig?: string;
     httpConfig?: string;
+    queueConfig?: string;
   };
 };
 
@@ -46,6 +46,7 @@ export type Config = {
     migrations: string;
     databaseConfig: string;
     httpConfig: string;
+    queueConfig: string;
   };
 };
 
@@ -80,6 +81,7 @@ export async function loadConfig() {
         migrations: "database/migrations",
         databaseConfig: "app/config/database.ts",
         httpConfig: "app/config/http.ts",
+        queueConfig: "app/config/queue.ts",
       } satisfies Config["paths"],
     },
   });

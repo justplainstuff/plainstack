@@ -3,6 +3,31 @@
  * Please do not edit it manually.
  */
 
+import type { ColumnType } from "kysely";
+
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
+
+export interface PlainjobsJobs {
+  createdAt: number;
+  data: string;
+  error: string | null;
+  failedAt: number | null;
+  id: Generated<number | null>;
+  status: Generated<string>;
+  type: string;
+}
+
+export interface PlainjobsScheduledJobs {
+  createdAt: number;
+  cronExpression: string | null;
+  id: Generated<number | null>;
+  nextRun: number | null;
+  status: Generated<string>;
+  type: string;
+}
+
 export interface Users {
   createdAt: number;
   email: string;
@@ -10,5 +35,7 @@ export interface Users {
 }
 
 export interface DB {
+  plainjobsJobs: PlainjobsJobs;
+  plainjobsScheduledJobs: PlainjobsScheduledJobs;
   users: Users;
 }

@@ -16,7 +16,7 @@ export { testHandler } from "./test-handler";
 export { outbox, sendMail, defineMailer } from "./mail";
 
 // database
-export { isolate, defineDatabase } from "./database";
+export { rollback, defineDatabase } from "./database";
 
 // jobs
-export { defineQueue, defineJob, type Job, spawnWorkers as work } from "./job";
+export { defineQueue, defineJob, type Job, work } from "./job";

@@ -2,7 +2,6 @@ import { type CommandDef, defineCommand, runMain } from "citty";
 import { $ } from "execa";
 import { loadAndGetConfig } from "./config";
 import { migrateToLatest, writeMigrationFile } from "./database";
-import { spawnWorkers } from "./job";
 import { getLogger } from "./log";
 import { loadAndGetManifest } from "./manifest";
 import { printRoutes } from "./print-routes";
@@ -103,12 +102,29 @@ function getBuiltInCommands({
   const work = defineCommand({
     meta: {
       name: "work",
-      description: "Start the background worker",
+      description: "Start background workers",
     },
-    run: async () => {
-      const config = await loadAndGetConfig();
-      const manifest = await loadAndGetManifest({ config, cwd });
-      await spawnWorkers(manifest.database);
+    args: {
+      parallel: {
+        type: "string",
+        description: "Number of parallel workers to run",
+        default: "1",
+      },
+    },
+    run: async ({ args }) => {
+      const parallel = Number.parseInt(args.parallel);
+      await Promise.all(
+        Array.from(
+          { length: parallel },
+          () =>
+            $({
+              all: true,
+              preferLocal: true,
+              stdout: "inherit",
+              stderr: "inherit",
+            })`plainstack-work`,
+        ),
+      );
     },
   });
 

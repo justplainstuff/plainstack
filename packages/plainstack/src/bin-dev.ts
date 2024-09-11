@@ -2,6 +2,7 @@
 
 import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
+import { work } from "./job";
 import { getLogger } from "./log";
 import { loadAndGetManifest } from "./manifest";
 
@@ -9,12 +10,13 @@ const log = getLogger("dev");
 
 async function main() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetManifest({ config, cwd: cwd() });
-  // TODO start-inmemory worker
-  appConfig.app.listen(config.port);
+  const { app, queue, jobs } = await loadAndGetManifest({ config, cwd: cwd() });
+  app.listen(config.port);
   log.info(`⚡️ http://localhost:${config.port}`);
-  //   void spawnWorkers(appConfig.database);
-  //   log.info("⚡️ worker started");
+  if (queue && Object.values(jobs).length) {
+    log.info("⚡️ worker started");
+    await work(queue, jobs);
+  }
 }
 
 void main();

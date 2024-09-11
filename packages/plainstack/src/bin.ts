@@ -3,4 +3,4 @@
 import { cwd } from "node:process";
 import { runCommand } from "./command";
 
-void runCommand({ cwd: cwd() });
+void runCommand({ cwd: cwd() }).then(() => process.exit(0));

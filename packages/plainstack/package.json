@@ -7,7 +7,8 @@
   "types": "dist/plainstack.d.ts",
   "bin": {
     "plainstack": "dist/bin.js",
-    "plainstack-dev": "dist/dev.js"
+    "plainstack-dev": "dist/bin-dev.js",
+    "plainstack-work": "dist/bin-work.js"
   },
   "scripts": {
     "test": "vitest run",

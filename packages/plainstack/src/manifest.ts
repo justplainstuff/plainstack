@@ -1,23 +1,22 @@
 import fs from "node:fs/promises";
 import { readdir } from "node:fs/promises";
 import path, { join } from "node:path";
-import { cwd } from "node:process";
 import type { CommandDef } from "citty";
 import type express from "express";
 import type { Kysely } from "kysely";
+import type { Queue } from "plainjobs";
 import { isCommand } from "./command";
 import type { Config } from "./config";
 import { isDatabase } from "./database";
 import { type Job, isJob } from "./job";
 import { getLogger } from "./log";
-import { directoryExists } from "./plainstack-fs";
-
-const log = getLogger("manifest");
+import { directoryExists, fileExists } from "./plainstack-fs";
 
 export async function loadModule<T>(
   filePath: string,
   load: (module: unknown) => Promise<T>,
-): Promise<{ defaultExport?: T; namedExports: Record<string, T> }> {
+): Promise<{ defaultExport?: T; namedExports: Record<string, T> } | undefined> {
+  if (!(await fileExists(filePath))) return undefined;
   const module = await import(filePath);
   const result: { defaultExport?: T; namedExports: Record<string, T> } = {
     namedExports: {},
@@ -63,6 +62,7 @@ export async function loadModulesfromDir<T>(
   currentDir: string = baseDir,
 ): Promise<FileModule<T>[]> {
   const modules: FileModule<T>[] = [];
+  const log = getLogger("manifest");
   if (!(await directoryExists(currentDir))) {
     log.debug(`directory ${currentDir} does not exist`);
     return [];
@@ -90,13 +90,11 @@ export async function loadModulesfromDir<T>(
         continue;
       }
       const relativePath = path.relative(baseDir, absolutePath);
-      const { defaultExport, namedExports } = await loadModule(
-        absolutePath,
-        load,
-      );
+      const result = await loadModule(absolutePath, load);
+      if (!result) continue;
       modules.push({
-        defaultExport,
-        namedExports,
+        defaultExport: result.defaultExport,
+        namedExports: result.namedExports,
         filename: path.parse(file).name,
         extension: path.extname(file),
         absolutePath,
@@ -149,13 +147,47 @@ function loadJob(path: string) {
   };
 }
 
+function isQueue(m: unknown): m is Queue {
+  return "add" in (m as object) && "schedule" in (m as object);
+}
+
+function loadQueue(path: string) {
+  return async (module: unknown): Promise<Queue> => {
+    if (!isQueue(module))
+      throw new Error(
+        `Invalid queue module at ${path}: expected a function as default export`,
+      );
+    return module as Queue;
+  };
+}
+
 export type Manifest = {
   database: Kysely<Record<string, unknown>>;
   app: express.Application;
+  queue?: Queue;
   jobs: Record<string, Job<unknown>>;
   commands: Record<string, CommandDef>;
   // TODO load routes here as well
 };
+
+function printManifest(manifest: Manifest) {
+  const log = getLogger("manifest");
+  log.info("loaded manifest:");
+  log.info("✓ database");
+  log.info("✓ app");
+  manifest.queue ? log.info("✓ queue") : log.info("✗ queue");
+  Object.values(manifest.jobs).length
+    ? log.info(
+        "✓ jobs:",
+        Object.values(manifest.jobs)
+          .map((j) => j.name)
+          .join(", "),
+      )
+    : log.info("✗ jobs");
+  Object.values(manifest.commands).length
+    ? log.info("✓ commands:", Object.keys(manifest.commands).join(", "))
+    : log.info("✗ commands");
+}
 
 let manifest: Manifest | undefined;
 
@@ -163,6 +195,7 @@ export async function loadManifest({
   config,
   cwd,
 }: { config: Config; cwd: string }): Promise<void> {
+  const log = getLogger("load-manifest");
   log.debug("starting to load app config");
 
   log.debug("loading database config module");
@@ -171,6 +204,8 @@ export async function loadManifest({
     databaseConfigPath,
     loadDatabase(databaseConfigPath),
   );
+  if (!databaseModule)
+    throw new Error(`no database config found at ${databaseConfigPath}`);
   if (!databaseModule.defaultExport)
     throw new Error(
       `no default export found in database config at ${databaseConfigPath}`,
@@ -180,6 +215,7 @@ export async function loadManifest({
   log.debug("loading http config module");
   const httpConfigPath = join(cwd, config.paths.httpConfig);
   const httpModule = await loadModule(httpConfigPath, loadHttp(httpConfigPath));
+  if (!httpModule) throw new Error(`no http config found at ${httpConfigPath}`);
   if (!httpModule.defaultExport)
     throw new Error(
       `no default export found in http config at ${httpConfigPath}`,
@@ -199,6 +235,7 @@ export async function loadManifest({
         `no default export found in command module at ${commandModule.filename}`,
       );
     }
+    log.debug(`loaded command ${commandModule.filename}`);
     commands[commandModule.filename] = commandModule.defaultExport;
   }
 
@@ -212,11 +249,18 @@ export async function loadManifest({
         `no default export found in job module at ${jobModule.filename}`,
       );
     }
+    log.debug(`loaded job ${jobModule.filename}`);
     jobs[jobModule.filename] = jobModule.defaultExport;
   }
 
+  log.debug("loading queue");
+  const queuePath = join(cwd, config.paths.queueConfig);
+  const queueModule = await loadModule(queuePath, loadQueue(queuePath));
+  const queue = queueModule?.defaultExport;
+
   log.debug("app config loaded successfully");
-  manifest = { app, database, commands, jobs };
+  manifest = { app, database, commands, jobs, queue };
+  printManifest(manifest);
 }
 
 export function getManifest(): Manifest {
