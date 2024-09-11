@@ -4,7 +4,11 @@ import type { Config } from "./config";
 import { loadAndGetManifest, loadModule, loadModulesfromDir } from "./manifest";
 
 describe("import modules", () => {
-  const testDir = path.join(__dirname, "../test", "manifest/load-module");
+  const testDir = path.join(
+    __dirname,
+    "../test/fixtures",
+    "manifest/load-module",
+  );
   const load = async (m: unknown): Promise<{ foobar: string }> => {
     if (!("foobar" in (m as Record<string, unknown>)))
       throw new Error(
@@ -70,7 +74,7 @@ describe("import modules", () => {
 
 describe("load and get manifest", () => {
   it("should load and get manifest", async () => {
-    const testDir = path.join(__dirname, "../test", "manifest");
+    const testDir = path.join(__dirname, "../test/fixtures", "manifest");
     const config: Config = {
       nodeEnv: "test",
       dbUrl: ":memory:",

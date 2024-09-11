@@ -1,4 +1,5 @@
 import * as path from "node:path";
+import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
 import { loadAndGetManifest } from "./manifest";
@@ -8,9 +9,9 @@ const log = getLogger("seed");
 
 export async function runSeed() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetManifest({ config });
+  const appConfig = await loadAndGetManifest({ config, cwd: cwd() });
 
-  const seedPath = path.join(process.cwd(), config.paths.seed);
+  const seedPath = path.join(cwd(), config.paths.seed);
 
   if (!(await fileExists(seedPath))) {
     log.info("Seed file not found. Skipping seeding.");

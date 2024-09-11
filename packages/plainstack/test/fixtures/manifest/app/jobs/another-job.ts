@@ -1,4 +1,4 @@
-import { defineJob } from "../../../../src/job";
+import { defineJob } from "../../../../../src/job";
 
 export default defineJob({
   name: __filename,

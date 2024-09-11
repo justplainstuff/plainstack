@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { cwd } from "node:process";
 import { type Kysely, Migrator, sql } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
 import { loadAndGetConfig } from "./config";
@@ -11,7 +12,7 @@ const log = getLogger("database");
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetManifest({ config });
+  const appConfig = await loadAndGetManifest({ config, cwd: cwd() });
   return new Migrator({
     db: appConfig.database,
     provider: new TSFileMigrationProvider({
@@ -81,9 +82,9 @@ export async function writeMigrationFile(name: string) {
  * The transaction is automatically rolled back, even if the function doesn't throw an error.
  * Use during testing, to keep test cases isolated from each other.
  * */
-export async function isolate(
-  db: Kysely<Record<string, unknown>>,
-  fn: (db: Kysely<Record<string, unknown>>) => Promise<void>,
+export async function isolate<T>(
+  db: Kysely<T>,
+  fn: (db: Kysely<T>) => Promise<void>,
 ) {
   // TODO check if pending migrations, and print warning if so
   let err: Error | null = null;

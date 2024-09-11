@@ -1,4 +1,6 @@
+import type SQLite from "better-sqlite3";
 import type { Kysely } from "kysely";
+import { type Queue, defineQueue as definePlainjobsQueue } from "plainjobs";
 
 export type Job<T> = {
   name: string;
@@ -27,4 +29,10 @@ export function defineJob<T>(opts: {
     name: opts.name,
     run: opts.run,
   };
+}
+
+export function defineQueue(opts: {
+  connection: SQLite.Database;
+}): Queue {
+  return definePlainjobsQueue({ connection: opts.connection });
 }
