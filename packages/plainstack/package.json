@@ -45,6 +45,7 @@
     "morgan": "^1.10.0",
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",
+    "pkg-types": "^1.2.0",
     "plainjobs": "0.0.4",
     "tailwindcss": "^3.4.3",
     "vitest": "^2.0.1",

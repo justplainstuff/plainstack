@@ -162,6 +162,9 @@ importers:
       nodemailer:
         specifier: ^6.9.13
         version: 6.9.14
+      pkg-types:
+        specifier: ^1.2.0
+        version: 1.2.0
       plainjobs:
         specifier: 0.0.4
         version: 0.0.4(better-sqlite3@11.2.1)

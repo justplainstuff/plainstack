@@ -2,6 +2,7 @@ import { type CommandDef, defineCommand, runMain } from "citty";
 import { $ } from "execa";
 import { loadAndGetConfig } from "./config";
 import { migrateToLatest, writeMigrationFile } from "./database";
+import { printInfo } from "./info";
 import { getLogger } from "./log";
 import { loadAndGetManifest } from "./manifest";
 import { printRoutes } from "./print-routes";
@@ -196,6 +197,18 @@ function getBuiltInCommands({
     },
   });
 
+  const info = defineCommand({
+    meta: {
+      name: "info",
+      description: "Print project info",
+    },
+    run: async () => {
+      const config = await loadAndGetConfig();
+      const manifest = await loadAndGetManifest({ config, cwd });
+      printInfo(manifest);
+    },
+  });
+
   return {
     dev,
     build,
@@ -205,6 +218,7 @@ function getBuiltInCommands({
     routes,
     migrate,
     seed,
+    info,
   };
 }
 

@@ -170,25 +170,6 @@ export type Manifest = {
   // TODO load routes here as well
 };
 
-function printManifest(manifest: Manifest) {
-  const log = getLogger("manifest");
-  log.info("loaded manifest:");
-  log.info("✓ database");
-  log.info("✓ app");
-  manifest.queue ? log.info("✓ queue") : log.info("✗ queue");
-  Object.values(manifest.jobs).length
-    ? log.info(
-        "✓ jobs:",
-        Object.values(manifest.jobs)
-          .map((j) => j.name)
-          .join(", "),
-      )
-    : log.info("✗ jobs");
-  Object.values(manifest.commands).length
-    ? log.info("✓ commands:", Object.keys(manifest.commands).join(", "))
-    : log.info("✗ commands");
-}
-
 let manifest: Manifest | undefined;
 
 export async function loadManifest({
@@ -260,7 +241,6 @@ export async function loadManifest({
 
   log.debug("app config loaded successfully");
   manifest = { app, database, commands, jobs, queue };
-  printManifest(manifest);
 }
 
 export function getManifest(): Manifest {
