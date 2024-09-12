@@ -1,7 +1,7 @@
 import { getDocumentationPages } from "app/services/page";
-import type { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async ({ res }) => {
+export const GET = defineHandler(async ({ res }) => {
   const docPages = (await getDocumentationPages()).map(
     (page) => `/docs/${page.slug}`,
   );
@@ -17,4 +17,4 @@ ${pages
     res.set("Content-Type", "text/xml");
     res.send(xml);
   };
-};
+});

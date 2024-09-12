@@ -1,6 +1,7 @@
 import type { Request } from "express";
 import type { Kysely } from "kysely";
 import { createResponse } from "node-mocks-http";
+import type { GenericDatabase } from "./database";
 import { type Handler, handleResponse } from "./handler";
 
 /** Run a handler with a mock request, returning the response. Useful for testing. */
@@ -10,7 +11,7 @@ export async function testHandler(
   {
     database,
   }: {
-    database?: Kysely<unknown>;
+    database?: GenericDatabase;
   },
 ) {
   const res = createResponse();

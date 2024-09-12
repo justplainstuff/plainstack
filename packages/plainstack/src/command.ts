@@ -47,7 +47,7 @@ function getBuiltInCommands({
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`esbuild --entry-points "${config.paths.assets}/*.ts" --outdir ${config.paths.out} --minify --sourcemap`,
+        })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --minify --sourcemap`,
         // TODO copy over everytying else
       ]);
       log.info("build took", Date.now() - now, "ms");
@@ -101,7 +101,7 @@ function getBuiltInCommands({
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`esbuild --entry-points "${config.paths.assets}/*.ts" --outdir ${config.paths.out} --sourcemap`,
+        })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --sourcemap`,
         // TODO copy over everytying else
       ]);
     },
@@ -114,8 +114,8 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const appConfig = await getManifest({ config, cwd });
-      appConfig.app.listen(config.port);
+      const { app } = await getManifest(["app"], { config, cwd });
+      app.listen(config.port);
       log.info(`⚡️ serving from port ${config.port}`);
     },
   });
@@ -156,7 +156,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await getManifest({ config, cwd });
+      const { app } = await getManifest(["app"], { config, cwd });
       await printRoutes(app);
     },
   });
@@ -180,9 +180,13 @@ function getBuiltInCommands({
       },
     },
     run: async ({ args }) => {
+      const log = getLogger("migrate");
       if (args.schema) {
         const config = await loadAndGetConfig();
         process.env.DATABASE_URL = config.dbUrl;
+        log.info(
+          `generate schema file to ${config.paths.schema} with DATABASE_URL=${config.dbUrl}`,
+        );
         await $({
           all: true,
           preferLocal: true,
@@ -196,6 +200,9 @@ function getBuiltInCommands({
           await migrateToLatest();
           const config = await loadAndGetConfig();
           process.env.DATABASE_URL = config.dbUrl;
+          log.info(
+            `generate schema file to ${config.paths.schema} with DATABASE_URL=${config.dbUrl}`,
+          );
           await $({
             all: true,
             preferLocal: true,
@@ -224,7 +231,13 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const manifest = await getManifest({ config, cwd });
+      const manifest = await getManifest(
+        ["database", "app", "queue", "jobs", "commands"],
+        {
+          config,
+          cwd,
+        },
+      );
       printInfo(manifest);
     },
   });
@@ -244,8 +257,8 @@ function getBuiltInCommands({
 
 async function getUserSubCommands({ cwd }: { cwd: string }) {
   const config = await loadAndGetConfig();
-  const manifest = await getManifest({ config, cwd });
-  return manifest.commands;
+  const { commands } = await getManifest(["commands"], { config, cwd });
+  return commands;
 }
 
 function getRootCommand({

@@ -16,7 +16,7 @@ import {
 } from "app/components/icons";
 import Layout from "app/layout";
 import { getDocumentationPages, getHeadingId } from "app/services/page";
-import { type Handler, notFound } from "plainstack";
+import { defineHandler, notFound } from "plainstack";
 
 const pageIcons: Record<string, JSX.Element> = {
   motivation: LeafIcon(),
@@ -33,7 +33,7 @@ const pageIcons: Record<string, JSX.Element> = {
   recipes: PizzaIcon(),
 };
 
-export const GET: Handler = async ({ req }) => {
+export const GET = defineHandler(async ({ req }) => {
   const pages = await getDocumentationPages();
   const currentPage = pages.find((page) => page.slug === req.params.slug);
   if (!currentPage) return notFound();
@@ -119,4 +119,4 @@ export const GET: Handler = async ({ req }) => {
       <FooterSection />
     </Layout>
   );
-};
+});

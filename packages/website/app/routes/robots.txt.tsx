@@ -1,8 +1,8 @@
-import type { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async ({ res }) => {
+export const GET = defineHandler(async ({ res }) => {
   return () => {
     res.set("Content-Type", "text/plain");
     res.send("User-agent: *\nAllow: /");
   };
-};
+});

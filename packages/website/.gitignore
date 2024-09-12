@@ -1,4 +1,5 @@
 .env
 .env.test
-db.sqlite3*
 output.css
+.out
+data.db*

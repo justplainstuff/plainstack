@@ -9,10 +9,11 @@ const log = getLogger("seed");
 
 export async function runSeed() {
   const config = await loadAndGetConfig();
-  const appConfig = await getManifest({ config, cwd: cwd() });
+  const { database } = await getManifest(["database"], { config, cwd: cwd() });
 
   const seedPath = path.join(cwd(), config.paths.seed);
 
+  // TODO move to manifest for loading
   if (!(await fileExists(seedPath))) {
     log.info("Seed file not found. Skipping seeding.");
     return;
@@ -25,7 +26,7 @@ export async function runSeed() {
       throw new Error("Seed file does not export a seed function");
     }
 
-    await seedModule.seed(appConfig.database);
+    await seedModule.seed(database);
     log.info("Seeding completed successfully.");
   } catch (error) {
     log.error("Error during seeding:", error);

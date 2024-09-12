@@ -10,8 +10,6 @@ import { type Job, isJob } from "../job";
 import { getLogger } from "../log";
 import { loadModule, loadModulesfromDir } from "./file-module";
 
-const log = getLogger("manifest");
-
 export type Manifest = {
   database: Kysely<Record<string, unknown>>;
   app: express.Application;
@@ -62,6 +60,7 @@ async function loadSingleModule<T>(
   moduleConfig: ModuleConfig<T>,
 ): Promise<T> {
   const modulePath = path.join(cwd, config.paths[moduleConfig.path]);
+  const log = getLogger("manifest");
   log.debug(`Loading single module from ${modulePath}`);
 
   const module = await loadModule(modulePath, async (m: unknown) => {
@@ -88,6 +87,7 @@ async function loadModuleList<T>(
   moduleConfig: ModuleConfig<T>,
 ): Promise<Record<string, T>> {
   const dirPath = path.join(cwd, config.paths[moduleConfig.path]);
+  const log = getLogger("manifest");
   log.debug(`Loading module list from ${dirPath}`);
 
   const modules = await loadModulesfromDir(dirPath, async (m: unknown) => {
@@ -117,38 +117,67 @@ async function loadModuleList<T>(
   return result;
 }
 
-export async function getManifest<T extends keyof Manifest>(
-  partial: T,
+const memoizedManifest: { [K in keyof Manifest]?: Manifest[K] } = {};
+
+export async function getManifest<K extends keyof Manifest>(
+  keys: K[],
   opts: { config?: Config; cwd?: string } = {},
-): Promise<Manifest[T]> {
+): Promise<Pick<Manifest, K>> {
+  const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
   const cwd = opts.cwd ?? process.cwd();
 
-  log.info(`Getting manifest for ${partial}`, { cwd });
+  log.info(`Getting manifest for ${keys.join(", ")}`, { cwd });
 
-  const moduleConfig = manifestConfig[partial];
-
-  try {
-    let result: unknown;
-
-    if (moduleConfig.type === "single") {
-      result = await loadSingleModule(config, cwd, moduleConfig);
-      if (partial === "app") {
-        result = await (
-          result as (config: Config) => Promise<express.Application>
-        )(config);
-        log.info("Successfully initialized express app");
+  const results = await Promise.all(
+    keys.map(async (key) => {
+      if (key in memoizedManifest) {
+        log.info(`Returning memoized manifest for ${key}`);
+        return memoizedManifest[key] as Manifest[K];
       }
-    } else {
-      result = await loadModuleList(config, cwd, moduleConfig);
-    }
 
-    log.info(`Successfully got manifest for ${partial}`);
-    return result as Manifest[T];
-  } catch (error) {
-    log.error(`Failed to get manifest for ${partial}`, {
-      error: (error as Error).message,
-    });
-    throw error;
-  }
+      const moduleConfig = manifestConfig[key];
+
+      try {
+        let result: Manifest[K];
+
+        if (moduleConfig.type === "single") {
+          result = (await loadSingleModule(
+            config,
+            cwd,
+            moduleConfig,
+          )) as Manifest[K];
+          if (key === "app") {
+            result = (await (
+              result as unknown as (
+                config: Config,
+              ) => Promise<express.Application>
+            )(config)) as Manifest[K];
+            log.info("Successfully initialized express app");
+          }
+        } else {
+          result = (await loadModuleList(
+            config,
+            cwd,
+            moduleConfig,
+          )) as Manifest[K];
+        }
+
+        log.info(`Successfully got manifest for ${key}`);
+
+        memoizedManifest[key] = result;
+
+        return result;
+      } catch (error) {
+        log.error(`Failed to get manifest for ${key}`, {
+          error: (error as Error).message,
+        });
+        throw error;
+      }
+    }),
+  );
+
+  return Object.fromEntries(
+    keys.map((key, index) => [key, results[index]]),
+  ) as unknown as Pick<Manifest, K>;
 }

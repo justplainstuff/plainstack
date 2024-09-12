@@ -3,7 +3,7 @@ import { FooterSection } from "app/components/footer-section";
 import { HeroSection } from "app/components/hero-section";
 import { SignupSection } from "app/components/signup-section";
 import type { Database } from "app/config/database";
-import { env } from "app/config/env";
+import env from "app/config/env";
 import Layout from "app/layout";
 import { createContact } from "app/services/contacts";
 import type { Request } from "express";

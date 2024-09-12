@@ -32,14 +32,15 @@ describe("manifest", () => {
   };
 
   it("get manifest single module", async () => {
-    const database = await getManifest("database", {
+    const { database } = await getManifest(["database"], {
       cwd: testDir,
       config,
     });
     expect(database).toBeDefined();
   });
+
   it("get manifest list of modules", async () => {
-    const jobs = await getManifest("jobs", {
+    const { jobs } = await getManifest(["jobs"], {
       cwd: testDir,
       config,
     });
@@ -47,5 +48,16 @@ describe("manifest", () => {
     expect(Object.keys(jobs)).toHaveLength(2);
     expect(jobs.hello).toBeDefined();
     expect(jobs["another-job"]).toBeDefined();
+  });
+
+  it("get multiple manifest items", async () => {
+    const result = await getManifest(["database", "jobs", "commands"], {
+      cwd: testDir,
+      config,
+    });
+    expect(result.database).toBeDefined();
+    expect(result.jobs).toBeDefined();
+    expect(Object.keys(result.jobs)).toHaveLength(2);
+    expect(result.commands).toBeDefined();
   });
 });

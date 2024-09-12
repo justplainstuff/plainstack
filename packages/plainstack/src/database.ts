@@ -8,11 +8,12 @@ import { getLogger } from "./log";
 import { getManifest } from "./manifest/manifest";
 import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
 
-const log = getLogger("database");
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type GenericDatabase = Kysely<any>;
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
-  const { database } = await getManifest("database", {
+  const { database } = await getManifest(["database"], {
     config,
     cwd: cwd(),
   });
@@ -25,6 +26,7 @@ async function getMigrator() {
 }
 
 export async function migrateToLatest() {
+  const log = getLogger("database");
   const migrator = await getMigrator();
   log.info("running migrations");
   const result = await migrator.migrateToLatest();
@@ -69,6 +71,7 @@ export async function down(db: Kysely<unknown>): Promise<void> {
 `;
 
 export async function writeMigrationFile(name: string) {
+  const log = getLogger("database");
   const config = await loadAndGetConfig();
   const sanitizedName = name.toLowerCase().replace(/[^a-z0-9_]/g, "_");
   const timestamp = Date.now();

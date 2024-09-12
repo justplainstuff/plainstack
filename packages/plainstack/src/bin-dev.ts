@@ -9,7 +9,10 @@ import { getManifest } from "./manifest/manifest";
 async function main() {
   const log = getLogger("dev");
   const config = await loadAndGetConfig();
-  const { app, queue, jobs } = await getManifest({ config, cwd: cwd() });
+  const { app, queue, jobs } = await getManifest(["app", "queue", "jobs"], {
+    config,
+    cwd: cwd(),
+  });
   app.listen(config.port);
   log.info(`⚡️ http://localhost:${config.port}`);
   if (queue && Object.values(jobs).length) {

@@ -1,11 +1,12 @@
-/* eslint-disable no-undef */
 /// <reference lib="dom" />
+import confetti from "canvas-confetti";
+
 (() => {
   const ws = new WebSocket(
     `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`,
   );
-  let userId = null;
-  let currentJoyCount = null;
+  let userId: string | null = null;
+  let currentJoyCount: number | null = null;
   let isInitialDataProcessed = false;
 
   ws.onopen = () => {
@@ -53,7 +54,7 @@
     }
   }
 
-  function updateJoyCounter(count) {
+  function updateJoyCounter(count: number | null) {
     console.log(
       "Updating joy counter. New count:",
       count,
@@ -63,7 +64,7 @@
     const counterElement = document.getElementById("joy-counter");
     if (counterElement && count !== null) {
       currentJoyCount = count;
-      counterElement.textContent = count;
+      counterElement.textContent = String(count);
       console.log("Counter updated to:", count);
     }
   }
@@ -80,7 +81,7 @@
 
     const counterElement = document.getElementById("joy-counter");
     if (counterElement) {
-      currentJoyCount = Number.parseInt(counterElement.textContent, 10);
+      currentJoyCount = Number.parseInt(counterElement.textContent ?? "0", 10);
       console.log("Initial joy count from HTML:", currentJoyCount);
     }
   });

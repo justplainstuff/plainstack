@@ -4,9 +4,7 @@ export default defineEnv((z) =>
   z.object({
     NODE_ENV: z.enum(["development", "production", "test"]),
     PORT: z.coerce.number().optional(),
-    LOG_LEVEL: z
-      .enum(["silly", "debug", "verbose", "http", "info", "warn", "error"])
-      .optional(),
+    LOG_LEVEL: z.coerce.number().optional(),
     DB_URL: z.string(),
     SMTP_HOST: z.string(),
     SMTP_USER: z.string(),

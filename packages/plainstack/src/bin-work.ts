@@ -9,7 +9,10 @@ import { getManifest } from "./manifest/manifest";
 async function main() {
   const log = getLogger("work");
   const config = await loadAndGetConfig();
-  const { queue, jobs } = await getManifest({ config, cwd: cwd() });
+  const { queue, jobs } = await getManifest(["queue", "jobs"], {
+    config,
+    cwd: cwd(),
+  });
   if (!queue)
     throw new Error(
       `can not start job worker without a queue, make sure you have a export default defineQueue() in ${config.paths.queueConfig}`,
