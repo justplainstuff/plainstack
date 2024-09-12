@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "@kitajs/html";
 import type { Database } from "app/config/database";
 import Layout from "app/layout";
 import { verifyDoubleOptIn } from "app/services/contacts";
-import type { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 import z from "zod";
 
 function Message(props: PropsWithChildren) {
@@ -17,7 +17,7 @@ function Message(props: PropsWithChildren) {
   );
 }
 
-export const GET: Handler = async ({ req, res }) => {
+export const GET = defineHandler(async ({ req, res }) => {
   const database = res.locals.database as Database;
   const parsed = z
     .object({
@@ -31,4 +31,4 @@ export const GET: Handler = async ({ req, res }) => {
   if (!contact)
     return <Message>Invalid email or token provided, please try again</Message>;
   return <Message>Thanks for signing up!</Message>;
-};
+});

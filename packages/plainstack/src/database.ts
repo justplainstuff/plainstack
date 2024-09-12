@@ -5,16 +5,19 @@ import { type Kysely, Migrator, sql } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
-import { loadAndGetManifest } from "./manifest";
+import { getPartialManifest } from "./manifest";
 import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
 
 const log = getLogger("database");
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
-  const appConfig = await loadAndGetManifest({ config, cwd: cwd() });
+  const { database } = await getPartialManifest("database", {
+    config,
+    cwd: cwd(),
+  });
   return new Migrator({
-    db: appConfig.database,
+    db: database,
     provider: new TSFileMigrationProvider({
       migrationFolder: path.join(process.cwd(), config.paths.migrations),
     }),

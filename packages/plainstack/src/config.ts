@@ -8,6 +8,7 @@ export type InputConfig = {
     reporters?: ConsolaReporter[];
   };
   port?: number;
+  // TODO make sure naming is consistent
   paths?: {
     routes?: string;
     commands?: string;
@@ -17,6 +18,7 @@ export type InputConfig = {
     schema?: string;
     out?: string;
     styles?: string;
+    assets?: string;
     seed?: string;
     migrations?: string;
     databaseConfig?: string;
@@ -39,6 +41,7 @@ export type Config = {
     jobs: string;
     forms: string;
     public: string;
+    assets: string;
     schema: string;
     out: string;
     styles: string;
@@ -73,10 +76,11 @@ export async function loadConfig() {
         commands: "app/commands",
         jobs: "app/jobs",
         forms: "app/forms",
-        public: ".out/public",
+        public: ".out",
         schema: "app/config/schema.ts",
         out: ".out",
         styles: "assets/styles.css",
+        assets: "assets",
         seed: "database/seed.ts",
         migrations: "database/migrations",
         databaseConfig: "app/config/database.ts",

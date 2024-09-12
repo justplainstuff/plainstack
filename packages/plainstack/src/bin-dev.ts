@@ -4,12 +4,12 @@ import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { work } from "./job";
 import { getLogger } from "./log";
-import { loadAndGetManifest } from "./manifest";
+import { getManifest } from "./manifest";
 
 async function main() {
   const log = getLogger("dev");
   const config = await loadAndGetConfig();
-  const { app, queue, jobs } = await loadAndGetManifest({ config, cwd: cwd() });
+  const { app, queue, jobs } = await getManifest({ config, cwd: cwd() });
   app.listen(config.port);
   log.info(`⚡️ http://localhost:${config.port}`);
   if (queue && Object.values(jobs).length) {

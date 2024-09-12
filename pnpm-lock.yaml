@@ -132,6 +132,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      esbuild:
+        specifier: ^0.23.1
+        version: 0.23.1
       execa:
         specifier: 9.3.1
         version: 9.3.1
@@ -326,12 +329,18 @@ importers:
       drizzle-orm:
         specifier: ^0.32.0
         version: 0.32.2(@types/better-sqlite3@7.6.11)(better-sqlite3@11.2.1)(kysely@0.27.4)
+      errorhandler:
+        specifier: ^1.5.1
+        version: 1.5.1
       express:
         specifier: ^4.19.2
         version: 4.19.2
       express-basic-auth:
         specifier: ^1.2.1
         version: 1.2.1
+      kysely:
+        specifier: ^0.27.4
+        version: 0.27.4
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -375,6 +384,9 @@ importers:
       '@types/better-sqlite3':
         specifier: ^7.6.10
         version: 7.6.11
+      '@types/errorhandler':
+        specifier: ^1.5.3
+        version: 1.5.3
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21

@@ -243,7 +243,15 @@ export async function loadManifest({
   manifest = { app, database, commands, jobs, queue };
 }
 
-export function getManifest(): Manifest {
+export async function getManifest({
+  config,
+  cwd,
+}: {
+  config: Config;
+  cwd: string;
+}): Promise<Manifest> {
+  if (manifest) return manifest;
+  await loadManifest({ config, cwd });
   if (!manifest) {
     console.error("make sure to call loadAppConfig() before getAppConfig()");
     console.error(
@@ -254,14 +262,12 @@ export function getManifest(): Manifest {
   return manifest;
 }
 
-export async function loadAndGetManifest({
-  config,
-  cwd,
-}: {
-  config: Config;
-  cwd: string;
-}): Promise<Manifest> {
-  if (manifest) return manifest;
-  await loadManifest({ config, cwd });
-  return getManifest();
+export async function getPartialManifest(
+  partial: keyof Manifest,
+  opts: {
+    config: Config;
+    cwd: string;
+  },
+): Promise<Pick<Manifest, typeof partial>> {
+  return Promise.reject();
 }

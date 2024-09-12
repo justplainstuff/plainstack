@@ -4,16 +4,15 @@ import { loadAndGetConfig } from "./config";
 import { migrateToLatest, writeMigrationFile } from "./database";
 import { printInfo } from "./info";
 import { getLogger } from "./log";
-import { loadAndGetManifest } from "./manifest";
+import { getManifest } from "./manifest";
 import { printRoutes } from "./print-routes";
 import { runSeed } from "./seed";
-
-const log = getLogger("command");
 
 function getBuiltInCommands({
   cwd,
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 }: { cwd: string }): Record<string, CommandDef<any>> {
+  const log = getLogger("command");
   const build = defineCommand({
     meta: {
       name: "build",
@@ -21,21 +20,35 @@ function getBuiltInCommands({
     },
     run: async () => {
       log.info("build start");
+      const config = await loadAndGetConfig();
 
       const now = Date.now();
       Promise.all([
-        await $({
+        $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
         })`biome check --fix .`,
-        await $({
+        $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
         })`tsc --noEmit`,
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/styles.css --watch --content "./app/**/*.{tsx,html,ts}"`,
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`esbuild --entry-points "${config.paths.assets}/*.ts" --outdir ${config.paths.out} --minify --sourcemap`,
+        // TODO copy over everytying else
       ]);
       log.info("build took", Date.now() - now, "ms");
     },
@@ -82,7 +95,14 @@ function getBuiltInCommands({
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/public/output.css --watch --content "./app/**/*.{tsx,html,ts}"`,
+        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/styles.css --watch --content "./app/**/*.{tsx,html,ts}"`,
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`esbuild --entry-points "${config.paths.assets}/*.ts" --outdir ${config.paths.out} --sourcemap`,
+        // TODO copy over everytying else
       ]);
     },
   });
@@ -94,7 +114,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const appConfig = await loadAndGetManifest({ config, cwd });
+      const appConfig = await getManifest({ config, cwd });
       appConfig.app.listen(config.port);
       log.info(`⚡️ serving from port ${config.port}`);
     },
@@ -136,7 +156,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await loadAndGetManifest({ config, cwd });
+      const { app } = await getManifest({ config, cwd });
       await printRoutes(app);
     },
   });
@@ -204,7 +224,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const manifest = await loadAndGetManifest({ config, cwd });
+      const manifest = await getManifest({ config, cwd });
       printInfo(manifest);
     },
   });
@@ -224,7 +244,7 @@ function getBuiltInCommands({
 
 async function getUserSubCommands({ cwd }: { cwd: string }) {
   const config = await loadAndGetConfig();
-  const manifest = await loadAndGetManifest({ config, cwd });
+  const manifest = await getManifest({ config, cwd });
   return manifest.commands;
 }
 

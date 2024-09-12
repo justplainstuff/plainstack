@@ -37,6 +37,7 @@
     "c12": "^1.11.2",
     "consola": "^3.2.3",
     "dotenv": "^16.4.5",
+    "esbuild": "^0.23.1",
     "execa": "9.3.1",
     "express-list-endpoints": "^7.1.0",
     "express-rate-limit": "^7.3.1",

@@ -4,12 +4,12 @@ import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { work } from "./job";
 import { getLogger } from "./log";
-import { loadAndGetManifest } from "./manifest";
+import { getManifest } from "./manifest";
 
 async function main() {
   const log = getLogger("work");
   const config = await loadAndGetConfig();
-  const { queue, jobs } = await loadAndGetManifest({ config, cwd: cwd() });
+  const { queue, jobs } = await getManifest({ config, cwd: cwd() });
   if (!queue)
     throw new Error(
       `can not start job worker without a queue, make sure you have a export default defineQueue() in ${config.paths.queueConfig}`,

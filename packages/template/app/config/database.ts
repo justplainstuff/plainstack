@@ -4,8 +4,6 @@ import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import { defineDatabase, getLogger } from "plainstack";
 import type { DB } from "./schema";
 
-const log = getLogger("database");
-
 export type Database = Kysely<DB>;
 
 export default defineDatabase(
@@ -15,6 +13,7 @@ export default defineDatabase(
     }),
     plugins: [new CamelCasePlugin()],
     log: (event: unknown) => {
+      const log = getLogger("database");
       log.debug(event);
     },
   }),

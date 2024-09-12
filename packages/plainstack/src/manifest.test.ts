@@ -1,7 +1,7 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { Config } from "./config";
-import { loadAndGetManifest, loadModule, loadModulesfromDir } from "./manifest";
+import { getManifest, loadModule, loadModulesfromDir } from "./manifest";
 
 describe("import modules", () => {
   const testDir = path.join(
@@ -92,6 +92,7 @@ describe("load and get manifest", () => {
         databaseConfig: "app/config/database.ts",
         httpConfig: "app/config/http.ts",
         queueConfig: "app/config/queue.ts",
+        assets: "-",
         migrations: "-",
         schema: "-",
         public: "-",
@@ -102,7 +103,7 @@ describe("load and get manifest", () => {
       },
     };
 
-    const manifest = await loadAndGetManifest({ config, cwd: testDir });
+    const manifest = await getManifest({ config, cwd: testDir });
 
     expect(manifest).toBeDefined();
     expect(manifest.app).toBeDefined();
