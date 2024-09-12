@@ -2,7 +2,7 @@ import * as path from "node:path";
 import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest";
+import { getManifest } from "./manifest/manifest";
 import { fileExists } from "./plainstack-fs";
 
 const log = getLogger("seed");

@@ -4,7 +4,7 @@ import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { work } from "./job";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest";
+import { getManifest } from "./manifest/manifest";
 
 async function main() {
   const log = getLogger("work");

@@ -1,6 +1,6 @@
 import packageJson from "../package.json";
 import { getLogger } from "./log";
-import type { Manifest } from "./manifest";
+import type { Manifest } from "./manifest/manifest";
 
 export function printInfo(manifest: Manifest) {
   const log = getLogger("manifest");

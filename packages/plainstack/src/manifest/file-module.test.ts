@@ -1,12 +1,11 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { Config } from "./config";
-import { getManifest, loadModule, loadModulesfromDir } from "./manifest";
+import { loadModule, loadModulesfromDir } from "./file-module";
 
 describe("import modules", () => {
   const testDir = path.join(
     __dirname,
-    "../test/fixtures",
+    "../../test/fixtures",
     "manifest/load-module",
   );
   const load = async (m: unknown): Promise<{ foobar: string }> => {
@@ -71,46 +70,5 @@ describe("import modules", () => {
 
     expect(modules).toHaveLength(2);
     expect(modules[0]?.filename).toBe("module-a");
-  });
-});
-
-describe("load and get manifest", () => {
-  it("should load and get manifest", async () => {
-    const testDir = path.join(__dirname, "../test/fixtures", "manifest");
-    const config: Config = {
-      nodeEnv: "test",
-      dbUrl: ":memory:",
-      logger: {
-        level: 1,
-        reporters: [],
-      },
-      port: 3000,
-      paths: {
-        routes: "app/routes",
-        commands: "app/commands",
-        jobs: "app/jobs",
-        databaseConfig: "app/config/database.ts",
-        httpConfig: "app/config/http.ts",
-        queueConfig: "app/config/queue.ts",
-        assets: "-",
-        migrations: "-",
-        schema: "-",
-        public: "-",
-        out: "-",
-        forms: "-",
-        styles: "-",
-        seed: "-",
-      },
-    };
-
-    const manifest = await getManifest({ config, cwd: testDir });
-
-    expect(manifest).toBeDefined();
-    expect(manifest.app).toBeDefined();
-    expect(manifest.database).toBeDefined();
-    expect(manifest.commands).toBeDefined();
-    expect(manifest.jobs).toBeDefined();
-    expect(manifest.jobs["another-job"]).toBeDefined();
-    expect(manifest.jobs.hello).toBeDefined();
   });
 });

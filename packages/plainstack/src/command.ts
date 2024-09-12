@@ -4,7 +4,7 @@ import { loadAndGetConfig } from "./config";
 import { migrateToLatest, writeMigrationFile } from "./database";
 import { printInfo } from "./info";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest";
+import { getManifest } from "./manifest/manifest";
 import { printRoutes } from "./print-routes";
 import { runSeed } from "./seed";
 
