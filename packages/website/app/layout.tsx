@@ -29,7 +29,7 @@ export default function Layout(
             }
           />
           <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
-          <link rel="stylesheet" href="/public/output.css" />
+          <link rel="stylesheet" href="/public/styles.css" />
 
           <script
             defer

@@ -79,10 +79,6 @@ export const GET = defineHandler(async () => {
     <Layout
       head={
         <>
-          <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-          />
           <script defer src="/public/confetti.js" />
         </>
       }
