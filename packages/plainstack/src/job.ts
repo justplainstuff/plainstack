@@ -5,8 +5,9 @@ import {
   defineQueue as definePlainjobsQueue,
   defineWorker,
 } from "plainjobs";
+import { getOrThrow } from "./bootstrap/get";
+import { test } from "./env";
 import { getLogger } from "./log";
-import { getManifest, getManifestOrThrow } from "./manifest/manifest";
 
 export type Job<T> = {
   name: string;
@@ -33,6 +34,38 @@ export function defineJob<T>(opts: {
   };
 }
 
+export type Schedule = {
+  name: string;
+  cron: string;
+  run: () => Promise<void>;
+};
+
+export function isSchedule(schedule: unknown): schedule is Schedule {
+  return (
+    typeof schedule === "object" &&
+    schedule !== null &&
+    "run" in schedule &&
+    "name" in schedule &&
+    typeof schedule.run === "function"
+  );
+}
+
+export function defineSchedule(opts: {
+  name: string;
+  cron: string;
+  run: () => Promise<void>;
+}): Schedule {
+  return {
+    name: path.parse(opts.name).name,
+    cron: opts.cron,
+    run: opts.run,
+  };
+}
+
+export function isQueue(q: unknown): q is Queue {
+  return typeof q === "object" && q !== null && "add" in q && "schedule" in q;
+}
+
 export function defineQueue(opts: {
   connection: SQLite.Database;
 }): Queue {
@@ -40,22 +73,43 @@ export function defineQueue(opts: {
   return definePlainjobsQueue({ connection: opts.connection, logger });
 }
 
-// TODO expose scheduled jobs
-
-export async function work(queue: Queue, jobs: Record<string, Job<unknown>>) {
+export async function work(
+  queue: Queue,
+  jobs: Record<string, Job<unknown>>,
+  schedules: Record<string, Schedule>,
+) {
   const log = getLogger("work");
-  if (!jobs.length) log.warn("no jobs to run");
-  log.info(`starting worker for jobs: ${Object.keys(jobs).join(", ")}`);
-  const workers = Object.values(jobs).map((job) =>
-    defineWorker(job.name, job.run, { queue, logger: log }),
+  if (!Object.values(jobs).length && !Object.values(schedules).length) {
+    log.warn("started worker, but no jobs or schedules to run");
+  }
+  for (const schedule of Object.values(schedules)) {
+    log.debug(`scheduling ${schedule.name} to run at ${schedule.cron}`);
+    queue.schedule(schedule.name, { cron: schedule.cron });
+  }
+  log.debug(`starting worker for jobs: ${Object.keys(jobs).join(", ")}`);
+  if (Object.values(schedules).length) {
+    log.debug(
+      `starting worker for schedules: ${Object.keys(schedules).join(", ")}`,
+    );
+  }
+  const workables = [...Object.values(jobs), ...Object.values(schedules)];
+  const workers = workables.map((w) =>
+    defineWorker(w.name, w.run, { queue, logger: log }),
   );
   await Promise.all(workers.map((worker) => worker.start()));
 }
 
 export async function perform<T>(job: Job<T>, data?: T) {
   const log = getLogger("perform");
-  log.info(`performing job ${job.name}`);
-  const { queue } = await getManifestOrThrow(["queue"]);
-  queue.add(job.name, { data });
-  log.info(`job ${job.name} queued`);
+  if (test()) {
+    log.warn("NODE_ENV=test, performing immediately job in test mode");
+    const { jobs } = await getOrThrow(["jobs"]);
+    if (!jobs[job.name]) throw new Error(`job ${job.name} not found`);
+    await jobs[job.name]?.run({ data });
+    return;
+  }
+  log.debug(`performing job ${job.name}`);
+  const { queue } = await getOrThrow(["queue"]);
+  queue.default.add(job.name, { data });
+  log.debug(`job ${job.name} enqueued`);
 }

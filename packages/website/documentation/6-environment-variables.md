@@ -1,31 +1,27 @@
 # Environment Variables
 
-plainweb uses [dotenv](https://github.com/motdotla/dotenv) and [zod](https://zod.dev) to parse environment variables.
+plainstack validates environment variables using [zod](https://zod.dev). By default, `.env` files are automatically loaded. During tests, `NODE_ENV=test` is set automatically and `.env.test` is loaded and merged with existing variables and the `.env` file.
 
 ## Setup
 
 ```typescript
 // app/config/env.ts
-import dotenv from "dotenv";
-import z from "zod";
+import { defineEnv } from "plainstack";
 
-dotenv.config();
-
-export const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]),
-  PORT: z.coerce.number().default(3000),
-  DB_URL: z.string().default("db.sqlite3"),
-});
-
-export type Env = z.infer<typeof envSchema>;
-
-export const env: Env = envSchema.parse(process.env);
+export default defineEnv((z) =>
+  z.object({
+    NODE_ENV: z.enum(["development", "production", "test"]),
+    PORT: z.coerce.number().optional(),
+    LOG_LEVEL: z.enum(["error", "warn", "info", "debug", "trace"]).optional(),
+    DB_URL: z.string(),
+  })
+);
 ```
 
 ## Usage
 
 ```typescript
-import { env } from "app/config/env";
+import env from "app/config/env";
 
 console.log(env.NODE_ENV); // either "development", "production" or "test"
 ```

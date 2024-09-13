@@ -14,14 +14,8 @@ const config: KnipConfig = {
         "assets/**/*.ts",
       ],
     },
-    "packages/template": {
-      entry: [
-        "plainstack.config.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
-        "database/**/*.ts",
-        "assets/**/*.ts",
-      ],
+    "packges/create-plainstack": {
+      entry: ["src/create-plainstack.ts"],
     },
     "packages/plainstack": {
       entry: [
@@ -34,9 +28,6 @@ const config: KnipConfig = {
     },
     "packages/plainstudio": {
       entry: ["bin/admin.ts", "src/admin/**/*.ts", "src/**/*.tsx"],
-    },
-    "create-plainweb": {
-      entry: ["src/cli.ts"],
     },
   },
 };

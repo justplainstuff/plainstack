@@ -1,11 +1,9 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import type JSONTransport from "nodemailer/lib/json-transport";
 import type Mail from "nodemailer/lib/mailer";
 import { getLogger } from "./log";
 
-const log = getLogger("mail");
-
-const devTransporter = nodemailer.createTransport({
+export const devMailer = nodemailer.createTransport({
   jsonTransport: true,
 });
 
@@ -15,6 +13,9 @@ const devTransporter = nodemailer.createTransport({
  */
 export const outbox: JSONTransport.SentMessageInfo[] = [];
 
+/**
+ * Define a mailer using nodemailer, that can be used to send emails.
+ */
 export function defineMailer(config: {
   host: string;
   port: number;
@@ -23,20 +24,25 @@ export function defineMailer(config: {
     user: string;
     pass: string;
   };
-}): nodemailer.Transporter {
+}): Transporter {
   return nodemailer.createTransport(config);
 }
 
-/** Send an email using the configured mailer. */
+export function isMailer(m: unknown): m is Transporter {
+  return typeof m === "object" && m !== null && "sendMail" in m;
+}
+
+/** Send an email by providing a mailers instance. */
 export async function sendMail(
-  mailer: nodemailer.Transporter,
+  mailer: Transporter,
   mailOptions: Mail.Options,
 ): Promise<void> {
+  const log = getLogger("mail");
   if (
     process.env.NODE_ENV === "test" ||
     process.env.NODE_ENV === "development"
   ) {
-    const result = await devTransporter.sendMail(mailOptions);
+    const result = await devMailer.sendMail(mailOptions);
     outbox.push(result);
     log.info("email sent to dev outbox -------------", mailOptions);
     log.info(result.envelope);

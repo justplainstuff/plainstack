@@ -1,13 +1,15 @@
-import { FeatureSection } from "app/components/feature-section";
 import { FooterSection } from "app/components/footer-section";
+import { FullstackSection } from "app/components/fullstack-section";
 import { HeroSection } from "app/components/hero-section";
+import { PlatformSection } from "app/components/platform-section";
+import { ShippingSection } from "app/components/shipping-section";
 import { SignupSection } from "app/components/signup-section";
 import type { Database } from "app/config/database";
 import env from "app/config/env";
-import Layout from "app/layout";
+import Layout from "app/layouts/root";
 import { createContact } from "app/services/contacts";
 import type { Request } from "express";
-import { defineHandler } from "plainstack";
+import { asset, defineHandler } from "plainstack";
 import { zfd } from "zod-form-data";
 
 async function validateTurnstile(req: Request, token: string) {
@@ -79,12 +81,14 @@ export const GET = defineHandler(async () => {
     <Layout
       head={
         <>
-          <script defer src="/public/confetti.js" />
+          <script defer src={asset("confetti.ts")} />
         </>
       }
     >
       <HeroSection />
-      <FeatureSection />
+      <FullstackSection />
+      <ShippingSection />
+      <PlatformSection />
       <SignupSection />
       <FooterSection />
     </Layout>

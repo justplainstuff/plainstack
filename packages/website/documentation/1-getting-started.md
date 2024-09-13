@@ -1,12 +1,12 @@
 # Getting Started
 
-Run the following command to create a new plainweb starter project:
+Run the following command to create a new plainstack starter project:
 
 ```bash
-npx create-plainweb
+npm create plainstack
 ```
 
-You need Node and [pnpm](https://pnpm.io/) installed. plainweb uses Node 20.10.0 or higher and pnpm 9.5.0 or higher.
+You need Node and [pnpm](https://pnpm.io/) installed. plainstack uses Node 20.10.0 or higher and pnpm 9.5.0 or higher.
 
 ```bash
 node --version
@@ -21,20 +21,39 @@ pnpm --version
 Start the development server at `http://localhost:3000`.
 
 ```bash
-pnpm run dev
+pnpm dev
 ```
 
 ## Commands
 
-These are the most important commands for development:
+Run
 
-- `pnpm run dev` runs the development server in watch mode
-- `pnpm run test` runs tests with the built-in Node test runner (Node 22 is recommended)
-- `pnpm run db:gen` generates the migration files
-- `pnpm run db:apply` applies the migrations
-- `pnpm run build` type checks your app and minifies the CSS
-- `pnpm run routes` prints all express routes to the console
-- `pnpm run check` runs the linter, formatter and scans .tsx files for cross-site scripting
+```bash
+pnpm pls
+```
+
+to see a list of supported commands.
+
+```bash
+The fastest way to build TypeScript apps  (plainstack)                                                                                                         10:26:20 AM
+
+USAGE plainstack dev|build|test|serve|work|routes|migrate|seed|info|custom
+
+COMMANDS
+
+      dev    Start the local development server
+    build    Type-check, lint and bundle assets
+     test    Run tests
+    serve    Start the production web server
+     work    Start background workers
+   routes    Print all file routes
+  migrate    Apply all pending migrations
+     seed    Run the seeds in seed.ts
+     info    Print project info
+   custom    Run a custom command
+
+Use plainstack <command> --help for more information about a command.
+```
 
 ## VSCode Extensions
 

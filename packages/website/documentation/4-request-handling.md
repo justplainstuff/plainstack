@@ -1,19 +1,19 @@
 # Request Handling
 
-In plainweb, a handler is a function that processes an incoming request and returns a response.
+In plainstack, a handler is a function that processes an incoming request and returns a response.
 
 ## Response Types
 
-plainweb simplifies common use cases by inferring the response type based on the returned value.
+plainstack simplifies common use cases by inferring the response type based on the returned value.
 
 ### HTML Responses
 
-Return a `JSX.Element` or a string to render an HTML response. In plainweb, `JSX.Element` is essentially `string | Promise<string>`.
+Return a `JSX.Element` or a string to render an HTML response. In plainstack, `JSX.Element` is essentially `string | Promise<string>`.
 
 ```tsx
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return (
     <html>
       <body>
@@ -21,15 +21,15 @@ export const GET: Handler = async () => {
       </body>
     </html>
   );
-};
+});
 ```
 
 For more control, use the `html` helper function:
 
 ```tsx
-import { Handler, html } from "plainstack";
+import { defineHandler, html } from "plainstack";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return html(
     <html>
       <body>
@@ -38,7 +38,7 @@ export const GET: Handler = async () => {
     </html>,
     { status: 200 }
   );
-};
+});
 ```
 
 ### JSON Responses
@@ -46,21 +46,21 @@ export const GET: Handler = async () => {
 Return a plain object to generate a JSON response:
 
 ```tsx
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return { hello: ["world1", "world2"] };
-};
+});
 ```
 
 For more control, use the `json` helper function:
 
 ```tsx
-import { Handler, json } from "plainstack";
+import { defineHandler, json } from "plainstack";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return json({ hello: ["world1", "world2"] }, { status: 200 });
-};
+});
 ```
 
 Note: The returned object must be JSON-serializable (no functions or promises).
@@ -70,11 +70,11 @@ Note: The returned object must be JSON-serializable (no functions or promises).
 Use the `redirect` function to perform redirects:
 
 ```tsx
-import { Handler, redirect } from "plainstack";
+import { defineHandler, redirect } from "plainstack";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return redirect("/admin");
-};
+});
 ```
 
 ### Express Response (Escape Hatch)
@@ -82,13 +82,13 @@ export const GET: Handler = async () => {
 For full control, you can access the Express `Response` object directly:
 
 ```tsx
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async ({ res }) => {
+export const GET = defineHandler(async ({ res }) => {
   return () => {
     res.status(200).send("Hello world");
   };
-};
+});
 ```
 
 ## Request Parameters
@@ -98,15 +98,15 @@ export const GET: Handler = async ({ res }) => {
 For a route like `routes/orgs/[orgId]/users/[userId].tsx`, access parameters using `req.params`:
 
 ```tsx
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async ({ req }) => {
+export const GET = defineHandler(async ({ req }) => {
   return (
     <div>
       User id {req.params.userId} in org {req.params.orgId}
     </div>
   );
-};
+});
 ```
 
 ### Query Strings
@@ -115,9 +115,9 @@ Access query parameters via `req.query`. It's recommended to parse them using `z
 
 ```tsx
 import { z } from "zod";
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const GET: Handler = async ({ req }) => {
+export const GET = defineHandler(async ({ req }) => {
   const schema = z.object({ sort: z.string() });
   const result = schema.safeParse(req.query);
 
@@ -126,7 +126,7 @@ export const GET: Handler = async ({ req }) => {
   }
 
   return <div>Sorted by {result.data.sort}</div>;
-};
+});
 ```
 
 ### Form Data
@@ -135,9 +135,9 @@ Use [zod-form-data](https://www.npmjs.com/package/zod-form-data) to parse form d
 
 ```tsx
 import { zfd } from "zod-form-data";
-import { Handler } from "plainstack";
+import { defineHandler } from "plainstack";
 
-export const POST: Handler = async ({ req }) => {
+export const POST = defineHandler(async ({ req }) => {
   const schema = zfd.formData({ value: zfd.text() });
   const result = schema.safeParse(req.body);
 
@@ -146,32 +146,32 @@ export const POST: Handler = async ({ req }) => {
   }
 
   return <div>Ping?</div>;
-};
+});
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return (
     <form hx-post="/ping">
       <input type="hidden" name="value" value="ping" />
       <button>Ping</button>
     </form>
   );
-};
+});
 ```
 
 ## Streaming Responses
 
-plainweb supports streaming responses using `Suspense`, similar to React:
+plainstack supports streaming responses using `Suspense`, similar to React:
 
 ```tsx
 import { Suspense } from "@kitajs/html/suspense";
-import { Handler, stream } from "plainstack";
+import { defineHandler, stream } from "plainstack";
 
 async function HelloDelayed() {
   await new Promise((resolve) => setTimeout(resolve, 5000));
   return <div>Hello 5 seconds later!</div>;
 }
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return stream((rid) => (
     <Suspense
       rid={rid}
@@ -181,14 +181,14 @@ export const GET: Handler = async () => {
       <HelloDelayed />
     </Suspense>
   ));
-};
+});
 ```
 
 This allows rendering parts of the page immediately while slower components load asynchronously.
 
 ## Layouts
 
-Layouts in plainweb are JSX components that wrap page content. They're simple to implement and use:
+Layouts in plainstack are JSX components that wrap page content. They're simple to implement and use:
 
 ```tsx
 export default function Layout({ children }: Html.PropsWithChildren<{}>) {
@@ -207,13 +207,15 @@ export default function Layout({ children }: Html.PropsWithChildren<{}>) {
 }
 ```
 
+They typically live in `app/layouts`.
+
 You can create a root layout for global styles and scripts, and nest more specific layouts within it:
 
 ```tsx
-import RootLayout from "app/components/root-layout";
-import AppLayout from "app/components/app-layout";
+import RootLayout from "app/layouts/root";
+import AppLayout from "app/layouts/app";
 
-export const GET: Handler = async () => {
+export const GET = defineHandler(async () => {
   return (
     <RootLayout>
       <AppLayout>
@@ -221,5 +223,5 @@ export const GET: Handler = async () => {
       </AppLayout>
     </RootLayout>
   );
-};
+});
 ```

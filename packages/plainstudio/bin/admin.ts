@@ -104,7 +104,6 @@
 //   app.use("/admin", await unstable_admin({ database, path: "/admin" }));
 //   app.use("/public", express.static(`${process.cwd()}`));
 //   app.listen(3000);
-//   // TODO config
 //   // printRoutes(app);
 //   app.use("/", (req, res) => {
 //     res.redirect("/admin/database");

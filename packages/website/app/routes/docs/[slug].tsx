@@ -1,6 +1,7 @@
 import Html from "@kitajs/html";
 import { FooterSection } from "app/components/footer-section";
 import {
+  ClockIcon,
   CloudUploadIcon,
   ContainerIcon,
   DatabaseIcon,
@@ -14,7 +15,7 @@ import {
   RouteIcon,
   TestTubeDiagonalIcon,
 } from "app/components/icons";
-import Layout from "app/layout";
+import Layout from "app/layouts/root";
 import { getDocumentationPages, getHeadingId } from "app/services/page";
 import { defineHandler, notFound } from "plainstack";
 
@@ -27,10 +28,11 @@ const pageIcons: Record<string, JSX.Element> = {
   database: DatabaseIcon(),
   "environment-variables": ContainerIcon(),
   testing: TestTubeDiagonalIcon(),
-  "task-queue": ListTodoIcon(),
+  "background-jobs": ListTodoIcon(),
   logging: LogsIcon(),
   deployment: CloudUploadIcon(),
   recipes: PizzaIcon(),
+  schedules: ClockIcon(),
 };
 
 export const GET = defineHandler(async ({ req }) => {

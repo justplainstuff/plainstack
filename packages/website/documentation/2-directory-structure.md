@@ -1,25 +1,22 @@
 # Directory Structure
 
-Running `npx create-plainweb` will create a starter project with the following structure:
+Running `npx create-plainstack` will create a starter project with the following structure:
 
-```bash
+```
 ├── Dockerfile
 ├── app
-│   ├── cli
+│   ├── commands
 │   ├── components
 │   ├── config
-│   ├── root.tsx
+│   ├── jobs
+│   ├── layouts
 │   ├── routes
-│   ├── schema.ts
-│   ├── services
-│   └── styles.css
-├── fly.toml
-├── migrations
+│   ├── schedules
+│   └── services
+├── assets
+├── database
 ├── package.json
-├── plainweb.config.ts
-├── public
-│   └── output.css
-├── tailwind.config.ts
+├── plainstack.config.ts
 └── tsconfig.json
 ```
 
@@ -27,100 +24,64 @@ Running `npx create-plainweb` will create a starter project with the following s
 
 This directory contains the main application code and everything that doesn't need to be in the root.
 
-### `cli`
+### `commands`
 
-One-off scripts that are aliased in `package.json`. This provides a low-overhead, simple convention for adding CLI entry points such as `pnpm db:gen`, `pnpm run start`, or `pnpm run dev`.
+Custom CLI commands that can be executed with `plainstack custom <name>`. Custom commands can be implemented using [citty](https://github.com/unjs/citty).
 
 ### `components`
 
-Contains React-like components used in the application. While plainweb doesn't use React directly, it employs type-safe `.tsx` components that behave like server-side rendered React components.
+Contains React-like components used in the application. While plainstack doesn't use React directly, it employs type-safe `.tsx` components that behave like server-side rendered React components.
 
 ### `config`
 
 Houses configuration files, such as database connection strings and mailer settings.
 
-### `env.ts`
+### `jobs`
 
-Manages type-safe environment variables using zod and dotenv.
+Background jobs are defined in this directory.
 
-### `root.tsx`
+### `layouts`
 
-The root layout used for all pages. It's a simple wrapper around the `<html>` tag where you can add global styles and scripts.
+This directory contains page layouts defines as JSX components.
 
 ### `routes`
 
-plainweb uses file-based routing with a convention similar to Next.js Pages Router. Routes are defined in `.tsx` files and are converted to express routes at startup.
+plainstack uses file-based routing with a convention similar to Next.js Pages Router. Routes are defined in `.tsx` files and are converted to express routes at startup.
 
-### `schema.ts`
+### `schedules`
 
-Type-safe drizzle database schema definitions.
+Schedules are cron-based background jobs that run periodically.
 
 ### `services`
 
 This directory is for your business logic. Often called `features` or `utils` in other frameworks, feel free to rename it as you see fit.
 
-### `styles.css`
+### `assets`
 
-The input file for Tailwind CSS.
+This is where you store static assets such as images, fonts, and stylesheets. Root `.ts` files are compiled and bundles to `.js` files.
 
-### `tasks`
+## `database`
 
-Defines background tasks that are stored in the simple SQLite-based task queue.
+This directory contains a list of kysely migrations and a `seed.ts` file that is used for seeding the database. `plainstack migrate` runs all pending migrations and `plainstack seed` runs the seed file.
 
-## `migrations`
+## `plainstack.config.ts`
 
-Running `pnpm db:gen` creates new migration files in this directory. Use `pnpm db:apply` to apply all migrations stored here.
-
-## `plainweb.config.ts`
-
-Contains the central plainweb configuration for the project.
+Contains the central plainstack configuration for the project.
 
 ```typescript
-import { env } from "app/config/env";
-import middleware from "app/config/middleware";
-import * as schema from "app/schema";
+import env from "app/config/env";
 import { defineConfig } from "plainstack";
 
 export default defineConfig({
   nodeEnv: env.NODE_ENV,
-  http: {
-    port: env.PORT ?? 3000,
-    redirects: {
-      "/docs/environmet-variables": "/docs/environment-variables",
-      "/docs": "/docs/getting-started",
-    },
-    staticPath: "/public",
-    middleware,
-  },
-  database: {
-    dbUrl: env.DB_URL ?? "db.sqlite3",
-    schema: schema,
-    pragma: {
-      journal_mode: "WAL",
-    },
-  },
-  mail: {
-    default: {
-      host: env.SMTP_HOST,
-      port: 587,
-      secure: false,
-      auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASS,
-      },
-    },
+  logger: {
+    level: env.LOG_LEVEL,
   },
 });
 ```
 
-## `public`
-
-Stores static files that are served directly by the server.
-
 ## Other Files
 
 - `Dockerfile`: Used for containerizing the application.
-- `fly.toml`: Configuration file for deployment on Fly.io.
 - `package.json`: Defines project dependencies and scripts.
-- `tailwind.config.ts`: Configuration file for Tailwind CSS.
 - `tsconfig.json`: TypeScript compiler options and project settings.

@@ -11,7 +11,7 @@
     "lint": "biome check .",
     "manypkg": "manypkg check",
     "manypkg:fix": "manypkg fix",
-    "check": "turbo build test && biome check --write . && pnpm knip && manypkg check"
+    "check": "turbo build test && biome check --write . && pnpm knip && manypkg fix"
   },
   "packageManager": "pnpm@9.5.0",
   "engineStrict": true,

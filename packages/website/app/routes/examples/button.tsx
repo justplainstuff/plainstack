@@ -1,4 +1,4 @@
-import Layout from "app/layout";
+import Layout from "app/layouts/root";
 import type { Handler } from "plainstack";
 
 export const POST: Handler = async () => {

@@ -5,8 +5,6 @@ import type { Contacts } from "app/config/schema";
 import doubleOptIn from "app/jobs/double-opt-in";
 import { getLogger, perform, randomId, sendMail } from "plainstack";
 
-const log = getLogger("contacts");
-
 function getBaseUrl() {
   return env.NODE_ENV === "production"
     ? "https://plainweb.dev"
@@ -17,6 +15,7 @@ export async function sendDoubleOptInEmail(
   database: Database,
   contact: Contacts,
 ) {
+  const log = getLogger("contacts");
   log.info(
     `Sending double opt-in email to ${contact.email} using base url ${getBaseUrl()}`,
   );
@@ -40,6 +39,7 @@ Josef
 }
 
 export async function createContact(database: Database, email: string) {
+  const log = getLogger("contacts");
   const token = Math.random().toString(36).substring(2, 15);
   const found = await database
     .selectFrom("contacts")

@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from "@kitajs/html";
 import type { Database } from "app/config/database";
-import Layout from "app/layout";
+import Layout from "app/layouts/root";
 import { verifyDoubleOptIn } from "app/services/contacts";
 import { defineHandler } from "plainstack";
 import z from "zod";

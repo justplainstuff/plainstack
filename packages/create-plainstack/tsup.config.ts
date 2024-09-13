@@ -2,9 +2,8 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   target: "node18",
-  noExternal: ["ora"],
   format: ["cjs"],
-  entry: ["src/cli.ts"],
+  entry: ["src/create-plainstack.ts"],
   outDir: "dist",
   dts: true,
   splitting: false,

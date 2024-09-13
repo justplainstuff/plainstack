@@ -1,6 +1,6 @@
 # SQL Database
 
-plainweb uses SQLite as its database engine and leverages [Drizzle](https://orm.drizzle.team/docs/overview) for type-safe queries and migrations. This combination provides a powerful and developer-friendly database solution.
+plainstack uses SQLite as its database engine and leverages [Kysely](https://kysely.dev/) for type-safe queries and migrations. This combination provides a powerful and developer-friendly database solution.
 
 ## Setup
 
@@ -10,80 +10,84 @@ First, set up the database connection:
 
 ```typescript
 // app/config/database.ts
-import BetterSqlite3Database from "better-sqlite3";
-import { env } from "./env";
+import env from "app/config/env";
+import SQLite from "better-sqlite3";
+import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
+import { defineDatabase, getLogger } from "plainstack";
+import type { DB } from "./schema";
 
-export const connection: BetterSqlite3Database.Database =
-  new BetterSqlite3Database(env.NODE_ENV === "test" ? ":memory:" : env.DB_URL);
+export type Database = Kysely<DB>;
 
-// Enable Write-Ahead Logging for better performance
-connection.pragma("journal_mode = WAL");
-```
-
-### Drizzle Setup
-
-Next, configure drizzle:
-
-```typescript
-// app/config/database.ts
-import * as schema from "./schema";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-
-export const database = drizzle<typeof schema>(connection, { schema });
-export type Database = typeof database;
+export default defineDatabase(
+  new Kysely<DB>({
+    dialect: new SqliteDialect({
+      database: new SQLite(env.DB_URL),
+    }),
+    plugins: [new CamelCasePlugin()],
+    log: (event: unknown) => {
+      const log = getLogger("database");
+      log.debug(event);
+    },
+  })
+);
 ```
 
 ## Schema Definition
 
-Define your database schema using Drizzle's type-safe table definitions:
+The database schema is automatically generated based on your migrations and stored in `app/config/schema.ts`. Here's an example of what it might look like:
 
 ```typescript
 // app/config/schema.ts
-import { text, integer, sqliteTable, int } from "drizzle-orm/sqlite-core";
+import { Generated, Insertable, Selectable, Updateable } from "kysely";
 
-export const contacts = sqliteTable("contacts", {
-  email: text("email").primaryKey(),
-  created: int("created").notNull(),
-  doubleOptInSent: integer("double_opt_in_sent"),
-  doubleOptInConfirmed: integer("double_opt_in_confirmed"),
-  doubleOptInToken: text("double_opt_in_token").notNull(),
-});
+export interface ContactsTable {
+  id: string;
+  email: string;
+  createdAt: number;
+  doubleOptInSent: number | null;
+  doubleOptInConfirmed: number | null;
+  doubleOptInToken: string;
+}
 
-export type Contact = typeof contacts.$inferSelect;
+export interface DB {
+  contacts: ContactsTable;
+}
 ```
 
-This approach provides type safety for your database operations and makes it easy to maintain your schema.
+This schema provides type safety for your database operations and makes it easy to maintain your schema.
 
 ## Migrations
 
-Drizzle provides a straightforward way to manage database migrations:
+plainstack provides a straightforward way to manage database migrations:
 
-1. Generate new migration files:
+1. Generate a new migration file:
 
    ```bash
-   pnpm db:gen
+   plainweb migrate <migration-name>
    ```
 
 2. Apply pending migrations:
+
    ```bash
-   pnpm db:apply
+   plainweb migrate
    ```
 
-Make sure to run these commands whenever you make changes to your schema.
+Make sure to run these commands whenever you make changes to your schema. Applying migrations will automatically update the `app/config/schema.ts` file based on the actual database schema.
 
 ## Queries
 
-Here's an example of how to perform a query using drizzle:
+Here's an example of how to perform a query using Kysely:
 
 ```typescript
-import { eq } from "drizzle-orm";
-import { database } from "app/config/database";
-import { contacts } from "app/config/schema";
+import { eq } from "kysely";
+import database from "app/config/database";
 
 async function getContact(email: string) {
-  const contact = await database.query.contacts.findFirst({
-    where: eq(contacts.email, email),
-  });
+  const contact = await database
+    .selectFrom("contacts")
+    .selectAll()
+    .where("email", "=", email)
+    .executeTakeFirst();
   return contact;
 }
 ```
@@ -95,15 +99,11 @@ This query is type-safe, and your IDE will provide autocomplete suggestions for 
 Here's how you can insert data into the database:
 
 ```typescript
-import { database } from "app/config/database";
-import { contacts } from "app/config/schema";
+import database from "app/config/database";
+import { NewContact } from "app/config/schema";
 
-async function createContact(email: string) {
-  await database.insert(contacts).values({
-    email,
-    created: Date.now(),
-    doubleOptInToken: generateToken(), // Implement this function
-  });
+async function createContact(contact: NewContact) {
+  await database.insertInto("contacts").values(contact).execute();
 }
 ```
 
@@ -112,28 +112,49 @@ async function createContact(email: string) {
 Updating data is similarly straightforward:
 
 ```typescript
-import { eq } from "drizzle-orm";
-import { database } from "app/config/database";
-import { contacts } from "app/config/schema";
+import database from "app/config/database";
 
 async function confirmDoubleOptIn(email: string) {
   await database
-    .update(contacts)
-    .set({ doubleOptInConfirmed: Date.now() })
-    .where(eq(contacts.email, email));
+    .updateTable("contacts")
+    .set({ doubleOptInConfirmed: Math.floor(Date.now() / 1000) })
+    .where("email", "=", email)
+    .execute();
 }
 ```
 
-## Drizzle Studio
+## Seeding
 
-Drizzle provides a GUI for managing your database. You can start it with:
+plainstack provides a way to seed your database with test data. Create a `database/seed.ts` file:
 
-```bash
-pnpm db:studio
+```typescript
+import type { Database } from "app/config/database";
+import type { Contacts } from "app/config/schema";
+import { defineSeed, randomId } from "plainstack";
+
+export default defineSeed(async (db: Database) => {
+  const now = Math.floor(Date.now() / 1000);
+  const contactsData = Array.from({ length: 50 }, (_, i) => ({
+    id: randomId(),
+    email: `user${i + 1}@example.com`,
+    createdAt: now - Math.floor(Math.random() * 30 * 24 * 60 * 60),
+    doubleOptInSent: Math.random() > 0.5 ? now : null,
+    doubleOptInConfirmed: Math.random() > 0.3 ? now : null,
+    doubleOptInToken: `token_${Math.random().toString(36).substring(2, 15)}`,
+  })) satisfies Contacts[];
+  await db.insertInto("contacts").values(contactsData).execute();
+  // Add more seed data as needed
+});
 ```
 
-This tool is helpful for inspecting your database, running ad-hoc queries, and managing your data during development.
+Run the seed script with:
+
+```bash
+plainweb seed
+```
+
+This is useful for populating your local database with test data.
 
 ## Docs
 
-For more detailed information about drizzle and its features, refer to the [official Drizzle documentation](https://orm.drizzle.team/docs/overview). It provides comprehensive guides on advanced querying, relationships, migrations, and more.
+For more detailed information about Kysely and its features, refer to the [official Kysely documentation](https://kysely.dev/docs/intro). It provides comprehensive guides on advanced querying, relationships, migrations, and more.

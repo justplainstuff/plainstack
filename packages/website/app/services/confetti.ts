@@ -2,8 +2,6 @@ import database from "app/config/database";
 import { getLogger } from "plainstack";
 import { WebSocket, type WebSocketServer } from "ws";
 
-const log = getLogger("confetti");
-
 interface ConfettiTrigger {
   id: string;
   timestamp: number;
@@ -95,9 +93,10 @@ export async function getNrOfSparks() {
 
 export async function listenWebsocket(wss: WebSocketServer) {
   await initializeTotalJoys();
-  log.info("listening for websocket connections");
+  const log = getLogger("confetti");
+  log.debug("listening for websocket connections");
   wss.on("connection", (ws: WebSocket) => {
-    log.info("new websocket connection");
+    log.debug("new websocket connection");
     const id = Math.random().toString(36).substr(2, 9);
 
     // Send user ID to the client
@@ -117,7 +116,7 @@ export async function listenWebsocket(wss: WebSocketServer) {
 
     ws.on("message", async (message: string) => {
       const data = JSON.parse(message);
-      log.info("Received websocket data", data);
+      log.debug("Received websocket data", data);
       if (data.type === "confetti") {
         if (isRateLimited(id)) {
           ws.send(
@@ -139,7 +138,7 @@ export async function listenWebsocket(wss: WebSocketServer) {
     });
 
     ws.on("close", () => {
-      log.info("Websocket connection closed");
+      log.debug("Websocket connection closed");
       userRateLimits.delete(id); // Clean up rate limit data when connection closes
     });
   });
