@@ -3,6 +3,7 @@ import type { CommandDef } from "citty";
 import type express from "express";
 import type { Kysely } from "kysely";
 import type { Transport } from "nodemailer";
+import { findWorkspaceDir } from "pkg-types";
 import type { Queue } from "plainjobs";
 import { isCommand } from "../command";
 import { type Config, loadAndGetConfig } from "../config";
@@ -143,7 +144,7 @@ export async function getManifest<K extends keyof Manifest>(
 ): Promise<Partial<Pick<Manifest, K>>> {
   const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
-  const cwd = opts.cwd ?? process.cwd();
+  const cwd = opts.cwd ?? (await findWorkspaceDir(process.cwd()));
 
   log.info(`Getting manifest for ${keys.join(", ")}`, { cwd });
 
@@ -203,7 +204,7 @@ export async function getManifestOrThrow<K extends keyof Manifest>(
 ): Promise<Pick<Manifest, K>> {
   const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
-  const cwd = opts.cwd ?? process.cwd();
+  const cwd = opts.cwd ?? (await findWorkspaceDir(process.cwd()));
 
   log.info(`Getting manifest or throw for ${keys.join(", ")}`, { cwd });
 

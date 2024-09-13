@@ -1,6 +1,6 @@
 import { type ConsolaReporter, LogLevels } from "consola";
 
-export type InputConfig = {
+type InputConfig = {
   nodeEnv: "development" | "production" | "test";
   dbUrl: string;
   logger: {
@@ -61,7 +61,7 @@ export function defineConfig(config: InputConfig) {
 
 let config: Config | undefined;
 
-export async function loadConfig() {
+async function loadConfig() {
   const c12LoadConfig = (await import("c12")).loadConfig;
   const resolvedConfig = await c12LoadConfig<InputConfig>({
     name: "plainstack",

@@ -13,7 +13,7 @@ export function test() {
   return process.env.NODE_ENV === "test";
 }
 
-export type Zod = typeof z;
+type Zod = typeof z;
 
 export function defineEnv<T>(f: (z: Zod) => z.Schema<T>) {
   const schema = f(z);

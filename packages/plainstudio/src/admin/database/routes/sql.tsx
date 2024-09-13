@@ -1,4 +1,4 @@
-import type { Handler } from "../../../handler";
+import type { Handler } from "plainstack";
 
 export const GET: Handler = async ({ req, res }) => {
   throw new Error("Not implemented");

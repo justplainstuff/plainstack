@@ -5,6 +5,8 @@
   },
   "files": {
     "ignore": [
+      "**/.env*",
+      "**/.out/**",
       "**/.git/**",
       "**/node_modules/**",
       "**/dist/**",

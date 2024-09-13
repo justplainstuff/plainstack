@@ -14,9 +14,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20",
-    "@vitest/coverage-v8": "^2.0.3",
     "tsup": "^8.2.4",
-    "tsx": "^4.16.2",
     "vitest": "^2.0.1"
   }
 }
