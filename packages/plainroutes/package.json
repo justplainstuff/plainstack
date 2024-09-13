@@ -9,7 +9,13 @@
     "coverage": "vitest run --coverage",
     "build": "tsc --noEmit src/plainroutes.ts && tsup"
   },
-  "keywords": ["plainroutes", "plainstack", "router", "file-based", "routing"],
+  "keywords": [
+    "plainroutes",
+    "plainstack",
+    "router",
+    "file-based",
+    "routing"
+  ],
   "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "devDependencies": {

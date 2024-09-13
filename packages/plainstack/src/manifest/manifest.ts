@@ -3,7 +3,6 @@ import type { CommandDef } from "citty";
 import type express from "express";
 import type { Kysely } from "kysely";
 import type { Transport } from "nodemailer";
-import { findWorkspaceDir } from "pkg-types";
 import type { Queue } from "plainjobs";
 import { isCommand } from "../command";
 import { type Config, loadAndGetConfig } from "../config";
@@ -14,7 +13,7 @@ import { loadModule, loadModulesfromDir } from "./file-module";
 
 export type Manifest = {
   database: Kysely<Record<string, unknown>>;
-  app: express.Application;
+  http: () => Promise<express.Application>;
   queue: Queue;
   mailer: Transport;
   jobs: Record<string, Job<unknown>>;
@@ -33,7 +32,7 @@ const manifestConfig: Record<keyof Manifest, ModuleConfig<unknown>> = {
     path: "databaseConfig",
     type: "single",
   },
-  app: {
+  http: {
     typeGuard: (m): m is (config: Config) => Promise<express.Application> =>
       typeof m === "function",
     path: "httpConfig",
@@ -144,7 +143,7 @@ export async function getManifest<K extends keyof Manifest>(
 ): Promise<Partial<Pick<Manifest, K>>> {
   const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
-  const cwd = opts.cwd ?? (await findWorkspaceDir(process.cwd()));
+  const cwd = opts.cwd ?? process.cwd();
 
   log.info(`Getting manifest for ${keys.join(", ")}`, { cwd });
 
@@ -164,12 +163,11 @@ export async function getManifest<K extends keyof Manifest>(
           result = (await loadSingleModule(config, cwd, moduleConfig)) as
             | Manifest[K]
             | undefined;
-          if (result && key === "app") {
-            result = (await (
-              result as unknown as (
-                config: Config,
-              ) => Promise<express.Application>
-            )(config)) as Manifest[K] | undefined;
+          if (result && key === "http") {
+            const getExpressApp = result as (
+              config: Config,
+            ) => Promise<express.Application>;
+            result = (() => getExpressApp(config)) as Manifest[K] | undefined;
             log.info("Successfully initialized express app");
           }
         } else {
@@ -204,7 +202,7 @@ export async function getManifestOrThrow<K extends keyof Manifest>(
 ): Promise<Pick<Manifest, K>> {
   const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
-  const cwd = opts.cwd ?? (await findWorkspaceDir(process.cwd()));
+  const cwd = opts.cwd ?? process.cwd();
 
   log.info(`Getting manifest or throw for ${keys.join(", ")}`, { cwd });
 

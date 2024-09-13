@@ -42,7 +42,7 @@ function getBuiltInCommands({
           stdout: "inherit",
           stderr: "inherit",
         })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/styles.css --content "./app/**/*.{tsx,html,ts} --minify"`.then(
-          () => log.info("✓ tailwind"),
+          () => log.info("✓ styles.css"),
         ),
         $({
           all: true,
@@ -50,9 +50,16 @@ function getBuiltInCommands({
           stdout: "inherit",
           stderr: "inherit",
         })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --minify --sourcemap`.then(
+          () => log.info("✓ .ts -> .js"),
+        ),
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`cpy --cwd=${config.paths.assets} . \!${config.paths.assets}/styles.css \!${config.paths.assets}/\*.ts ${config.paths.out}`.then(
           () => log.info("✓ assets"),
         ),
-        // TODO copy over everytying else
       ]);
       log.info("build took", Date.now() - now, "ms");
     },
@@ -106,7 +113,12 @@ function getBuiltInCommands({
           stdout: "inherit",
           stderr: "inherit",
         })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --sourcemap`,
-        // TODO copy over everytying else
+        $({
+          all: true,
+          preferLocal: true,
+          stdout: "inherit",
+          stderr: "inherit",
+        })`chokidar "${config.paths.assets}/**/*" --ignore "${config.paths.assets}/styles.css" --ignore "${config.paths.assets}/*.ts" -c "cpy --cwd=${config.paths.assets} . \!${config.paths.assets}/styles.css \!${config.paths.assets}/\*.ts ${config.paths.out}"`,
       ]);
     },
   });
@@ -118,8 +130,8 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await getManifestOrThrow(["app"], { config, cwd });
-      app.listen(config.port);
+      const { http } = await getManifestOrThrow(["http"], { config, cwd });
+      http();
       log.info(`⚡️ serving from port ${config.port}`);
     },
   });
@@ -160,8 +172,8 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await getManifestOrThrow(["app"], { config, cwd });
-      await printRoutes(app);
+      const { http } = await getManifestOrThrow(["http"], { config, cwd });
+      await printRoutes(await http());
     },
   });
 
@@ -236,7 +248,7 @@ function getBuiltInCommands({
     run: async () => {
       const config = await loadAndGetConfig();
       const manifest = await getManifest(
-        ["database", "app", "queue", "jobs", "commands"],
+        ["database", "http", "queue", "jobs", "commands"],
         {
           config,
           cwd,
@@ -290,7 +302,8 @@ function getRootCommand({
   });
 }
 
-export async function runCommand({ cwd }: { cwd: string }) {
+export async function runCommand(opts?: { cwd?: string }) {
+  const cwd = opts?.cwd ?? process.cwd();
   const builtInCommands = getBuiltInCommands({ cwd });
   const rootCommand = getRootCommand({
     cwd,

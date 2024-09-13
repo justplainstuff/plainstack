@@ -2,7 +2,9 @@
   "name": "create-plainstack",
   "version": "0.0.33",
   "description": "Create a new plainstack.dev project",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "bin": {
     "create-plainweb": "dist/cli.js"
   },

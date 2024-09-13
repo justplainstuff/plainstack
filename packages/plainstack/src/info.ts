@@ -4,7 +4,7 @@ import type { Manifest } from "./manifest/manifest";
 
 export function printInfo({
   database,
-  app,
+  http,
   queue,
   jobs,
   commands,

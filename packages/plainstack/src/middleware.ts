@@ -3,11 +3,10 @@ import expressRateLimit from "express-rate-limit";
 import type { Kysely } from "kysely";
 import morgan from "morgan";
 import type { Config } from "./config";
+import type { GenericDatabase } from "./database";
 import { fileRouter as plainFileRouter } from "./file-router";
 import { randomId } from "./id";
 import { getLogger } from "./log";
-
-const log = getLogger("middleware");
 
 export function forceWWW(): express.RequestHandler {
   return function forceWWW(
@@ -15,6 +14,7 @@ export function forceWWW(): express.RequestHandler {
     res: express.Response,
     next: express.NextFunction,
   ) {
+    const log = getLogger("www");
     const host = req.header("host");
 
     if (host) {
@@ -64,10 +64,10 @@ function rateLimit(opts?: {
 function database({
   database,
 }: {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  database: Kysely<any>;
+  database: GenericDatabase;
 }): express.RequestHandler {
   return (req, res, next) => {
+    const log = getLogger("middleware");
     log.debug("attach database to request");
     res.locals.database = database;
     next();

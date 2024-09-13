@@ -2,6 +2,7 @@
 import confetti from "canvas-confetti";
 
 (() => {
+  window.confetti = confetti;
   const ws = new WebSocket(
     `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`,
   );

@@ -27,6 +27,8 @@
   "license": "MIT",
   "peerDependencies": {
     "@kitajs/html": "^4.2.1",
+    "chokidar-cli": "^3.0.0",
+    "cpy-cli": "^5.0.0",
     "esbuild": "^0.23.1",
     "express": "^4.19.2",
     "kysely": "^0.27.4",
@@ -48,7 +50,6 @@
     "morgan": "^1.10.0",
     "node-mocks-http": "^1.14.1",
     "nodemailer": "^6.9.13",
-    "pkg-types": "^1.2.0",
     "plainjobs": "0.0.4"
   },
   "devDependencies": {
@@ -62,7 +63,9 @@
     "@types/supertest": "^6.0.2",
     "@vitest/coverage-v8": "^2.0.3",
     "better-sqlite3": "^11.0.0",
+    "chokidar-cli": "^3.0.0",
     "citty": "^0.1.6",
+    "cpy-cli": "^5.0.0",
     "esbuild": "^0.23.1",
     "express": "^4.19.2",
     "kysely": "^0.27.4",
