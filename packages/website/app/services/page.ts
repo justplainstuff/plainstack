@@ -1,6 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { env } from "app/config/env";
+import env from "app/config/env";
 import MarkdownIt from "markdown-it";
 import { getLogger } from "plainstack";
 import slugify from "slugify";

@@ -6,6 +6,7 @@ import {
   defineWorker,
 } from "plainjobs";
 import { getLogger } from "./log";
+import { getManifest, getManifestOrThrow } from "./manifest/manifest";
 
 export type Job<T> = {
   name: string;
@@ -39,6 +40,8 @@ export function defineQueue(opts: {
   return definePlainjobsQueue({ connection: opts.connection, logger });
 }
 
+// TODO expose scheduled jobs
+
 export async function work(queue: Queue, jobs: Record<string, Job<unknown>>) {
   const log = getLogger("work");
   if (!jobs.length) log.warn("no jobs to run");
@@ -47,4 +50,12 @@ export async function work(queue: Queue, jobs: Record<string, Job<unknown>>) {
     defineWorker(job.name, job.run, { queue, logger: log }),
   );
   await Promise.all(workers.map((worker) => worker.start()));
+}
+
+export async function perform<T>(job: Job<T>, data?: T) {
+  const log = getLogger("perform");
+  log.info(`performing job ${job.name}`);
+  const { queue } = await getManifestOrThrow(["queue"]);
+  queue.add(job.name, { data });
+  log.info(`job ${job.name} queued`);
 }

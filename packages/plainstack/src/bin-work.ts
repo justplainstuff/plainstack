@@ -4,12 +4,12 @@ import { cwd } from "node:process";
 import { loadAndGetConfig } from "./config";
 import { work } from "./job";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest/manifest";
+import { getManifest, getManifestOrThrow } from "./manifest/manifest";
 
 async function main() {
   const log = getLogger("work");
   const config = await loadAndGetConfig();
-  const { queue, jobs } = await getManifest(["queue", "jobs"], {
+  const { queue, jobs } = await getManifestOrThrow(["queue", "jobs"], {
     config,
     cwd: cwd(),
   });

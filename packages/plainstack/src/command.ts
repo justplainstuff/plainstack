@@ -4,7 +4,7 @@ import { loadAndGetConfig } from "./config";
 import { migrateToLatest, writeMigrationFile } from "./database";
 import { printInfo } from "./info";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest/manifest";
+import { getManifest, getManifestOrThrow } from "./manifest/manifest";
 import { printRoutes } from "./print-routes";
 import { runSeed } from "./seed";
 
@@ -23,31 +23,35 @@ function getBuiltInCommands({
       const config = await loadAndGetConfig();
 
       const now = Date.now();
-      Promise.all([
+      await Promise.all([
         $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`biome check --fix .`,
+        })`biome check --fix .`.then(() => log.info("✓ lint")),
         $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`tsc --noEmit`,
+        })`tsc --noEmit`.then(() => log.info("✓ types")),
         $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/styles.css --watch --content "./app/**/*.{tsx,html,ts}"`,
+        })`tailwindcss -i ${config.paths.styles} -o ${config.paths.out}/styles.css --content "./app/**/*.{tsx,html,ts} --minify"`.then(
+          () => log.info("✓ tailwind"),
+        ),
         $({
           all: true,
           preferLocal: true,
           stdout: "inherit",
           stderr: "inherit",
-        })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --minify --sourcemap`,
+        })`esbuild ${config.paths.assets}/*.ts --bundle --outdir=${config.paths.out} --minify --sourcemap`.then(
+          () => log.info("✓ assets"),
+        ),
         // TODO copy over everytying else
       ]);
       log.info("build took", Date.now() - now, "ms");
@@ -114,7 +118,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await getManifest(["app"], { config, cwd });
+      const { app } = await getManifestOrThrow(["app"], { config, cwd });
       app.listen(config.port);
       log.info(`⚡️ serving from port ${config.port}`);
     },
@@ -156,7 +160,7 @@ function getBuiltInCommands({
     },
     run: async () => {
       const config = await loadAndGetConfig();
-      const { app } = await getManifest(["app"], { config, cwd });
+      const { app } = await getManifestOrThrow(["app"], { config, cwd });
       await printRoutes(app);
     },
   });
@@ -257,7 +261,7 @@ function getBuiltInCommands({
 
 async function getUserSubCommands({ cwd }: { cwd: string }) {
   const config = await loadAndGetConfig();
-  const { commands } = await getManifest(["commands"], { config, cwd });
+  const { commands } = await getManifestOrThrow(["commands"], { config, cwd });
   return commands;
 }
 

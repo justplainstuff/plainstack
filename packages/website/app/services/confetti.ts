@@ -1,7 +1,6 @@
-import { database } from "app/config/database";
-import { sparks } from "app/schema";
+import database from "app/config/database";
 import { getLogger } from "plainstack";
-import { type Server, WebSocket } from "ws";
+import { WebSocket, type WebSocketServer } from "ws";
 
 const log = getLogger("confetti");
 
@@ -23,11 +22,17 @@ const MAX_TRIGGERS_PER_WINDOW = 60;
 const RECENT_TRIGGER_WINDOW = 2000; // 2 seconds
 
 async function initializeTotalJoys() {
-  const found = await database.query.sparks.findFirst();
+  const found = await database
+    .selectFrom("sparks")
+    .selectAll()
+    .executeTakeFirst();
   totalJoys = found?.nr ?? 0;
 }
 
-async function broadcastConfettiTrigger(wss: Server, triggerId: string) {
+async function broadcastConfettiTrigger(
+  wss: WebSocketServer,
+  triggerId: string,
+) {
   totalJoys++;
   await updateSparks();
   const message = JSON.stringify({
@@ -63,20 +68,32 @@ function isRateLimited(userId: string): boolean {
 }
 
 async function updateSparks() {
-  const found = await database.query.sparks.findFirst();
+  const found = await database
+    .selectFrom("sparks")
+    .selectAll()
+    .executeTakeFirst();
   if (!found) {
-    await database.insert(sparks).values({ nr: totalJoys, last: Date.now() });
+    await database
+      .insertInto("sparks")
+      .values({ nr: totalJoys, last: Date.now() })
+      .execute();
   } else {
-    await database.update(sparks).set({ nr: totalJoys, last: Date.now() });
+    await database
+      .updateTable("sparks")
+      .set({ nr: totalJoys, last: Date.now() })
+      .execute();
   }
 }
 
 export async function getNrOfSparks() {
-  const found = await database.query.sparks.findFirst();
+  const found = await database
+    .selectFrom("sparks")
+    .selectAll()
+    .executeTakeFirst();
   return found?.nr ?? 0;
 }
 
-export async function listenWebsocket(wss: Server) {
+export async function listenWebsocket(wss: WebSocketServer) {
   await initializeTotalJoys();
   log.info("listening for websocket connections");
   wss.on("connection", (ws: WebSocket) => {

@@ -1,10 +1,9 @@
 import type { Database } from "app/config/database";
-import { env } from "app/config/env";
-import { type Contact, contacts } from "app/schema";
-import doubleOptIn from "app/tasks/double-opt-in";
-import { eq } from "drizzle-orm";
+import env from "app/config/env";
+import mailer from "app/config/mailer";
+import type { Contacts } from "app/config/schema";
+import doubleOptIn from "app/jobs/double-opt-in";
 import { getLogger, perform, randomId, sendMail } from "plainstack";
-import config from "plainweb.config";
 
 const log = getLogger("contacts");
 
@@ -16,12 +15,12 @@ function getBaseUrl() {
 
 export async function sendDoubleOptInEmail(
   database: Database,
-  contact: Contact,
+  contact: Contacts,
 ) {
   log.info(
     `Sending double opt-in email to ${contact.email} using base url ${getBaseUrl()}`,
   );
-  await sendMail(config.mail.default, {
+  await sendMail(mailer, {
     from: "josef@plainweb.dev",
     to: contact.email,
     subject: "plainweb.dev",
@@ -34,26 +33,30 @@ Josef
     `,
   });
   await database
-    .update(contacts)
+    .updateTable("contacts")
     .set({ doubleOptInSent: Date.now() })
-    .where(eq(contacts.email, contact.email));
+    .where("email", "=", contact.email)
+    .execute();
 }
 
 export async function createContact(database: Database, email: string) {
   const token = Math.random().toString(36).substring(2, 15);
-  const found = await database.query.contacts.findFirst({
-    where: eq(contacts.email, email),
-  });
+  const found = await database
+    .selectFrom("contacts")
+    .selectAll()
+    .where("email", "=", email)
+    .executeTakeFirst();
   if (!found) {
     const inserted = await database
-      .insert(contacts)
+      .insertInto("contacts")
       .values({
         id: randomId("con"),
         email,
-        created: Date.now(),
+        createdAt: Date.now(),
         doubleOptInToken: token,
       })
-      .returning();
+      .returningAll()
+      .execute();
     await perform(doubleOptIn, inserted[0]);
   } else {
     log.info("Contact already exists, sending new email", found.email);
@@ -71,16 +74,19 @@ export async function verifyDoubleOptIn(
     token: string;
   },
 ) {
-  const contact = await database.query.contacts.findFirst({
-    where: eq(contacts.email, email),
-  });
+  const contact = await database
+    .selectFrom("contacts")
+    .selectAll()
+    .where("email", "=", email)
+    .executeTakeFirst();
   if (contact?.doubleOptInConfirmed) return contact;
   if (!contact || contact.doubleOptInToken !== token) return null;
   await database
-    .update(contacts)
+    .updateTable("contacts")
     .set({ doubleOptInConfirmed: Date.now() })
-    .where(eq(contacts.email, email));
-  await sendMail(config.mail.default, {
+    .where("email", "=", email)
+    .execute();
+  await sendMail(mailer, {
     from: "josef@plainweb.dev",
     to: email,
     subject: "plainweb.dev",

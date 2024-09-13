@@ -19,4 +19,4 @@ export { outbox, sendMail, defineMailer } from "./mail";
 export { rollback, defineDatabase } from "./database";
 
 // jobs
-export { defineQueue, defineJob, type Job, work } from "./job";
+export { defineQueue, defineJob, type Job, work, perform } from "./job";

@@ -2,6 +2,7 @@ import path from "node:path";
 import type { CommandDef } from "citty";
 import type express from "express";
 import type { Kysely } from "kysely";
+import type { Transport } from "nodemailer";
 import type { Queue } from "plainjobs";
 import { isCommand } from "../command";
 import { type Config, loadAndGetConfig } from "../config";
@@ -14,6 +15,7 @@ export type Manifest = {
   database: Kysely<Record<string, unknown>>;
   app: express.Application;
   queue: Queue;
+  mailer: Transport;
   jobs: Record<string, Job<unknown>>;
   commands: Record<string, CommandDef>;
 };
@@ -40,6 +42,12 @@ const manifestConfig: Record<keyof Manifest, ModuleConfig<unknown>> = {
     typeGuard: (m): m is Queue =>
       typeof m === "object" && m !== null && "add" in m && "schedule" in m,
     path: "queueConfig",
+    type: "single",
+  },
+  mailer: {
+    typeGuard: (m): m is Transport =>
+      typeof m === "object" && m !== null && "sendMail" in m,
+    path: "mailerConfig",
     type: "single",
   },
   jobs: {
@@ -187,4 +195,28 @@ export async function getManifest<K extends keyof Manifest>(
   );
 
   return Object.fromEntries(results) as Partial<Pick<Manifest, K>>;
+}
+
+export async function getManifestOrThrow<K extends keyof Manifest>(
+  keys: K[],
+  opts: { config?: Config; cwd?: string } = {},
+): Promise<Pick<Manifest, K>> {
+  const log = getLogger("manifest");
+  const config = opts.config ?? (await loadAndGetConfig());
+  const cwd = opts.cwd ?? process.cwd();
+
+  log.info(`Getting manifest or throw for ${keys.join(", ")}`, { cwd });
+
+  const result = await getManifest(keys, opts);
+
+  const missingKeys = keys.filter((key) => result[key] === undefined);
+  if (missingKeys.length > 0) {
+    const missingPaths = missingKeys.map((key) => {
+      const modulePath = path.join(cwd, config.paths[manifestConfig[key].path]);
+      return `${key} not found at ${modulePath}`;
+    });
+    throw new Error(`Missing manifests: ${missingPaths.join(", ")}`);
+  }
+
+  return result as Pick<Manifest, K>;
 }

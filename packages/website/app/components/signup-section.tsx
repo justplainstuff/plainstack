@@ -1,4 +1,4 @@
-import { env } from "app/config/env";
+import env from "app/config/env";
 
 export function SignupSection() {
   return (

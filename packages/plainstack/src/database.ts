@@ -5,7 +5,7 @@ import { type Kysely, Migrator, sql } from "kysely";
 import { TSFileMigrationProvider } from "kysely-ctl";
 import { loadAndGetConfig } from "./config";
 import { getLogger } from "./log";
-import { getManifest } from "./manifest/manifest";
+import { getManifest, getManifestOrThrow } from "./manifest/manifest";
 import { ensureDirectoryExists, fileExists } from "./plainstack-fs";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -13,7 +13,7 @@ export type GenericDatabase = Kysely<any>;
 
 async function getMigrator() {
   const config = await loadAndGetConfig();
-  const { database } = await getManifest(["database"], {
+  const { database } = await getManifestOrThrow(["database"], {
     config,
     cwd: cwd(),
   });

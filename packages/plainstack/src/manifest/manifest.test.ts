@@ -1,7 +1,7 @@
 import path from "node:path";
 import { describe, expect, it, test } from "vitest";
 import type { Config } from "../config";
-import { getManifest } from "./manifest";
+import { getManifest, getManifestOrThrow } from "./manifest";
 
 describe("manifest", () => {
   const testDir = path.join(__dirname, "../../test/fixtures", "manifest");
@@ -20,6 +20,7 @@ describe("manifest", () => {
       databaseConfig: "app/config/database.ts",
       httpConfig: "app/config/http.ts",
       queueConfig: "app/config/queue.ts",
+      mailerConfig: "app/config/mailer.ts",
       assets: "-",
       migrations: "-",
       schema: "-",
@@ -80,5 +81,44 @@ describe("manifest", () => {
     if (!jobs) throw new Error("job not found");
     expect(Object.keys(jobs)).toHaveLength(2);
     expect(commands).toBeDefined();
+  });
+
+  it("getManifestOrThrow should return manifests when all exist", async () => {
+    const result = await getManifestOrThrow(["database", "jobs"], {
+      cwd: testDir,
+      config,
+    });
+    expect(result.database).toBeDefined();
+    expect(result.jobs).toBeDefined();
+    expect(Object.keys(result.jobs)).toHaveLength(2);
+  });
+
+  it("getManifestOrThrow should throw when a single manifest doesn't exist", async () => {
+    await expect(
+      getManifestOrThrow(["queue"], {
+        cwd: testDir,
+        config,
+      }),
+    ).rejects.toThrow(/queue not found at/);
+  });
+
+  it("getManifestOrThrow should throw with correct paths for missing manifests", async () => {
+    const expectedQueuePath = path.join(testDir, config.paths.queueConfig);
+    await expect(
+      getManifestOrThrow(["queue"], {
+        cwd: testDir,
+        config,
+      }),
+    ).rejects.toThrow(new RegExp(`queue not found at ${expectedQueuePath}`));
+  });
+
+  it("getManifestOrThrow should throw for existing manifests when some don't exist", async () => {
+    const expectedQueuePath = path.join(testDir, config.paths.queueConfig);
+    await expect(
+      getManifestOrThrow(["queue", "database"], {
+        cwd: testDir,
+        config,
+      }),
+    ).rejects.toThrow(new RegExp(`queue not found at ${expectedQueuePath}`));
   });
 });

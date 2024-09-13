@@ -24,6 +24,7 @@ export type InputConfig = {
     databaseConfig?: string;
     httpConfig?: string;
     queueConfig?: string;
+    mailerConfig?: string;
   };
 };
 
@@ -50,6 +51,7 @@ export type Config = {
     databaseConfig: string;
     httpConfig: string;
     queueConfig: string;
+    mailerConfig: string;
   };
 };
 
@@ -86,6 +88,7 @@ export async function loadConfig() {
         databaseConfig: "app/config/database.ts",
         httpConfig: "app/config/http.ts",
         queueConfig: "app/config/queue.ts",
+        mailerConfig: "app/config/mailer.ts",
       } satisfies Config["paths"],
     },
   });
