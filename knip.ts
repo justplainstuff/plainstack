@@ -3,7 +3,7 @@ import type { KnipConfig } from "knip";
 const config: KnipConfig = {
   ignoreBinaries: ["routes", "serve"],
   ignoreWorkspaces: ["packages/plainstudio"],
-  ignoreDependencies: ["@biomejs/biome", "@vitest/coverage-v8"],
+  ignoreDependencies: ["@biomejs/biome", "@vitest/coverage-v8", "tsx"],
   workspaces: {
     "packages/website": {
       entry: [
@@ -30,13 +30,7 @@ const config: KnipConfig = {
         "test/**/*.tsx",
         "src/**/*.test.ts",
       ],
-      ignoreBinaries: [
-        "vitest",
-        "esbuild",
-        "kysely-codegen",
-        "plainstack-dev",
-        "plainstack-work",
-      ],
+      ignoreBinaries: ["plainstack-dev", "plainstack-work"],
     },
     "packages/plainstudio": {
       entry: ["bin/admin.ts", "src/admin/**/*.ts", "src/**/*.tsx"],
