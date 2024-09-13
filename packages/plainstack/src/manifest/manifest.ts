@@ -58,27 +58,37 @@ async function loadSingleModule<T>(
   config: Config,
   cwd: string,
   moduleConfig: ModuleConfig<T>,
-): Promise<T> {
+): Promise<T | undefined> {
   const modulePath = path.join(cwd, config.paths[moduleConfig.path]);
   const log = getLogger("manifest");
   log.debug(`Loading single module from ${modulePath}`);
 
-  const module = await loadModule(modulePath, async (m: unknown) => {
-    if (!moduleConfig.typeGuard(m)) {
-      throw new Error(
-        `Invalid module: type guard check failed for ${moduleConfig.path}`,
-      );
+  try {
+    const module = await loadModule(modulePath, async (m: unknown) => {
+      if (!moduleConfig.typeGuard(m)) {
+        throw new Error(
+          `Invalid module: type guard check failed for ${moduleConfig.path}`,
+        );
+      }
+      return m as T;
+    });
+
+    if (!module) return undefined;
+
+    if (!module.defaultExport) {
+      log.error(`No default export found in module at ${modulePath}`);
+      throw new Error(`No default export found in module at ${modulePath}`);
     }
-    return m as T;
-  });
 
-  if (!module || !module.defaultExport) {
-    log.error(`Failed to load module from ${modulePath}`);
-    throw new Error(`No default export found in module at ${modulePath}`);
+    log.info(`Successfully loaded single module from ${modulePath}`);
+    return module.defaultExport;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "MODULE_NOT_FOUND") {
+      log.warn(`Module not found at ${modulePath}`);
+      return undefined;
+    }
+    throw error;
   }
-
-  log.info(`Successfully loaded single module from ${modulePath}`);
-  return module.defaultExport;
 }
 
 async function loadModuleList<T>(
@@ -122,7 +132,7 @@ const memoizedManifest: { [K in keyof Manifest]?: Manifest[K] } = {};
 export async function getManifest<K extends keyof Manifest>(
   keys: K[],
   opts: { config?: Config; cwd?: string } = {},
-): Promise<Pick<Manifest, K>> {
+): Promise<Partial<Pick<Manifest, K>>> {
   const log = getLogger("manifest");
   const config = opts.config ?? (await loadAndGetConfig());
   const cwd = opts.cwd ?? process.cwd();
@@ -133,41 +143,40 @@ export async function getManifest<K extends keyof Manifest>(
     keys.map(async (key) => {
       if (key in memoizedManifest) {
         log.info(`Returning memoized manifest for ${key}`);
-        return memoizedManifest[key] as Manifest[K];
+        return [key, memoizedManifest[key]] as [K, Manifest[K] | undefined];
       }
 
       const moduleConfig = manifestConfig[key];
 
       try {
-        let result: Manifest[K];
+        let result: Manifest[K] | undefined;
 
         if (moduleConfig.type === "single") {
-          result = (await loadSingleModule(
-            config,
-            cwd,
-            moduleConfig,
-          )) as Manifest[K];
-          if (key === "app") {
+          result = (await loadSingleModule(config, cwd, moduleConfig)) as
+            | Manifest[K]
+            | undefined;
+          if (result && key === "app") {
             result = (await (
               result as unknown as (
                 config: Config,
               ) => Promise<express.Application>
-            )(config)) as Manifest[K];
+            )(config)) as Manifest[K] | undefined;
             log.info("Successfully initialized express app");
           }
         } else {
-          result = (await loadModuleList(
-            config,
-            cwd,
-            moduleConfig,
-          )) as Manifest[K];
+          result = (await loadModuleList(config, cwd, moduleConfig)) as
+            | Manifest[K]
+            | undefined;
         }
 
-        log.info(`Successfully got manifest for ${key}`);
+        if (result !== undefined) {
+          log.info(`Successfully got manifest for ${key}`);
+          memoizedManifest[key] = result;
+        } else {
+          log.warn(`Manifest for ${key} is undefined`);
+        }
 
-        memoizedManifest[key] = result;
-
-        return result;
+        return [key, result] as [K, Manifest[K] | undefined];
       } catch (error) {
         log.error(`Failed to get manifest for ${key}`, {
           error: (error as Error).message,
@@ -177,7 +186,5 @@ export async function getManifest<K extends keyof Manifest>(
     }),
   );
 
-  return Object.fromEntries(
-    keys.map((key, index) => [key, results[index]]),
-  ) as unknown as Pick<Manifest, K>;
+  return Object.fromEntries(results) as Partial<Pick<Manifest, K>>;
 }

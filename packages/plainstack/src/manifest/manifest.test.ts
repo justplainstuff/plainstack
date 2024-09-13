@@ -31,6 +31,14 @@ describe("manifest", () => {
     },
   };
 
+  it("get manifest single module not existing file", async () => {
+    const { queue } = await getManifest(["queue"], {
+      cwd: testDir,
+      config,
+    });
+    expect(queue).toBeUndefined();
+  });
+
   it("get manifest single module", async () => {
     const { database } = await getManifest(["database"], {
       cwd: testDir,
@@ -39,11 +47,21 @@ describe("manifest", () => {
     expect(database).toBeDefined();
   });
 
+  it("get manifest multiple modules, some not existing", async () => {
+    const { database, queue } = await getManifest(["database", "queue"], {
+      cwd: testDir,
+      config,
+    });
+    expect(database).toBeDefined();
+    expect(queue).toBeUndefined();
+  });
+
   it("get manifest list of modules", async () => {
     const { jobs } = await getManifest(["jobs"], {
       cwd: testDir,
       config,
     });
+    if (!jobs) throw new Error("job not found");
     expect(jobs).toBeDefined();
     expect(Object.keys(jobs)).toHaveLength(2);
     expect(jobs.hello).toBeDefined();
@@ -51,13 +69,16 @@ describe("manifest", () => {
   });
 
   it("get multiple manifest items", async () => {
-    const result = await getManifest(["database", "jobs", "commands"], {
-      cwd: testDir,
-      config,
-    });
-    expect(result.database).toBeDefined();
-    expect(result.jobs).toBeDefined();
-    expect(Object.keys(result.jobs)).toHaveLength(2);
-    expect(result.commands).toBeDefined();
+    const { database, jobs, commands } = await getManifest(
+      ["database", "jobs", "commands"],
+      {
+        cwd: testDir,
+        config,
+      },
+    );
+    expect(database).toBeDefined();
+    if (!jobs) throw new Error("job not found");
+    expect(Object.keys(jobs)).toHaveLength(2);
+    expect(commands).toBeDefined();
   });
 });
