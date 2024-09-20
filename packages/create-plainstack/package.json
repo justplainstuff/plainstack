@@ -1,6 +1,6 @@
 {
   "name": "create-plainstack",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "Create a new plainstack.dev app",
   "files": [
     "dist/"
