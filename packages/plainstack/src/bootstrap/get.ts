@@ -67,9 +67,7 @@ export async function get<K extends keyof App>(
         log.debug(`successfully loaded app component: ${key}`);
         return [key, result];
       } catch (error) {
-        log.error(`failed to load app component: ${key}`, {
-          error: (error as Error).message,
-        });
+        log.error(`failed to load app component: ${key}`, error);
         return [key, undefined];
       }
     }),

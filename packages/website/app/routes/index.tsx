@@ -9,7 +9,7 @@ import env from "app/config/env";
 import Layout from "app/layouts/root";
 import { createContact } from "app/services/contacts";
 import type { Request } from "express";
-import { asset, defineHandler } from "plainstack";
+import { asset, defineHandler, getLogger } from "plainstack";
 import { zfd } from "zod-form-data";
 
 async function validateTurnstile(req: Request, token: string) {
@@ -33,6 +33,7 @@ async function validateTurnstile(req: Request, token: string) {
 }
 
 export const POST = defineHandler(async ({ req, res }) => {
+  const log = getLogger("contacts");
   const database = res.locals.database as Database;
   const parsed = zfd
     .formData({
@@ -67,7 +68,7 @@ export const POST = defineHandler(async ({ req, res }) => {
       </div>
     );
   } catch (e) {
-    console.error(e);
+    log.error(e);
     return (
       <div class="mt-10 text-xl text-error">
         An error occurred. Please try again later.
@@ -78,13 +79,7 @@ export const POST = defineHandler(async ({ req, res }) => {
 
 export const GET = defineHandler(async () => {
   return (
-    <Layout
-      head={
-        <>
-          <script defer src={asset("confetti.ts")} />
-        </>
-      }
-    >
+    <Layout head=<script defer src={asset("confetti.ts")} />>
       <HeroSection />
       <FullstackSection />
       <ShippingSection />

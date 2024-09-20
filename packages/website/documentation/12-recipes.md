@@ -65,7 +65,7 @@ Create a JSON API endpoint with proper error handling:
 
 ```tsx
 // routes/api/users/[id].tsx
-import { defineHandler, json } from "plainstack";
+import { defineHandler, json, getLogger } from "plainstack";
 import { z } from "zod";
 import database from "app/config/database";
 
@@ -76,6 +76,7 @@ const userSchema = z.object({
 });
 
 export const GET = defineHandler(async ({ req }) => {
+  const log = getLogger("api/users/[id]");
   try {
     const { id } = req.params;
     const user = await database
@@ -91,7 +92,7 @@ export const GET = defineHandler(async ({ req }) => {
     const validatedUser = userSchema.parse(user);
     return json(validatedUser);
   } catch (error) {
-    console.error("Error fetching user:", error);
+    log.error("Error fetching user:", error);
     return json({ error: "Internal server error" }, { status: 500 });
   }
 });

@@ -11,7 +11,13 @@ async function createEnvFile(path: string) {
   consola.log("creating .env file");
   await fs.promises.writeFile(
     join(path, ".env"),
-    "NODE_ENV=development\nDB_URL=db.sqlite3\nPORT=3000",
+    `
+NODE_ENV=development
+DB_URL=db.sqlite3
+PORT=3000
+SMTP_HOST=
+SMTP_USER=
+SMTP_PASS=`,
     "utf-8",
   );
 }
@@ -21,7 +27,12 @@ async function createEnvTestFile(path: string) {
   consola.log("creating .env.test file");
   await fs.promises.writeFile(
     join(path, ".env.test"),
-    "NODE_ENV=test\nDB_URL=:memory:",
+    `
+NODE_ENV=test
+DB_URL=:memory:
+SMTP_HOST=
+SMTP_USER=
+SMTP_PASS=`,
     "utf-8",
   );
 }
