@@ -48,7 +48,7 @@ import { database } from "app/config/database";
 import { sendDailyReport } from "app/services/reports";
 
 export default defineSchedule({
-  name: __filename,
+  name: import.meta.filename,
   cron: "0 0 * * *", // Run daily at midnight
   async run() {
     const users = await database
@@ -66,7 +66,7 @@ export default defineSchedule({
 
 In this example:
 
-- `name` is the name of the schedule, which must be unique. Using `__filename` ensures uniqueness based on the file path.
+- `name` is the name of the schedule, which must be unique. Using `import.meta.filename` ensures uniqueness based on the file path.
 - `cron` defines when the schedule should run using cron syntax.
 - `run` defines the main logic to be executed on schedule.
 
@@ -100,7 +100,7 @@ import { database } from "app/config/database";
 import generateReport from "app/jobs/generate-report";
 
 export default defineSchedule({
-  name: __filename,
+  name: import.meta.filename,
   cron: "0 1 * * *", // Run daily at 1 AM
   async run() {
     const users = await database

@@ -1,6 +1,6 @@
 {
   "name": "plainstudio",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A SQLite editor for express apps.",
   "type": "commonjs",
   "main": "dist/plainstudio.js",

@@ -1,5 +1,11 @@
 # plainweb
 
+## 0.0.19
+
+### Patch Changes
+
+- better error reporting during bootstrap
+
 ## 0.0.18
 
 ### Patch Changes

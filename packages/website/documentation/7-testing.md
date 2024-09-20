@@ -132,7 +132,7 @@ During testing, jobs are executed immediately.
 import { defineJob } from "plainstack";
 
 export default defineJob({
-  name: __filename,
+  name: import.meta.filename,
   run: async () => {
     console.log("Hello from a job!");
   },

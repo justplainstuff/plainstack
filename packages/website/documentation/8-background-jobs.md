@@ -51,7 +51,7 @@ import type { Contact } from "app/config/schema";
 import { sendDoubleOptInEmail } from "app/services/contacts";
 
 export default defineJob<Contact>({
-  name: __filename,
+  name: import.meta.filename,
   async run({ data }) {
     await sendDoubleOptInEmail(database, data);
     await database
@@ -65,7 +65,7 @@ export default defineJob<Contact>({
 
 In this example:
 
-- `name` is the name of the job type, which must be unique. Use `__filename` to get the filename of the current file.
+- `name` is the name of the job type, which must be unique. Use `import.meta.filename` to get the filename of the current file.
 - `run` defines the main job logic.
 
 ## Performing Jobs

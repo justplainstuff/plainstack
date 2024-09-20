@@ -1,7 +1,7 @@
 import { defineJob } from "../../../../../src/job";
 
 export default defineJob({
-  name: __filename,
+  name: import.meta.filename,
   run: async () => {
     console.log("Another job!");
   },

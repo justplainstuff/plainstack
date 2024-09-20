@@ -4,7 +4,7 @@ import { sendDoubleOptInEmail } from "app/services/contacts";
 import { defineJob } from "plainstack";
 
 export default defineJob<Contacts>({
-  name: __filename,
+  name: import.meta.filename,
   async run({ data }) {
     await sendDoubleOptInEmail(database, data);
   },
