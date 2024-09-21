@@ -1,5 +1,35 @@
 # plainweb
 
+## 0.0.24
+
+### Patch Changes
+
+- fix import
+
+## 0.0.23
+
+### Patch Changes
+
+- check for os windows
+
+## 0.0.22
+
+### Patch Changes
+
+- log debug module loading
+
+## 0.0.21
+
+### Patch Changes
+
+- be more liberal when validating job name
+
+## 0.0.20
+
+### Patch Changes
+
+- 0d4320d: fix issue with windows filepaths
+
 ## 0.0.19
 
 ### Patch Changes

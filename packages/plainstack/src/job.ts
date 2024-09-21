@@ -24,12 +24,29 @@ export function isJob<T>(job: unknown): job is Job<T> {
   );
 }
 
+export function validateName(name: string): string {
+  if (!name)
+    throw new Error("defineJob(): name is not valid because it was undefined");
+  const cleanName = name.startsWith("file:///") ? name.slice(7) : name;
+  const parts = cleanName.split("/");
+  let lastPart = parts[parts.length - 1];
+  lastPart = lastPart?.split(".")[0];
+
+  if (!lastPart || typeof lastPart !== "string" || !lastPart.length) {
+    throw new Error(
+      "defineJob(): name is not valid, make sure to provide a proper name or filename",
+    );
+  }
+
+  return lastPart;
+}
+
 export function defineJob<T>(opts: {
   name: string;
   run: ({ data }: { data: T }) => Promise<void>;
 }): Job<T> {
   return {
-    name: path.parse(opts.name).name,
+    name: validateName(opts.name),
     run: opts.run,
   };
 }

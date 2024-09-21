@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
+import { platform } from "node:process";
 import { pathToFileURL } from "node:url";
 import { getLogger } from "../log";
 import { directoryExists, fileExists } from "../plainstack-fs";
@@ -23,7 +24,9 @@ export async function loadModule<T>(
     log.debug(`tried loading module, ${filePath} does not exist`);
     return undefined;
   }
-  const module = await import(pathToFileURL(filePath).toString());
+  const fileURL = pathToFileURL(filePath, { windows: platform === "win32" });
+  log.debug(`loading module from path - ${filePath}, fileURL: ${fileURL}`);
+  const module = await import(fileURL.toString());
   const result: { defaultExport?: T; namedExports: Record<string, T> } = {
     namedExports: {},
   };
