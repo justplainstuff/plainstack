@@ -98,14 +98,7 @@ function getBuiltInCommands({
       name: "test",
       description: "Run tests",
     },
-    args: {
-      watch: {
-        type: "boolean",
-        description: "Run tests in watch mode",
-        default: false,
-      },
-    },
-    run: async ({ args }) => {
+    run: async () => {
       if (await hasPendingMigrations()) {
         log.warn(
           "there are pending migrations, run `plainstack migrate` to apply them",
@@ -116,7 +109,7 @@ function getBuiltInCommands({
         preferLocal: true,
         stdout: "inherit",
         stderr: "inherit",
-      })`vitest ${args.watch ? "watch" : "run"}`;
+      })`tsx --test`;
     },
   });
 
