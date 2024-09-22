@@ -5,15 +5,6 @@ const config: KnipConfig = {
   ignoreWorkspaces: ["packages/plainstudio"],
   ignoreDependencies: ["@biomejs/biome", "@vitest/coverage-v8", "tsx"],
   workspaces: {
-    "packages/website": {
-      entry: [
-        "plainstack.config.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
-        "database/**/*.ts",
-        "assets/**/*.ts",
-      ],
-    },
     "packges/create-plainstack": {
       entry: ["src/create-plainstack.ts"],
     },
