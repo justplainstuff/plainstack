@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  target: "node20",
+  target: "node22",
   format: ["esm"],
   entry: [
     "src/plainstack.ts",

@@ -1,9 +1,8 @@
 import type { KnipConfig } from "knip";
 
 const config: KnipConfig = {
-  ignoreBinaries: ["routes", "serve"],
   ignoreWorkspaces: ["packages/plainstudio"],
-  ignoreDependencies: ["@biomejs/biome", "@vitest/coverage-v8", "tsx"],
+  ignoreDependencies: ["@vitest/coverage-v8"],
   workspaces: {
     "packges/create-plainstack": {
       entry: ["src/create-plainstack.ts"],
