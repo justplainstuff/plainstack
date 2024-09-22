@@ -1,5 +1,12 @@
 # plainweb.dev
 
+## 1.0.25
+
+### Patch Changes
+
+- Updated dependencies
+  - plainstack@0.0.25
+
 ## 1.0.24
 
 ### Patch Changes

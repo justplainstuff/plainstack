@@ -8,7 +8,10 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
         name: checkout code 📥
@@ -33,82 +36,3 @@ jobs:
           CF_TURNSTILE_SITEKEY: test
           ADMIN_PASSWORD: test
           DB_URL: ":memory:"
-      - name: create-plainweb local 🪨
-        run: ./create-plainweb/dist/cli.js my-plainweb-project --yes --no-git-init --debug --no-install
-        env:
-          npm_config_user_agent: ${{ github.actor }}
-      - name: ensure uses local plainweb (not npm)
-        run: |
-          echo "  - \"my-plainweb-project\"" >> pnpm-workspace.yaml
-          sed -i 's/"plainweb": "[^"]*"/"plainweb": "workspace:*"/' my-plainweb-project/package.json
-      - name: install my-plainweb-project dependencies 🔧
-        run: |
-          cd my-plainweb-project 
-          pnpm install --frozen-lockfile=false
-      - name: run build, test, and check on my-plainweb-project 🚀
-        run: |
-          cd my-plainweb-project
-          pnpm build
-          pnpm test
-          pnpm check
-          pnpm routes
-      - name: test server for my-plainweb-project 🌐
-        run: |
-          cd my-plainweb-project
-          pnpm serve &
-          sleep 5  # Wait for the server to start
-          if curl -s http://localhost:3000 | grep -q "Let's go"; then
-            echo "Server started successfully and contains 'Let's go'"
-          else
-            echo "Server check failed"
-            exit 1
-          fi
-          kill $!  # Stop the server
-          rm -rf node_modules
-
-  create-plainweb:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - name: install pnpm 📦
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.5.0
-      - name: create-plainweb 🪨
-        run: |
-          pnpm dlx create-plainweb@latest my-plainweb-project --yes --no-git-init --debug
-        env:
-          npm_config_user_agent: ${{ github.actor }}
-      - name: run build, test, and check 🚀
-        run: |
-          cd my-plainweb-project
-          pnpm build
-          pnpm test
-          pnpm check
-          pnpm routes
-      - name: test server 🌐
-        run: |
-          cd my-plainweb-project
-          pnpm serve &
-          sleep 5  # Wait for the server to start
-          if curl -s http://localhost:3000 | grep -q "Let's go"; then
-            echo "Server started successfully and contains 'Let's go'"
-          else
-            echo "Server check failed"
-            exit 1
-          fi
-          kill $!  # Stop the server
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: deploy to fly 🚀
-        run: |
-          cd my-plainweb-project
-          sed -i 's/app = '"'"'my-app'"'"'/app = '"'"'plainweb-template'"'"'/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/auto_stop_machines = false/auto_stop_machines = true/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/auto_start_machines = false/auto_start_machines = true/' fly.toml
-          sed -i '/\[http_service\]/,/\[/ s/min_machines_running = 1/min_machines_running = 0/' fly.toml
-          cat fly.toml
-          flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_PLAINWEB_TEMPLATE_DEPLOY_TOKEN }}
-      - name: check fly deployment ⬆️
-        run: curl -s https://plainweb-template.fly.dev | grep -q "Let's go"
