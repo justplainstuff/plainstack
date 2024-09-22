@@ -104,6 +104,7 @@ function getBuiltInCommands({
           "there are pending migrations, run `plainstack migrate` to apply them",
         );
       }
+      process.env.NODE_ENV = "test";
       await $({
         all: true,
         preferLocal: true,

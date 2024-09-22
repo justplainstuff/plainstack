@@ -1,5 +1,17 @@
 # plainweb
 
+## 0.0.27
+
+### Patch Changes
+
+- set NODE_ENV=test
+
+## 0.0.26
+
+### Patch Changes
+
+- use built-in test runner
+
 ## 0.0.25
 
 ### Patch Changes

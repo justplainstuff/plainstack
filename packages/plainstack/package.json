@@ -1,6 +1,6 @@
 {
   "name": "plainstack",
-  "version": "0.0.25",
+  "version": "0.0.27",
   "description": "A framework combining HTMX, SQLite and TypeScript for less complexity and more joy",
   "type": "module",
   "main": "dist/plainstack.js",

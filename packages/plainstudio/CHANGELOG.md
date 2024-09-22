@@ -1,5 +1,19 @@
 # plainstudio
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies
+  - plainstack@0.0.27
+
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies
+  - plainstack@0.0.26
+
 ## 0.0.10
 
 ### Patch Changes

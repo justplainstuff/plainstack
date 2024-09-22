@@ -97,23 +97,16 @@ export async function rollback<T>(
   db: Kysely<T>,
   fn: (db: Kysely<T>) => Promise<void>,
 ) {
-  let err: Error | null = null;
+  const err: Error | null = null;
 
   try {
-    // Begin the transaction
     await sql.raw("BEGIN").execute(db);
-    try {
-      await fn(db);
-    } catch (e) {
-      err = e as Error;
-    }
+    await fn(db);
   } finally {
     await sql.raw("ROLLBACK").execute(db);
   }
 
-  if (err) {
-    throw err;
-  }
+  if (err) throw err;
 }
 
 export function defineDatabase<T>(db: Kysely<T>): Kysely<T> {
