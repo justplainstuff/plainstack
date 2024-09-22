@@ -2,7 +2,9 @@
   "name": "create-plainstack",
   "version": "0.0.34",
   "description": "Create a new plainstack.dev app",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "bin": {
     "create-plainweb": "dist/create-plainstack.js",
     "create-plainstack": "dist/create-plainstack.js"
@@ -11,7 +13,10 @@
   "scripts": {
     "build": "tsc --noEmit && tsup"
   },
-  "keywords": ["plainstack", "typescript"],
+  "keywords": [
+    "plainstack",
+    "typescript"
+  ],
   "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "dependencies": {
