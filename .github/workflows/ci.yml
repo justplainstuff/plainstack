@@ -20,6 +20,16 @@ jobs:
           bun-version: 1.1.29
       - name: install dependencies 🔧
         run: bun install
+      - name: migrate ✅
+        run: |
+          timeout_cmd=""
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            timeout_cmd="timeout 3"
+          else
+            timeout_cmd="timeout 3s"
+          fi
+          $timeout_cmd bun run example/0-todo.tsx || true
+        shell: bash
       - name: build ✅
         run: bun run build
       - name: test ✅
