@@ -1,14 +1,3 @@
-# plainstack
-
-plainstack is a web framework for TypeScript that allows you to build production-ready apps in a single file.
-
-## Getting Started
-
-`bun create plainstack`
-
-## Example App
-
-```typescript
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { logger } from "hono/logger";
@@ -70,7 +59,7 @@ app.get(
         </body>
       </html>
     );
-  })
+  }),
 );
 
 app.get("/", async (c) => {
@@ -105,7 +94,7 @@ app.get("/", async (c) => {
         />
         <button type="submit">Add</button>
       </form>
-    </div>
+    </div>,
   );
 });
 
@@ -124,4 +113,3 @@ app.post("/delete/:id", async (c) => {
 });
 
 export default app;
-```
