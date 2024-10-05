@@ -1,5 +1,18 @@
 # plainweb
 
+## v0.0.41
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.41...v0.0.41)
+
+### 🏡 Chore
+
+- Release ([512febb](https://github.com/joseferben/plainweb/commit/512febb))
+- **release:** V0.0.40 ([98bdbd7](https://github.com/joseferben/plainweb/commit/98bdbd7))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.40
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.41...v0.0.40)
