@@ -1,5 +1,9 @@
 # plainweb
 
+## v0.0.38
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.37...v0.0.38)
+
 ## v0.0.37
 
 [compare changes](https://github.com/joseferben/plainweb/compare/create-plainweb@0.0.32...v0.0.37)
