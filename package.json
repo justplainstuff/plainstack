@@ -1,6 +1,6 @@
 {
   "name": "plainstack",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "The single-file TypeScript web framework",
   "type": "module",
   "main": "dist/plainstack.js",
