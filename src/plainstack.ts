@@ -4,3 +4,4 @@ export { test } from "./env";
 export { session } from "./middleware/session";
 export { job, queue, perform, work } from "./job";
 export { form } from "./form";
+export { type DB } from "./db";
