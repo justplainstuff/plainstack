@@ -53,6 +53,10 @@ export function migrate(
       });
     }
     consola.info("✓ types generated");
+    if (process.env.MIRGATE) {
+      console.info("MIGRATE env var set, stopping process");
+      process.exit(0);
+    }
   };
 }
 
