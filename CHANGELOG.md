@@ -1,5 +1,17 @@
 # plainweb
 
+## v0.0.43
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.42...v0.0.43)
+
+### 🩹 Fixes
+
+- Export all env vars ([7fc3419](https://github.com/joseferben/plainweb/commit/7fc3419))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.42
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.41...v0.0.42)
