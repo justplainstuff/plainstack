@@ -1,6 +1,6 @@
 {
   "name": "plainstack",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "The single-file TypeScript web framework",
   "type": "module",
   "main": "dist/plainstack.js",
@@ -12,7 +12,7 @@
   "types": "dist/plainstack.d.ts",
   "scripts": {
     "build": "tsc --noEmit && tsup",
-    "publish": "changelogen --release"
+    "publish": "changelogen --release --publish"
   },
   "keywords": [
     "plainstack",

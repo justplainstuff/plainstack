@@ -1,5 +1,50 @@
 # plainweb
 
+## v0.0.37
+
+[compare changes](https://github.com/joseferben/plainweb/compare/create-plainweb@0.0.32...v0.0.37)
+
+### 🚀 Enhancements
+
+- DefineHandler ([56c12a1](https://github.com/joseferben/plainweb/commit/56c12a1))
+- Plainstack ([#135](https://github.com/joseferben/plainweb/pull/135))
+
+### 🩹 Fixes
+
+- **deps:** Update dependency shiki to v1.14.0 ([e161dd6](https://github.com/joseferben/plainweb/commit/e161dd6))
+- **deps:** Update dependency better-sqlite3 to v11.2.0 ([2875271](https://github.com/joseferben/plainweb/commit/2875271))
+- **deps:** Update dependency better-sqlite3 to v11.2.1 ([5d31d56](https://github.com/joseferben/plainweb/commit/5d31d56))
+- **deps:** Update dependency knip to v5.27.3 ([5c2480e](https://github.com/joseferben/plainweb/commit/5c2480e))
+- **deps:** Update dependency tsx to v4.18.0 ([edebe24](https://github.com/joseferben/plainweb/commit/edebe24))
+- **deps:** Update dependency markdown-it-anchor to v9.1.0 ([41d88f5](https://github.com/joseferben/plainweb/commit/41d88f5))
+- Tag line ([ca93485](https://github.com/joseferben/plainweb/commit/ca93485))
+- Feature section ([e5918d9](https://github.com/joseferben/plainweb/commit/e5918d9))
+- **deps:** Update dependency drizzle-kit to ^0.24.0 ([#99](https://github.com/joseferben/plainweb/pull/99))
+- New tag line ([2886385](https://github.com/joseferben/plainweb/commit/2886385))
+- Ci flyctl ([e728681](https://github.com/joseferben/plainweb/commit/e728681))
+- Ci deploy tokens ([aebf2b2](https://github.com/joseferben/plainweb/commit/aebf2b2))
+- Fly deploy ([c44fe95](https://github.com/joseferben/plainweb/commit/c44fe95))
+- Remove web deploy flow ([0bbc296](https://github.com/joseferben/plainweb/commit/0bbc296))
+- **deps:** Update dependency knip to v5.27.4 ([530d092](https://github.com/joseferben/plainweb/commit/530d092))
+- **deps:** Update dependency ora to v8.1.0 ([5ae96c3](https://github.com/joseferben/plainweb/commit/5ae96c3))
+- Install curl ([748d8f1](https://github.com/joseferben/plainweb/commit/748d8f1))
+- Install curl ([f2603b1](https://github.com/joseferben/plainweb/commit/f2603b1))
+- **deps:** Update dependency tsx to v4.19.0 ([4e6c3c3](https://github.com/joseferben/plainweb/commit/4e6c3c3))
+- **deps:** Update dependency turbo to v2.1.0 ([7c779b5](https://github.com/joseferben/plainweb/commit/7c779b5))
+- **deps:** Update dependency knip to v5.27.5 ([84fc605](https://github.com/joseferben/plainweb/commit/84fc605))
+- **deps:** Update dependency shiki to v1.15.0 ([b68451e](https://github.com/joseferben/plainweb/commit/b68451e))
+- **deps:** Update dependency shiki to v1.15.1 ([b8205db](https://github.com/joseferben/plainweb/commit/b8205db))
+- **deps:** Update dependency shiki to v1.15.2 ([56fda3b](https://github.com/joseferben/plainweb/commit/56fda3b))
+
+### 🏡 Chore
+
+- Release ([3cb4c07](https://github.com/joseferben/plainweb/commit/3cb4c07))
+- Deploy web ([b544ecf](https://github.com/joseferben/plainweb/commit/b544ecf))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.36
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.35...v0.0.36)
