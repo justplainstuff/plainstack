@@ -1,6 +1,7 @@
 import { Database } from "bun:sqlite";
 import { randomBytes } from "node:crypto";
 import { readdir } from "node:fs/promises";
+import { join } from "node:path";
 import type { BuildConfig as BunBuildConfig } from "bun";
 import { CamelCasePlugin, Kysely } from "kysely";
 import { BunSqliteDialect } from "kysely-bun-sqlite";
@@ -46,12 +47,15 @@ type BuildConfig = Omit<BunBuildConfig, "entrypoints"> & {
 export async function build(options: BuildConfig) {
   const entrypointfiles =
     typeof options.entrypoints === "string"
-      ? await readdir(options.entrypoints)
+      ? await readdir(options.entrypoints).then((files) =>
+          files.map((file) => join(options.entrypoints as string, file)),
+        )
       : options.entrypoints;
+  console.log(entrypointfiles);
   return await Bun.build({
     outdir: "static",
     sourcemap: "linked",
-    minify: false, // TODO
+    minify: prod(),
     ...options,
     entrypoints: entrypointfiles,
   });
