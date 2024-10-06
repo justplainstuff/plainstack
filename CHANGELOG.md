@@ -1,5 +1,17 @@
 # plainweb
 
+## v0.0.47
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.46...v0.0.47)
+
+### 🚀 Enhancements
+
+- Add PS_BUILD ([0e4e983](https://github.com/joseferben/plainweb/commit/0e4e983))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.46
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.45...v0.0.46)
