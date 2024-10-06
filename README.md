@@ -2,10 +2,6 @@
 
 plainstack is a web framework for TypeScript that allows you to build production-ready apps in a single file.
 
-## Getting Started
-
-`bun create plainstack`
-
 ## Example App
 
 ```typescript
