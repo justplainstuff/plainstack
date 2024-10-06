@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { BuildConfig as BunBuildConfig } from "bun";
+import consola from "consola";
 import { CamelCasePlugin, Kysely } from "kysely";
 import { BunSqliteDialect } from "kysely-bun-sqlite";
 import { bun } from "plainjob";
@@ -51,12 +52,16 @@ export async function build(options: BuildConfig) {
           files.map((file) => join(options.entrypoints as string, file)),
         )
       : options.entrypoints;
-  console.log(entrypointfiles);
-  return await Bun.build({
+  const result = await Bun.build({
     outdir: "static",
     sourcemap: "linked",
-    minify: prod(),
+    minify: false, // TODO this breaks the naming atm
     ...options,
     entrypoints: entrypointfiles,
   });
+  if (process.env.PS_BUILD) {
+    consola.info("✓ build finished, PB_BUILD=1 exiting process...");
+    process.exit(0);
+  }
+  return result;
 }
