@@ -1,5 +1,17 @@
 # plainweb
 
+## v0.0.46
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.45...v0.0.46)
+
+### 🩹 Fixes
+
+- Cwd when building client components ([1eb221a](https://github.com/joseferben/plainweb/commit/1eb221a))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.45
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.44...v0.0.45)
