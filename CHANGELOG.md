@@ -1,5 +1,17 @@
 # plainweb
 
+## v0.0.48
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.47...v0.0.48)
+
+### 🏡 Chore
+
+- Add migrate env var ([08c9ccd](https://github.com/joseferben/plainweb/commit/08c9ccd))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.47
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.46...v0.0.47)
