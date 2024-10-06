@@ -45,7 +45,7 @@ export function isSchedule(schedule: unknown): schedule is Schedule {
   );
 }
 
-export function defineSchedule(opts: {
+export function schedule(opts: {
   name: string;
   cron: string;
   run: () => Promise<void>;

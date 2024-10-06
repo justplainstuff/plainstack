@@ -2,20 +2,28 @@ import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { logger } from "hono/logger";
 import { JobStatus } from "plainjob";
-import { job, perform, work } from "plainstack";
-import { bunSqlite } from "plainstack/bun";
+import { job, perform, schedule, work } from "plainstack";
+import { sqlite } from "plainstack/bun";
 
-const { queue } = bunSqlite();
+const { queue } = sqlite();
 
 const randomJob = job<string>({
-  name: "random",
+  name: "fails-randomly",
   run: async ({ data }) => {
     if (Math.random() > 0.5) throw new Error("Random error");
     console.log("Processing job", data);
   },
 });
 
-void work(queue, { job: randomJob }, {});
+const minuteSchedule = schedule({
+  name: "every-minute",
+  cron: "* * * * *",
+  run: async () => {
+    console.log("this runs every minute");
+  },
+});
+
+void work(queue, { randomJob }, { minuteSchedule });
 
 const app = new Hono();
 

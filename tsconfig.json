@@ -14,7 +14,8 @@
     "paths": {
       "plainstack": ["./src/plainstack.ts"],
       "plainstack/session": ["./src/middleware/session.ts"],
-      "plainstack/bun": ["./src/bun.ts"]
+      "plainstack/bun": ["./src/bun.ts"],
+      "plainstack/client": ["./src/client.tsx"]
     },
 
     // bundler mode

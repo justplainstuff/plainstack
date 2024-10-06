@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { bunSqlite } from "./bun";
+import { sqlite } from "./bun";
 import { rollback, store } from "./entity";
 
 type Database = {
@@ -20,7 +20,7 @@ type Database = {
 };
 
 describe("entity crud operations", async () => {
-  const { database, migrate } = bunSqlite<Database>();
+  const { database, migrate } = sqlite<Database>();
 
   await migrate(
     ({ schema }) =>

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { logger } from "hono/logger";
 import { form, store } from "plainstack";
-import { bunSqlite, secret } from "plainstack/bun";
+import { secret, sqlite } from "plainstack/bun";
 import { session } from "plainstack/session";
 
 interface Items {
@@ -15,7 +15,7 @@ interface DB {
   items: Items;
 }
 
-const { database, migrate } = bunSqlite<DB>();
+const { database, migrate } = sqlite<DB>();
 
 await migrate(({ schema }) => {
   return schema
