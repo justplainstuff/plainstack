@@ -59,8 +59,9 @@ export async function build(options: BuildConfig) {
     ...options,
     entrypoints: entrypointfiles,
   });
+  consola.info("✓ build finished");
   if (process.env.PS_BUILD) {
-    consola.info("✓ build finished, PB_BUILD=1 exiting process...");
+    consola.info("PS_BUILD=1, exiting process...");
     process.exit(0);
   }
   return result;

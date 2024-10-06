@@ -53,8 +53,8 @@ export function migrate(
       });
     }
     consola.info("✓ types generated");
-    if (process.env.MIRGATE) {
-      console.info("MIGRATE env var set, stopping process");
+    if (process.env.PS_MIGRATE) {
+      console.info("PS_MIGRATE=1, exiting process...");
       process.exit(0);
     }
   };
