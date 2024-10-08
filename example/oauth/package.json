@@ -1,0 +1,10 @@
+{
+  "name": "oauth",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "workspace:*",
+    "@hono/oauth-providers": "^0.6.1"
+  }
+}

@@ -8,7 +8,7 @@ import { CamelCasePlugin, Kysely } from "kysely";
 import { BunSqliteDialect } from "kysely-bun-sqlite";
 import { bun } from "plainjob";
 import { migrate as migrate_ } from "./database";
-import { prod, test } from "./env";
+import { test } from "./env";
 import { queue } from "./job";
 
 export function sqlite<DB = unknown>() {
@@ -28,15 +28,15 @@ export function sqlite<DB = unknown>() {
   return { sqlite: sqlite_, database, migrate, queue: q };
 }
 
-export async function secret(): Promise<string> {
-  if (process.env.SECRET_KEY) return process.env.SECRET_KEY;
+export async function secret(key = "PLAINSTACK_SECRET"): Promise<string> {
+  if (process.env[key]) return process.env[key];
   const newSecret = randomBytes(16).toString("hex");
   const envFile = Bun.file(".env");
   if (!(await envFile.exists())) {
-    await Bun.write(".env", `SECRET_KEY="${newSecret}"`);
+    await Bun.write(".env", `${key}="${newSecret}"`);
   } else {
     const envContent = await envFile.text();
-    Bun.write(".env", `${envContent}\nSECRET_KEY="${newSecret}"`);
+    Bun.write(".env", `${envContent}\n${key}="${newSecret}"`);
   }
   return newSecret;
 }

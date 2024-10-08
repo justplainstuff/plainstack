@@ -1,0 +1,41 @@
+{
+  "name": "plainstack",
+  "version": "0.0.48",
+  "description": "The single-file TypeScript web framework",
+  "type": "module",
+  "main": "dist/plainstack.js",
+  "exports": {
+    ".": "./dist/plainstack.js",
+    "./bun": "./dist/bun.js",
+    "./session": "./dist/middleware/session.js",
+    "./client": "./dist/client.js"
+  },
+  "types": "dist/plainstack.d.ts",
+  "scripts": {
+    "build": "tsc --noEmit && tsup",
+    "test": "bun test",
+    "release": "bun test && bun run build && changelogen --release"
+  },
+  "keywords": ["plainstack", "bun", "hono", "typescript", "kysely"],
+  "author": "Josef Erben <josef@plainweb.dev>",
+  "license": "MIT",
+  "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "change-case": "^5.4.4",
+    "consola": "^3.2.3",
+    "hono": "^4.6.3",
+    "hono-sessions": "^0.5.8",
+    "kysely": "^0.27.4",
+    "kysely-bun-sqlite": "^0.3.2",
+    "kysely-codegen": "^0.16.5",
+    "plainjob": "^0.0.11",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/toastify-js": "^1.12.3",
+    "changelogen": "^0.5.7",
+    "tsup": "^8.2.4",
+    "typescript": "^5.3.3"
+  }
+}

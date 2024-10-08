@@ -1,0 +1,9 @@
+{
+  "name": "client-component",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "workspace:*"
+  }
+}

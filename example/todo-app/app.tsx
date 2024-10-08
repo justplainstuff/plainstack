@@ -1,9 +1,12 @@
+import { parseWithZod } from "@conform-to/zod";
+import { conformValidator } from "@hono/conform-validator";
 import { Hono } from "hono";
 import { jsxRenderer } from "hono/jsx-renderer";
 import { logger } from "hono/logger";
-import { form, store } from "plainstack";
+import { Toast, store } from "plainstack";
 import { secret, sqlite } from "plainstack/bun";
 import { session } from "plainstack/session";
+import type z from "zod";
 
 interface Items {
   content: string;
@@ -30,6 +33,12 @@ const entities = await store(database);
 
 const app = new Hono();
 
+function form<T>(schema: z.ZodSchema<T> | Promise<z.ZodSchema<T>>) {
+  return conformValidator(async (formData) =>
+    parseWithZod(formData, { schema: await schema }),
+  );
+}
+
 app.use(logger());
 app.use(session({ encryptionKey: await secret() }));
 
@@ -53,9 +62,7 @@ app.get(
           <title>So many todos</title>
         </head>
         <body>
-          <main class="container">
-            <h1>{children}</h1>
-          </main>
+          <main class="container">{children}</main>
         </body>
       </html>
     );
@@ -63,12 +70,12 @@ app.get(
 );
 
 app.get("/", async (c) => {
-  const info = c.var.session.get("info");
+  const toast = c.var.session.get("toast");
   const items = await entities("items").all();
   return c.render(
     <div>
+      <Toast toast={toast} />
       <h1>Todo App</h1>
-      {info && <article>{info}</article>}
       <ul class="items-list">
         {items.map((item) => (
           <li key={item.id}>
@@ -102,13 +109,13 @@ app.post("/add", form(entities("items").zod), async (c) => {
   const submission = c.req.valid("form");
   const data = submission.value;
   await entities("items").create(data);
-  c.var.session.flash("info", "Item added");
+  c.var.session.flash("toast", "Item added");
   return c.redirect("/");
 });
 
 app.post("/delete/:id", async (c) => {
-  await entities("items").delete(c.req.param("id"));
-  c.var.session.flash("info", "Item deleted");
+  await entities("items").delete({ id: c.req.param("id") });
+  c.var.session.flash("toast", "Item deleted");
   return c.redirect("/");
 });
 

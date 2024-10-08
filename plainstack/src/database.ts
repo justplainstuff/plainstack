@@ -29,7 +29,7 @@ export function migrate(
       allowUnorderedMigrations: true,
     });
     const result = await migrator.migrateToLatest();
-    consola.debug(result);
+    consola.debug("migrations result", result);
     consola.info("✓ migrations applied");
     const dialectManager = new DialectManager({
       numericParser: DEFAULT_NUMERIC_PARSER,

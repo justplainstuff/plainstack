@@ -1,5 +1,5 @@
 import { useState } from "hono/jsx";
-import { mount } from "plainstack/client";
+import { mount } from "../../plainstack/src/client";
 
 export function Counter() {
   const [count, setCount] = useState(0);

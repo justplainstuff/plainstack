@@ -1,0 +1,11 @@
+{
+  "name": "todo-app",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "workspace:*",
+    "@hono/conform-validator": "^1.0.0",
+    "@conform-to/zod": "^1.2.2"
+  }
+}

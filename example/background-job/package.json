@@ -1,0 +1,9 @@
+{
+  "name": "background-job",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "workspace:*"
+  }
+}

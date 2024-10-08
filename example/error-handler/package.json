@@ -1,0 +1,9 @@
+{
+  "name": "error-handler",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "workspace:*"
+  }
+}
