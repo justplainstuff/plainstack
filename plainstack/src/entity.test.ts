@@ -1,4 +1,6 @@
 import { describe, expect, test } from "bun:test";
+import type { Generated } from "kysely";
+import type { NumericParser } from "kysely-codegen";
 import { sqlite } from "./bun";
 import { rollback, store } from "./entity";
 
@@ -7,6 +9,7 @@ interface Users {
   name: string;
   email: string;
   age: number | null;
+  isStaff: Generated<number>;
   createdAt: number;
   updatedAt: number;
 }
@@ -37,6 +40,7 @@ describe("entity", async () => {
         .addColumn("name", "text", (col) => col.notNull())
         .addColumn("email", "text", (col) => col.notNull().unique())
         .addColumn("age", "integer")
+        .addColumn("is_staff", "boolean")
         .addColumn("created_at", "integer", (col) => col.notNull())
         .addColumn("updated_at", "integer", (col) => col.notNull())
         .execute(),
@@ -68,6 +72,7 @@ describe("entity", async () => {
       entities("users").create({
         name: "Jane Smith",
         email: "jane@example.com",
+        isStaff: 1,
         age: null,
       }),
     );
@@ -286,6 +291,7 @@ describe("entity", async () => {
         id: createResult.id,
         name: "John Updated",
         email: "john.updated@example.com",
+        isStaff: 0,
         age: null,
       });
 

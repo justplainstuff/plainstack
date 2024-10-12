@@ -1,6 +1,8 @@
 import { createId } from "@paralleldrive/cuid2";
 import { camelCase, snakeCase } from "change-case";
 import {
+  type Generated,
+  type Insertable,
   type Kysely,
   type SelectQueryBuilder,
   type TableMetadata,
@@ -24,10 +26,9 @@ type OptionalNullable<T> = {
   [K in keyof PickNotNullable<T>]: T[K];
 };
 
-type InsertableEntity<
-  DB,
-  EntityName extends keyof DB & string,
-> = OptionalNullable<Omit<DB[EntityName], "id" | "createdAt" | "updatedAt">> & {
+type InsertableEntity<Entity> = OptionalNullable<
+  Omit<Insertable<Entity>, "id" | "createdAt" | "updatedAt">
+> & {
   id?: string;
   createdAt?: number;
   updatedAt?: number;
@@ -163,7 +164,7 @@ export class Entity<DB, EntityName extends keyof DB & string> {
   }
 
   async createMany(
-    data: Array<InsertableEntity<DB, EntityName>>,
+    data: Array<InsertableEntity<DB[EntityName]>>,
   ): Promise<DB[EntityName][]> {
     const results: DB[EntityName][] = [];
     for (const item of data) {
@@ -188,7 +189,7 @@ export class Entity<DB, EntityName extends keyof DB & string> {
   }
 
   async create(
-    data: InsertableEntity<DB, EntityName>,
+    data: InsertableEntity<DB[EntityName]>,
   ): Promise<DB[EntityName]> {
     const inserted = await this.db
       .insertInto(this.name)
@@ -245,7 +246,9 @@ export class Entity<DB, EntityName extends keyof DB & string> {
   }
 
   async update(
-    data: OptionalNullable<Omit<DB[EntityName], "createdAt" | "updatedAt">> & {
+    data: OptionalNullable<
+      Omit<Insertable<DB[EntityName]>, "createdAt" | "updatedAt">
+    > & {
       id: string;
       updatedAt?: number;
     },
@@ -267,7 +270,9 @@ export class Entity<DB, EntityName extends keyof DB & string> {
 
   async updateMany(
     data: Array<
-      OptionalNullable<Omit<DB[EntityName], "createdAt" | "updatedAt">> & {
+      OptionalNullable<
+        Omit<Insertable<DB[EntityName]>, "createdAt" | "updatedAt">
+      > & {
         id: string;
         updatedAt?: number;
       }
