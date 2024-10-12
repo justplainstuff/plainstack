@@ -1,6 +1,6 @@
 {
   "name": "plainstack",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "The single-file TypeScript web framework",
   "type": "module",
   "main": "dist/plainstack.js",
@@ -16,7 +16,13 @@
     "test": "bun test",
     "release": "bun test && bun run build && changelogen --release"
   },
-  "keywords": ["plainstack", "bun", "hono", "typescript", "kysely"],
+  "keywords": [
+    "plainstack",
+    "bun",
+    "hono",
+    "typescript",
+    "kysely"
+  ],
   "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "dependencies": {
