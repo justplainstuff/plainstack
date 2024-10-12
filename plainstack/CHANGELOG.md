@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.50
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.49...v0.0.50)
+
+### 🩹 Fixes
+
+- Boolean column type ([31aeeda](https://github.com/joseferben/plainweb/commit/31aeeda))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.49
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.48...v0.0.49)
