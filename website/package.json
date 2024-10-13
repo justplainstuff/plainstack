@@ -1,4 +1,5 @@
 {
+  "name": "website",
   "scripts": {
     "build": "tsc --noEmit"
   },
