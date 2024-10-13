@@ -1,3 +1,4 @@
+import "hono";
 import {
   CookieStore,
   type Session,
@@ -6,6 +7,7 @@ import {
 } from "hono-sessions";
 import type { CookieOptions } from "hono/utils/cookie";
 import { prod } from "../env";
+import type { MiddlewareHandler } from "hono";
 
 interface SessionOptions {
   store?: Store | CookieStore;
@@ -22,7 +24,7 @@ interface CookieStoreOptions {
 
 type Options = SessionOptions & CookieStoreOptions;
 
-export function session(opts: Options) {
+export function session(opts: Options): MiddlewareHandler {
   if (!opts.encryptionKey && prod())
     throw new Error(
       "encryptionKey is required in production when using session()",
@@ -33,7 +35,7 @@ export function session(opts: Options) {
       sessionCookieName: "session",
     }),
     ...opts,
-  });
+  }) as unknown as MiddlewareHandler;
 }
 
 export interface SessionVariables {
@@ -41,7 +43,6 @@ export interface SessionVariables {
   session_key_rotation: boolean;
 }
 
-// TODO should be plainstack
 declare module "hono" {
   interface ContextVariableMap extends SessionVariables {}
 }

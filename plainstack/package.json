@@ -16,26 +16,22 @@
     "test": "bun test",
     "release": "bun test && bun run build && changelogen --release"
   },
-  "keywords": [
-    "plainstack",
-    "bun",
-    "hono",
-    "typescript",
-    "kysely"
-  ],
+  "keywords": ["plainstack", "bun", "hono", "typescript", "kysely"],
   "author": "Josef Erben <josef@plainweb.dev>",
   "license": "MIT",
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
     "change-case": "^5.4.4",
     "consola": "^3.2.3",
-    "hono": "^4.6.3",
     "hono-sessions": "^0.5.8",
     "kysely": "^0.27.4",
     "kysely-bun-sqlite": "^0.3.2",
     "kysely-codegen": "^0.16.5",
     "plainjob": "^0.0.11",
     "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "hono": "^4.6.3"
   },
   "devDependencies": {
     "@types/bun": "latest",

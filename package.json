@@ -1,7 +1,7 @@
 {
   "workspaces": ["example/*", "plainstack", "website"],
   "scripts": {
-    "build": "bun --filter 'plainstack' build && bun --filter './example/*' build",
+    "build": "bun --filter 'plainstack' build && bun --filter './{example/*,website}' build",
     "test": "bun --filter '*' test"
   }
 }

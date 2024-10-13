@@ -1,13 +1,28 @@
 {
   "name": "website",
+  "type": "module",
   "scripts": {
-    "build": "tsc --noEmit"
+    "dev": "concurrently \"bun run --hot app/app.tsx\" \"tailwindcss -i ./app/styles.css -o ./static/styles.css --watch \"",
+    "build": "tsc --noEmit && tailwindcss -i ./app/styles.css -o ./static/styles.css --minify && PS_BUILD=1 bun run app/app.tsx"
   },
   "dependencies": {
-    "plainstack": "latest",
-    "hono": "latest"
+    "consola": "^3.2.3",
+    "hono": "^4.6.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.0.1",
+    "plainstack": "workspace:*",
+    "shiki": "^1.7.0",
+    "slugify": "^1.6.6",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "@biomejs/biome": "^1.8.3",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/bun": "latest",
+    "@types/markdown-it": "^14.1.1",
+    "concurrently": "^9.0.1",
+    "daisyui": "^4.11.1",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.3.3"
   }
 }
