@@ -1,10 +1,10 @@
 import { createId } from "@paralleldrive/cuid2";
 import { camelCase, snakeCase } from "change-case";
 import {
-  type Generated,
   type Insertable,
   type Kysely,
   type SelectQueryBuilder,
+  type Selectable,
   type TableMetadata,
   sql,
 } from "kysely";
@@ -165,8 +165,8 @@ export class Entity<DB, EntityName extends keyof DB & string> {
 
   async createMany(
     data: Array<InsertableEntity<DB[EntityName]>>,
-  ): Promise<DB[EntityName][]> {
-    const results: DB[EntityName][] = [];
+  ): Promise<Selectable<DB[EntityName]>[]> {
+    const results: Selectable<DB[EntityName]>[] = [];
     for (const item of data) {
       const inserted = await this.db
         .insertInto(this.name)
@@ -183,14 +183,14 @@ export class Entity<DB, EntityName extends keyof DB & string> {
         } as any)
         .returningAll()
         .executeTakeFirstOrThrow();
-      results.push(inserted as unknown as DB[EntityName]);
+      results.push(inserted as unknown as Selectable<DB[EntityName]>);
     }
     return results;
   }
 
   async create(
     data: InsertableEntity<DB[EntityName]>,
-  ): Promise<DB[EntityName]> {
+  ): Promise<Selectable<DB[EntityName]>> {
     const inserted = await this.db
       .insertInto(this.name)
       .values({
@@ -206,7 +206,7 @@ export class Entity<DB, EntityName extends keyof DB & string> {
       } as any)
       .returningAll()
       .executeTakeFirstOrThrow();
-    return inserted as unknown as DB[EntityName];
+    return inserted as unknown as Selectable<DB[EntityName]>;
   }
 
   async all<K extends keyof DB[EntityName]>(
@@ -215,7 +215,7 @@ export class Entity<DB, EntityName extends keyof DB & string> {
       limit?: number;
       offset?: number;
     },
-  ): Promise<DB[EntityName][]> {
+  ): Promise<Selectable<DB[EntityName]>[]> {
     let query = this.db.selectFrom(this.name).selectAll();
 
     if (filter) {
@@ -234,12 +234,12 @@ export class Entity<DB, EntityName extends keyof DB & string> {
       }
     }
 
-    return (await query.execute()) as DB[EntityName][];
+    return (await query.execute()) as unknown as Selectable<DB[EntityName]>[];
   }
 
   async get<K extends keyof DB[EntityName]>(
     filter?: Partial<Pick<DB[EntityName], K>>,
-  ): Promise<DB[EntityName] | undefined> {
+  ): Promise<Selectable<DB[EntityName]> | undefined> {
     const result = await this.all(filter);
     if (result.length === 0) return undefined;
     return result[0];

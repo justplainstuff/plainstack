@@ -79,6 +79,7 @@ describe("entity", async () => {
 
     expect(result.name).toBe("Jane Smith");
     expect(result.email).toBe("jane@example.com");
+    expect(result.isStaff).toBe(1);
     expect(result.id).toMatch(/^usr_/);
     expect(result.createdAt).toBeGreaterThan(0);
   });
