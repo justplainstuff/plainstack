@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.53
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.52...v0.0.53)
+
+### 🩹 Fixes
+
+- Undo redirect with context ([ca362d7](https://github.com/joseferben/plainweb/commit/ca362d7))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.52
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.51...v0.0.52)
