@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "plainstack": "latest",
+    "hono": "latest"
+  }
+}
