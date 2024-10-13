@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.52
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.51...v0.0.52)
+
+### 🏡 Chore
+
+- Auth helper paths ([e415316](https://github.com/joseferben/plainweb/commit/e415316))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.51
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.50...v0.0.51)
