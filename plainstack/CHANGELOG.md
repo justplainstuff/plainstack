@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.51
+
+[compare changes](https://github.com/joseferben/plainweb/compare/v0.0.50...v0.0.51)
+
+### 🩹 Fixes
+
+- Selectable ([ae102e2](https://github.com/joseferben/plainweb/commit/ae102e2))
+
+### ❤️ Contributors
+
+- Joseferben <josef@erben.systems>
+
 ## v0.0.50
 
 [compare changes](https://github.com/joseferben/plainweb/compare/v0.0.49...v0.0.50)
