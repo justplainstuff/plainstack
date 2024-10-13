@@ -6,5 +6,8 @@
   "dependencies": {
     "plainstack": "latest",
     "hono": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
   }
 }
