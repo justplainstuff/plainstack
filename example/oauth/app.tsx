@@ -93,7 +93,7 @@ app.get("/", async (c) => {
 app.get(
   "/signin",
   signin({
-    protected: "/protected",
+    protectedPath: "/protected",
     getUser: (id) => entities("users").get({ id }),
   }),
   async (c) => {
@@ -114,7 +114,7 @@ app.get("/signout", async (c) => {
 app.get(
   "/protected",
   protect({
-    signin: "/signin",
+    signinPath: "/signin",
     getUser: (id) => entities("users").get({ id }),
   }),
   async (c) => {
